@@ -27,7 +27,6 @@ export interface TextInputProps extends IBoxProps {
   onFocus?: () => void;
   inputBg?: string;
   inputHint?: ColorType;
-  textColor?: ColorType;
   rightIcon?: React.ReactElement;
   leftIcon?: React.ReactElement;
   secureText?: boolean;
@@ -49,7 +48,6 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
     onFocus,
     inputBg,
     inputHint,
-    textColor = 'text',
     rightIcon,
     leftIcon,
     secureText,
@@ -79,7 +77,6 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
         <HStack
           borderColor={'grey.100'}
           bg={'white'}
-          // w="full"
           alignItems="center"
           justifyContent={'space-between'}
           rounded={'10px'}
@@ -105,7 +102,6 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
               returnKeyType={returnKeyType}
               placeholder={placeholder}
               fontSize={'12px'}
-              color={textColor}
               selectionColor={'main'}
               value={value}
               onChangeText={onChange}
