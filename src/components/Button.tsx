@@ -23,7 +23,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   isBottom,
   noShadow,
   h = '50px',
-  fontSize = 14,
+  fontSize = 12,
   textTransform,
   variant = 'filled',
   ...extraProps
@@ -69,7 +69,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
       shadow={shadow()}
       _text={{
         fontSize,
-        fontWeight: '700',
+        fontWeight: '600',
         color: btnTextColor(),
         textTransform,
       }}
