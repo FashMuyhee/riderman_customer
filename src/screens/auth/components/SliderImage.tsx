@@ -29,7 +29,7 @@ const SliderImage = () => {
   const SlideItem = ({item}: {item: any}) => (
     <View w={wp(100)}>
       <Image
-        h="280px"
+        h="250px"
         resizeMode="center"
         alt="illustration"
         source={item?.image}
@@ -51,17 +51,16 @@ const SliderImage = () => {
       data={images}
       timer={10000}
       contentContainerStyle={{
-        height: hp(55),
+        height: hp(50),
         backgroundColor: colors.main,
       }}
-      indicatorContainerStyle={{position: 'absolute', bottom: 20}}
       indicatorActiveColor={'#fff'}
       indicatorInActiveColor={'#4e8a6a'}
       indicatorActiveWidth={35}
       indicatorStyle={{height: 10, borderRadius: 10, width: 10}}
       indicatorContainerStyle={{
         position: 'absolute',
-        bottom: 30,
+        bottom: 10,
         width: 80,
         alignItems: 'center',
         justifyContent: 'space-between',
