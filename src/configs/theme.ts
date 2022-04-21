@@ -3,7 +3,7 @@ import { extendTheme } from 'native-base';
 const theme = extendTheme({
   colors: {
     bg: '#FAFAFA',
-    main: '#178F4F',
+    main: '#178e4e',
     grey: {
       100: '#F7F7F7'
     }
