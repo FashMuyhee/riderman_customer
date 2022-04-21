@@ -105,7 +105,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
               selectionColor={'main'}
               value={value}
               onChangeText={onChange}
-              pl="0px"
+              pl="5px"
               multiline={multiline}
               numberOfLines={multiline ? 8 : 1}
               editable={!disabled}
