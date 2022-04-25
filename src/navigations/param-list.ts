@@ -6,3 +6,7 @@ export type AuthStackParamList = {
   verify: undefined;
   register: undefined;
 };
+
+export type GuardStackParamList = {
+  home: undefined;
+};
