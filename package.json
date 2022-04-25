@@ -5,7 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start --port=6000",
+    "start": "react-native start",
+    "start_port": "react-native start --port=6000",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
@@ -18,6 +19,7 @@
     "react": "17.0.1",
     "react-native": "0.64.1",
     "react-native-flatlist-slider": "^1.0.6",
+    "react-native-geolocation-service": "^5.3.0-beta.4",
     "react-native-gesture-handler": "^2.4.0",
     "react-native-maps": "^0.31.0",
     "react-native-reanimated": "^2.7.0",
