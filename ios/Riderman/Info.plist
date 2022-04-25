@@ -52,6 +52,14 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>UIAppFonts</key>
+	<!-- location permission -->
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Give Riderman permission  to use Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Give Riderman permission  to use Location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Give Riderman permission  to use Location</string>
+	<!-- location permission -->
 	<array>
 		<string>font-black.ttf</string>
 		<string>font-blackitalic.ttf</string>
