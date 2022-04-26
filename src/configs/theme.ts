@@ -6,8 +6,10 @@ const theme = extendTheme({
     main: '#178e4e',
     grey: {
       100: '#F7F7F7',
-      200: '#777777'
-    }
+      200: '#777777',
+      300:'#B9B9B9'
+    },
+    accent: '#b6dac7'
   },
   config: {
     initialColorMode: 'light',
