@@ -6,6 +6,7 @@ import {
   ChevronLeftIcon,
   Pressable,
   Image,
+  Badge,
 } from 'native-base';
 import BarIcon from './icons/bar';
 import bellIcon from '@images/icons/bell.png';
@@ -13,10 +14,12 @@ import {useNavigation, DrawerActions} from '@react-navigation/native';
 
 export type ITransparentNavbarProps = {
   isHome?: boolean;
+  notificationCount?: number;
 };
 
 const TransparentNavbar: React.FC<ITransparentNavbarProps> = ({
   isHome = false,
+  notificationCount = 0,
 }) => {
   const {dispatch} = useNavigation();
   return (
@@ -62,6 +65,23 @@ const TransparentNavbar: React.FC<ITransparentNavbarProps> = ({
             w="23px"
             resizeMode="center"
           />
+          <Badge
+            position="absolute"
+            top="1px"
+            right="5px"
+            bg="main"
+            rounded="md"
+            px="5px"
+            py="1px"
+            alignItems="center"
+            justifyContent="center"
+            _text={{
+              fontSize: 9,
+              color: 'white',
+              textAlign: 'center',
+            }}>
+            {notificationCount}
+          </Badge>
         </Pressable>
       )}
     </HStack>
