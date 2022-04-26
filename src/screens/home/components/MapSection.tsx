@@ -1,11 +1,14 @@
 import React, {useRef, useEffect} from 'react';
-import {IconButton, useTheme, View} from 'native-base';
+import {IconButton, Image, useTheme, View} from 'native-base';
 import {hp} from '@utils/responsive';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {StyleSheet} from 'react-native';
 import useGetLocation from '@hooks/useGetLocation';
 import LocationIcon from '@components/icons/location';
 import mapStyle from '@utils/map-style';
+import {bikes} from '@utils/sample-data';
+import bikeIllus from '@images/icons/bike.png';
+import userPin from '@images/icons/user-location.png';
 
 export type IMapSectionProps = {};
 
@@ -54,14 +57,50 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
         }}
         provider="google"
         style={StyleSheet.absoluteFill}
+        minZoomLevel={18}
         userInterfaceStyle="light"
         customMapStyle={mapStyle}
-        // showsUserLocation
         rotateEnabled={false}
         showsTraffic
         loadingEnabled={loading}
-        loadingIndicatorColor={colors.main}
-      />
+        loadingIndicatorColor={colors.main}>
+        {bikes.map((bike, index) => (
+          <Marker key={index} coordinate={{...bike}}>
+            <Image
+              source={bikeIllus}
+              borderWidth={1}
+              resizeMode="center"
+              alt="bike"
+              w="30px"
+              h="30px"
+              style={{
+                transform: [
+                  {
+                    rotate: `${bike.heading}deg`,
+                  },
+                ],
+              }}
+            />
+          </Marker>
+        ))}
+
+        <Marker
+          coordinate={{
+            // @ts-ignore
+            latitude: parseFloat(cords?.latitude),
+            // @ts-ignore
+            longitude: parseFloat(cords?.longitude),
+          }}>
+          <Image
+            source={userPin}
+            borderWidth={1}
+            resizeMode="center"
+            alt="user_location"
+            w="80px"
+            h="80px"
+          />
+        </Marker>
+      </MapView>
       <IconButton
         icon={<LocationIcon />}
         onPress={getLocation}
