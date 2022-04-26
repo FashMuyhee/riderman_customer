@@ -8,7 +8,8 @@
     "start": "react-native start",
     "start_port": "react-native start --port=6000",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adb-connect": "adb reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.6",
