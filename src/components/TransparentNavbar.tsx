@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, HStack, IconButton, ChevronLeftIcon, Image} from 'native-base';
+import {
+  View,
+  HStack,
+  IconButton,
+  ChevronLeftIcon,
+  Pressable,
+  Image,
+} from 'native-base';
 import BarIcon from './icons/bar';
 import bellIcon from '@images/icons/bell.png';
 export type ITransparentNavbarProps = {
@@ -36,21 +43,21 @@ const TransparentNavbar: React.FC<ITransparentNavbarProps> = ({
         }
       />
       {isHome && (
-        <IconButton
+        <Pressable
+          alignItems="center"
+          justifyContent="center"
           size={10}
           shadow="2"
           bg="white"
-          rounded="full"
-          icon={
-            <Image
-              source={bellIcon}
-              alt="bell_icon"
-              h="23px"
-              w="23px"
-              resizeMode="center"
-            />
-          }
-        />
+          rounded="full">
+          <Image
+            source={bellIcon}
+            alt="bell_icon"
+            h="23px"
+            w="23px"
+            resizeMode="center"
+          />
+        </Pressable>
       )}
     </HStack>
   );
