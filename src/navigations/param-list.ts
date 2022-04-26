@@ -9,4 +9,5 @@ export type AuthStackParamList = {
 
 export type GuardStackParamList = {
   home: undefined;
+  request_delivery: undefined;
 };
