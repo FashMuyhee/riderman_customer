@@ -12,7 +12,7 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
-      defaultStatus="open"
+      defaultStatus="closed"
       initialRouteName="stack"
       screenOptions={{
         headerShown: false,
