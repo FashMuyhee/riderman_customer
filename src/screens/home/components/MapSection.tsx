@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import {StyleSheet} from 'react-native';
 import useGetLocation from '@hooks/useGetLocation';
 import LocationIcon from '@components/icons/location';
+import mapStyle from '@utils/map-style';
 
 export type IMapSectionProps = {};
 
@@ -14,7 +15,7 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
   const {colors} = useTheme();
   const mapRef = useRef<MapView>(null);
 
-  const regionFrom = (lat: number, lon: number, accuracy: number) => {
+  /* const regionFrom = (lat: number, lon: number, accuracy: number) => {
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
 
     const latitudeDelta = accuracy / oneDegreeOfLatitudeInMeters;
@@ -26,38 +27,17 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
       latitudeDelta,
       longitudeDelta,
     };
-  };
+  }; */
 
   useEffect(() => {
     if (cords && mapRef.current) {
-      // mapRef.current.animateCamera({
-      //   center: {
-      //     // @ts-ignore
-      //     latitude: parseFloat(cords?.latitude),
-      //     // @ts-ignore
-      //     longitude: parseFloat(cords?.longitude),
-      //   },
-      //   zoom: 16,
-      //   // @ts-ignore
-      //   altitude: cords.altitude,
-      //   // @ts-ignore
-      //   heading: cords.heading,
-      //   pitch: 1000,
-      // });
-      const {latitudeDelta, longitudeDelta} = regionFrom(
-        cords?.latitude,
-        cords?.longitude,
-        cords.accuracy,
-      );
       mapRef.current.animateToRegion({
         // @ts-ignore
         latitude: parseFloat(cords?.latitude),
         // @ts-ignore
         longitude: parseFloat(cords?.longitude),
-       /*  latitudeDelta,
-        longitudeDelta, */
         latitudeDelta: 0.0043,
-        longitudeDelta: 0.0034
+        longitudeDelta: 0.0034,
       });
     }
   }, [location]);
@@ -74,39 +54,13 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
         }}
         provider="google"
         style={StyleSheet.absoluteFill}
-        mapType="standard"
         userInterfaceStyle="light"
+        customMapStyle={mapStyle}
         // showsUserLocation
-        // userLocationAnnotationTitle="James"
-        // followsUserLocation
-        // userLocationCalloutEnabled
-        // showsMyLocationButton
         rotateEnabled={false}
         showsTraffic
-        tintColor="white"
         loadingEnabled={loading}
         loadingIndicatorColor={colors.main}
-        // initialCamera={{
-        //   center: {latitude: 6.7275658, longitude: 3.3086788},
-        //   altitude: 15000,
-        //   heading: 0,
-        //   zoom: 15,
-        //   pitch: 1,
-        // }}
-        // camera={{
-        //   center: {
-        //     // @ts-ignore
-        //     latitude: parseFloat(cords?.latitude),
-        //     // @ts-ignore
-        //     longitude: parseFloat(cords?.longitude),
-        //   },
-        //   // @ts-ignore
-        //   heading: parseInt(cords.heading),
-        //   // @ts-ignore
-        //   altitude: cords?.altitude,
-        //   pitch: 0,
-        //   zoom: 15,
-        // }}
       />
       <IconButton
         icon={<LocationIcon />}
