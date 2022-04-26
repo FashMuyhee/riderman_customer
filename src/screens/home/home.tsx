@@ -31,7 +31,11 @@ const Home: React.FC<IHomeProps> = ({navigation}) => {
           What would you like to get delivered?
         </Text>
         <TextInput mt="15px" placeholder="Request Pickup" disabled />
-        <Button title="Delivery History" mt="10px" />
+        <Button
+          title="Delivery History"
+          mt="10px"
+          onPress={() => navigation.navigate('request_delivery')}
+        />
       </View>
     </ScreenWrapper>
   );
