@@ -9,6 +9,8 @@ import {
 } from 'native-base';
 import BarIcon from './icons/bar';
 import bellIcon from '@images/icons/bell.png';
+import {useNavigation, DrawerActions} from '@react-navigation/native';
+
 export type ITransparentNavbarProps = {
   isHome?: boolean;
 };
@@ -16,6 +18,7 @@ export type ITransparentNavbarProps = {
 const TransparentNavbar: React.FC<ITransparentNavbarProps> = ({
   isHome = false,
 }) => {
+  const {dispatch} = useNavigation();
   return (
     <HStack
       zIndex={1}
@@ -28,9 +31,11 @@ const TransparentNavbar: React.FC<ITransparentNavbarProps> = ({
       mt="20%"
       h="60px">
       <IconButton
+        onPress={() => dispatch(DrawerActions.toggleDrawer())}
         size={10}
         shadow="2"
         bg="white"
+        _pressed={{background: 'white'}}
         rounded="full"
         icon={
           isHome ? (
