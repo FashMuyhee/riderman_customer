@@ -24,8 +24,8 @@ const ScreenWrapper: React.FunctionComponent<ScreenWrapperProps> = ({
     <Box
       bg={bgColor ? bgColor : 'bg'}
       h="100%"
-      px={pad ? 10 : 0}
-      pt={pad ? 10 : 0}>
+      px={pad ? 7 : 0}
+      pt={pad ? 7 : 0}>
       <StatusBar
         backgroundColor={
           translucentBar ? 'transparent' : barColor ? barColor : colors.main
