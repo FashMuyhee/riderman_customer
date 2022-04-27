@@ -1,11 +1,9 @@
 import React from 'react';
-import {View, Text, HStack, VStack} from 'native-base';
+import {Text, View} from 'native-base';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MultiSelectInput, ScreenWrapper, TextInput} from '@components';
-import LocationPinIcon from '@components/icons/location-pin';
-import LocationRadiusIcon from '@components/icons/location-radius';
-import PlaceAutoComplete from './components/PlaceAutoComplete';
+import {Button, ScreenWrapper} from '@components';
+import {FormInput} from './components/FormInput';
 
 export type IRequestDeliveryProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'request_delivery'>;
@@ -14,39 +12,18 @@ export type IRequestDeliveryProps = {
 const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
   return (
     <ScreenWrapper pad>
-      <View mt="-15px">
-        <Text fontSize="11px" color="grey.200">
-          1. Select Pickup & Delivery Locations
-        </Text>
-        <HStack space="2" alignItems="center" mt="4">
-          <VStack justifyContent="center" alignItems="center">
-            <LocationRadiusIcon />
-            <View borderColor="accent" borderWidth={2} h="35px" />
-            <LocationPinIcon />
-          </VStack>
-          <VStack w="93%">
-            <PlaceAutoComplete placeholder="Pickup:" />
-            <PlaceAutoComplete placeholder="Delivery:" />
-          </VStack>
-        </HStack>
-      </View>
-
-      <View w="full" mt="15px">
-        <Text fontSize="11px" color="grey.200">
-          2. Fill Packaging Information
-        </Text>
-        <HStack space="2" alignItems="center" mt="4">
-          <View w="58%">
-            <MultiSelectInput placeholder="Add a Package" />
-          </View>
-          <TextInput
-            w="38%"
-            placeholder="No. of Package"
-            keyboardType="numeric"
-          />
-        </HStack>
-        <TextInput w="full" placeholder="Delivery Instructions (Optional)" />
-      </View>
+      <FormInput />
+      <View
+        borderStyle="dashed"
+        borderRadius={'1px'}
+        borderColor="#EEEEEE"
+        borderWidth={0.5}
+        mt="10px"
+      />
+      <Text fontSize="11px" color="main" mt="10px">
+        + Add Another Delivery
+      </Text>
+      <Button title="Continue" mt="20px" />
     </ScreenWrapper>
   );
 };
