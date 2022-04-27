@@ -2,16 +2,16 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {View, Text, ScrollView, HStack} from 'native-base';
 import {AuthStackParamList} from '@navigations/param-list';
-import {PhoneInput, ScreenWrapper} from '@components';
+import {ScreenWrapper} from '@components';
 import {hp} from '@utils/responsive';
 import Navbar from './components/Navbar';
 import PinInput from './components/PinInput';
 
-export type IForgetPasswordProps = {
-  navigation: StackNavigationProp<AuthStackParamList, 'f_password'>;
+export type IVerifyCodeProps = {
+  navigation: StackNavigationProp<AuthStackParamList, 'verify'>;
 };
 
-const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
+const VerifyCode: React.FC<IVerifyCodeProps> = ({navigation}) => {
   const [token, setToken] = useState('');
 
   return (
@@ -20,7 +20,7 @@ const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
       <View bg="bg" h={hp(100)} borderTopRadius="25px" px="30px">
         <View my="30px">
           <Text fontSize="xl" textAlign="center" bold>
-            Forgot Password
+            Enter Code
           </Text>
           <Text
             fontSize="11px"
@@ -28,24 +28,30 @@ const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
             alignSelf="center"
             textAlign="center"
             color="grey.200">
-            Enter your phone number to receive a reset code
+            A six digit code was sent to your email and phone number
+          </Text>
+          <Text fontSize="11px" mt="10px" bold textAlign="center">
+            Resend code in 6:00 min
           </Text>
         </View>
-        {/* @ts-ignore */}
-        <PhoneInput />
+        <PinInput
+          value={token}
+          onChange={setToken}
+          onFinish={() => navigation.navigate('r_password')}
+        />
         <HStack
           w="60%"
           alignItems="center"
           space="2"
           mt="15px"
           alignSelf={'center'}>
-          <Text fontSize="11px">Remember password? </Text>
+          <Text fontSize="11px">Didn’t receive code? </Text>
           <Text
             fontSize="11px"
-            onPress={() => navigation.navigate('login')}
+            onPress={() => navigation.navigate('r_password')}
             underline
             color="main">
-            Login
+            Resend code
           </Text>
         </HStack>
       </View>
@@ -53,4 +59,4 @@ const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
   );
 };
 
-export default ForgetPassword;
+export default VerifyCode;
