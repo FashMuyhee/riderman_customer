@@ -37,3 +37,5 @@ export const
       heading: 120,
     }
   ]
+
+export const packageType = ['wears', 'electronic', 'gadgets', 'perishables', 'accessories', 'documents', 'shoes']
