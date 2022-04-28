@@ -7,9 +7,11 @@ const theme = extendTheme({
     grey: {
       100: '#F7F7F7',
       200: '#777777',
-      300:'#B9B9B9'
+      300: '#B9B9B9',
+      400: '#263238'
     },
     accent: '#b6dac7'
+
   },
   config: {
     initialColorMode: 'light',
