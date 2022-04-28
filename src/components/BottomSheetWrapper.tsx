@@ -6,7 +6,7 @@ import {hp} from '@utils/responsive';
 export type IBottomSheetWrapperProps = {
   isBackDrop?: boolean;
   height?: number;
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 const BottomSheetWrapper = React.forwardRef<RBSheet, IBottomSheetWrapperProps>(
@@ -23,7 +23,7 @@ const BottomSheetWrapper = React.forwardRef<RBSheet, IBottomSheetWrapperProps>(
           wrapper: {
             backgroundColor: isBackDrop
               ? 'rgba(18, 18, 18, 0.3)'
-              : 'transparent',
+              : 'rgba(18, 18, 18, 0.04)',
           },
           draggableIcon: {
             backgroundColor: '#f5f5f5',
