@@ -21,7 +21,7 @@ import {hp} from '@utils/responsive';
 export interface IMultiSelectInputProps {
   values: string[];
   onSelect: (item: string[]) => void;
-  data: Array<string>;
+  data?: Array<string>;
   placeholder: string;
   width?: string;
   height?: string;
