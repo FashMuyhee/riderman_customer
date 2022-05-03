@@ -3,7 +3,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawerContent';
 import {useTheme} from 'native-base';
 import GuardStack from '../stack/guard';
-import TimeIcon from '@components/icons/timer';
+import TimeIcon from '@components/icons/time';
 
 const Drawer = createDrawerNavigator();
 
