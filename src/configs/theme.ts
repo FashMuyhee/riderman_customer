@@ -8,7 +8,8 @@ const theme = extendTheme({
       100: '#F7F7F7',
       200: '#777777',
       300: '#B9B9B9',
-      400: '#263238'
+      400: '#263238',
+      500: '#EEEEEE'
     },
     accent: '#b6dac7'
 
