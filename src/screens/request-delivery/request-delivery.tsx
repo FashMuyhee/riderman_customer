@@ -10,9 +10,14 @@ export type IRequestDeliveryProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'request_delivery'>;
 };
 
+export type LocationValue = {
+  desc: string;
+  location: {lat: number; lng: number};
+};
+
 const initialValues: IDeliveryRequestBody = {
-  pickupLocation: '',
-  deliveryLocation: '',
+  pickupLocation: {desc: '', location: {lat: 0, lng: 0}},
+  deliveryLocation: {desc: '', location: {lat: 0, lng: 0}},
   packageName: '',
   packageTypes: [],
   weight: '',
@@ -21,17 +26,15 @@ const initialValues: IDeliveryRequestBody = {
   rPhone: '',
   rEmail: '',
 };
-const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
-  const [requestValues, setRequestValues] = useState<
-    Array<IDeliveryRequestBody>
-  >([initialValues]);
 
-  const handleFormChange =
-    (index: number, key: string) => (value: string | string[]) => {
-      let newRequestValue = [...requestValues];
-      newRequestValue[index] = {...newRequestValue[index], [key]: value};
-      setRequestValues(newRequestValue);
-    };
+const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
+  const [requestValues, setRequestValues] = useState<Array<IDeliveryRequestBody>>([initialValues]);
+
+  const handleFormChange = (index: number, key: string) => (value: string | string[] | LocationValue) => {
+    let newRequestValue = [...requestValues];
+    newRequestValue[index] = {...newRequestValue[index], [key]: value};
+    setRequestValues(newRequestValue);
+  };
 
   const handleAddNewForm = () => {
     setRequestValues(prev => [...prev, initialValues]);
@@ -57,18 +60,8 @@ const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
           />
         ))}
         <View>
-          <View
-            borderStyle="dashed"
-            borderRadius={'1px'}
-            borderColor="#EEEEEE"
-            borderWidth={0.5}
-            mt="10px"
-          />
-          <Text
-            onPress={handleAddNewForm}
-            fontSize="11px"
-            color="main"
-            mt="10px">
+          <View borderStyle="dashed" borderRadius={'1px'} borderColor="#EEEEEE" borderWidth={0.5} mt="10px" />
+          <Text onPress={handleAddNewForm} fontSize="11px" color="main" mt="10px">
             + Add Another Delivery
           </Text>
           <Button title="Continue" mt="20px" />
