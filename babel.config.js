@@ -23,6 +23,6 @@ module.exports = {
         '@services': './src/services',
 
       }
-    }], 'react-native-reanimated/plugin'
+    }], 'react-native-reanimated/plugin', ["module:react-native-dotenv"]
   ]
 };
