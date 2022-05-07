@@ -23,7 +23,7 @@ export type PlacePredictionType = {
 
 export interface IPlaceAutoCompleteProps extends TextInputProps {
   value: string;
-  onPlaceChange: ({place, location}: {place: string; location: {lat: number; lng: number}}) => void;
+  onPlaceChange: ({desc, location}: {desc: string; location: {lat: number; lng: number}}) => void;
 }
 
 export type LocationItemProps = {
@@ -120,10 +120,10 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
      * get place lat and longitude on press
      * @param placeId
      */
-    const handlePressLocation = async (placeId: string, des: string) => {
+    const handlePressLocation = async (placeId: string, desc: string) => {
       try {
         const res: {lat: number; lng: number} = await placeAPI.getPlaceID(placeId);
-        onPlaceChange({place: des, location: res});
+        onPlaceChange({desc, location: res});
         closeSearchModal();
       } catch (error) {
         console.log(error);

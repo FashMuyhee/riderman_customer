@@ -1,6 +1,8 @@
+import { LocationValue } from "@screens/request-delivery/request-delivery";
+
 export type IDeliveryRequestBody = {
-  pickupLocation: string;
-  deliveryLocation: string;
+  pickupLocation: LocationValue;
+  deliveryLocation: LocationValue;
   packageName: string;
   packageTypes: string[];
   weight: string;
