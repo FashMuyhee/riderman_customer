@@ -1,3 +1,4 @@
+import { IDeliveryRequestBody } from "@models/delivery";
 
 export type AuthStackParamList = {
   login: undefined;
@@ -10,4 +11,5 @@ export type AuthStackParamList = {
 export type GuardStackParamList = {
   home: undefined;
   request_delivery: undefined;
+  delivery_summary: { item: IDeliveryRequestBody[] }
 };

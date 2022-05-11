@@ -1,9 +1,7 @@
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
+import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
 import Home from '@screens/home/home';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
+import DeliverySummary from '@screens/request-delivery/summary';
 import {useTheme} from 'native-base';
 import React from 'react';
 import {Platform} from 'react-native';
@@ -33,17 +31,20 @@ const GuardStack = () => {
           fontSize: 16,
         },
       }}>
-      <StackNav.Screen
-        component={Home}
-        options={{headerShown: false}}
-        name="home"
-      />
+      <StackNav.Screen component={Home} options={{headerShown: false}} name="home" />
       <StackNav.Screen
         component={RequestDelivery}
         options={{
           headerTitle: 'Delivery Form',
         }}
         name="request_delivery"
+      />
+      <StackNav.Screen
+        component={DeliverySummary}
+        options={{
+          headerTitle: 'Delivery Summary',
+        }}
+        name="delivery_summary"
       />
     </StackNav.Navigator>
   );
