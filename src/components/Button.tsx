@@ -26,6 +26,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   fontSize = 12,
   textTransform,
   variant = 'filled',
+  bg = 'main',
   ...extraProps
 }) => {
   const bottomStyle: StyleProp<ViewStyle> = {
@@ -42,7 +43,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     if (variant === 'outlined') {
       return 'offWhite';
     }
-    return 'main';
+    return bg;
   };
 
   const btnTextColor = () => {
