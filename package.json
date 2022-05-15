@@ -12,6 +12,7 @@
     "adb-connect": "adb reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-native-picker/picker": "^2.4.1",
     "@react-navigation/drawer": "^6.4.1",
