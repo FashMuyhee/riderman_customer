@@ -13,7 +13,7 @@ export type IDeliverySummaryProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'delivery_summary'>;
 };
 
-const DeliverySummary: React.FC<IDeliverySummaryProps> = ({}) => {
+const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation}) => {
   return (
     <ScreenWrapper pad={false} bgColor="#fafafa">
       <Text textAlign="center" mt="20px" color="grey.200" fontSize="13px">
@@ -41,7 +41,7 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({}) => {
         <View mt="20px" borderColor="grey.500" borderStyle="dashed" borderWidth={1} borderRadius="1px" />
         <HStack space="3" alignItems="center" mt="20px">
           <Button bg="black" title="Cancel" w="1/2" />
-          <Button title="Confirm" w="1/2" />
+          <Button title="Confirm" w="1/2" onPress={() => navigation.navigate('select_rider')} />
         </HStack>
       </View>
     </ScreenWrapper>
