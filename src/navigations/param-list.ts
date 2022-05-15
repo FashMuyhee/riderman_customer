@@ -12,4 +12,5 @@ export type GuardStackParamList = {
   home: undefined;
   request_delivery: undefined;
   delivery_summary: { item: IDeliveryRequestBody[] }
+  select_rider: undefined
 };
