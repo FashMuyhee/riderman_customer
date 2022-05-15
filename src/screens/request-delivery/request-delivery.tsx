@@ -64,7 +64,7 @@ const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
           <Text onPress={handleAddNewForm} fontSize="11px" color="main" mt="10px">
             + Add Another Delivery
           </Text>
-          <Button title="Continue" mt="20px" />
+          <Button title="Continue" mt="20px" onPress={() => navigation.navigate('delivery_summary', {item: requestValues})} />
         </View>
       </ScrollView>
     </ScreenWrapper>
