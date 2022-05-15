@@ -11,7 +11,8 @@ const theme = extendTheme({
       400: '#263238',
       500: '#EEEEEE'
     },
-    accent: '#b6dac7'
+    accent: '#b6dac7',
+    lightAccent: '#e8f4ed'
 
   },
   config: {
