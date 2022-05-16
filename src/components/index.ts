@@ -1,4 +1,4 @@
-import BottomSheetWrapper from "./BottomSheetWrapper";
+import { BottomSheetWrapper, BottomSheetWrapperSnappy } from "./BottomSheetWrapper";
 import Button from "./Button";
 import FlatList from "./FlatList";
 import MultiSelectInput from "./MutilSelectInput";
@@ -9,5 +9,5 @@ import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
 
 
-export { ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList }
+export { ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy }
 
