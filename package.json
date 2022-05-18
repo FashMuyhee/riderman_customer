@@ -1,0 +1,70 @@
+{
+  "name": "riderman_customer",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "start_port": "react-native start --port=6000",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adb-connect": "adb reverse tcp:8081 tcp:8081"
+  },
+  "dependencies": {
+    "@gorhom/bottom-sheet": "^4",
+    "@react-native-masked-view/masked-view": "^0.2.6",
+    "@react-native-picker/picker": "^2.4.1",
+    "@react-navigation/drawer": "^6.4.1",
+    "@react-navigation/native": "^6.0.10",
+    "@react-navigation/stack": "^6.2.1",
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.2",
+    "native-base": "3.4.0",
+    "react": "17.0.2",
+    "react-native": "0.68.2",
+    "react-native-dotenv": "^3.3.1",
+    "react-native-flatlist-slider": "^1.0.6",
+    "react-native-geolocation-service": "^5.3.0-beta.4",
+    "react-native-gesture-handler": "^2.4.0",
+    "react-native-maps": "^0.31.0",
+    "react-native-phone-input": "^1.3.3",
+    "react-native-raw-bottom-sheet": "^2.2.0",
+    "react-native-reanimated": "^2.7.0",
+    "react-native-safe-area-context": "^3.2.1",
+    "react-native-screens": "~3.10.2",
+    "react-native-smooth-pincode-input": "^1.0.9",
+    "react-native-svg": "^12.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/jest": "^26.0.23",
+    "@types/react-native": "^0.67.3",
+    "@types/react-test-renderer": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "babel-jest": "^26.6.3",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "^7.32.0",
+    "jest": "^26.6.3",
+    "metro-react-native-babel-preset": "^0.67.0",
+    "react-test-renderer": "17.0.2",
+    "typescript": "^4.4.4"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
