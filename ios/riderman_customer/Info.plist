@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>riderman_customer</string>
+	<string>Riderman</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,6 +37,27 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>font-black.ttf</string>
+		<string>font-blackitalic.ttf</string>
+		<string>font-bold.ttf</string>
+		<string>font-bolditalic.ttf</string>
+		<string>font-extrabold.ttf</string>
+		<string>font-extrabolditalic.ttf</string>
+		<string>font-extralight.ttf</string>
+		<string>font-extralightitalic.ttf</string>
+		<string>font-italic.ttf</string>
+		<string>font-light.ttf</string>
+		<string>font-lightitalic.ttf</string>
+		<string>font-medium.ttf</string>
+		<string>font-mediumitalic.ttf</string>
+		<string>font-regular.ttf</string>
+		<string>font-semibold.ttf</string>
+		<string>font-semibolditalic.ttf</string>
+		<string>font-thin.ttf</string>
+		<string>font-thinitalic.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
