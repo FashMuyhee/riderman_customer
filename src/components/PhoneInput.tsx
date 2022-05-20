@@ -28,7 +28,7 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value}) => {
           borderColor: colors.grey[100],
           borderRadius: 10,
           paddingHorizontal: 15,
-          height: 50,
+          height: 57,
           marginBottom: 10,
         }}
         initialCountry="ng"

@@ -29,7 +29,7 @@ export interface IMultiSelectInputProps {
 
 const MultiSelectInput: React.FC<IMultiSelectInputProps> = ({
   width,
-  height = '47px',
+  height = '55px',
   placeholder,
   values,
   onSelect,

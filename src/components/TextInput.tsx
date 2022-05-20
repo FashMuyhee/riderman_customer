@@ -56,7 +56,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
     ...boxProps
   } = props;
 
-  const INPUT_HEIGHT = '37px';
+  const INPUT_HEIGHT = '48px';
   const [focus, setFocus] = React.useState(false);
 
   return (
