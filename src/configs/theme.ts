@@ -38,40 +38,40 @@ const theme = extendTheme({
   fontConfig: {
     poppins: {
       100: {
-        normal: 'font-extralight',
-        italic: 'font-extralightitalic',
+        normal: 'Poppins-ExtraLight',
+        italic: 'Poppins-ExtraLightItalic',
       },
       200: {
-        normal: 'font-extralight',
-        italic: 'font-extralightitalic',
+        normal: 'Poppins-ExtraLight',
+        italic: 'Poppins-ExtraLightItalic',
       },
       300: {
-        normal: 'font-light',
-        italic: 'font-lightitalic',
+        normal: 'Poppins-Light',
+        italic: 'Poppins-LightItalic',
       },
       400: {
-        normal: 'font-regular',
-        italic: 'font-italic',
+        normal: 'Poppins-Regular',
+        italic: 'Poppins-Italic',
       },
       500: {
-        normal: 'font-regular',
-        italic: 'font-italic',
+        normal: 'Poppins-Regular',
+        italic: 'Poppins-Italic',
       },
       600: {
-        normal: 'font-semibold',
-        italic: 'font-semibolditalic',
+        normal: 'Poppins-SemiBold',
+        italic: 'Poppins-SemiBoldItalic',
       },
       700: {
-        normal: 'font-bold',
-        italic: 'font-bolditalic',
+        normal: 'Poppins-Bold',
+        italic: 'Poppins-BoldItalic',
       },
       800: {
-        normal: 'font-extrabold',
-        italic: 'font-extrabolditalic',
+        normal: 'Poppins-ExtraBold',
+        italic: 'Poppins-ExtraBoldItalic',
       },
       900: {
-        normal: 'font-black',
-        italic: 'font-blackitalic',
+        normal: 'Poppins-Black',
+        italic: 'Poppins-BlackItalic',
       },
     },
   },
