@@ -29,7 +29,7 @@ const GuardStack = () => {
         headerTintColor: 'white',
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          fontFamily: 'font-medium',
+          fontFamily: 'Poppins-Medium',
           fontSize: 16,
         },
       }}>
