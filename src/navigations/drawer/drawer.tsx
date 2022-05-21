@@ -31,7 +31,7 @@ const DrawerNavigator = () => {
         drawerType: 'front',
         drawerActiveBackgroundColor: colors.bg,
         drawerLabelStyle: {
-          fontFamily: 'Raleway-Regular',
+          fontFamily: 'Poppins-Regular',
           fontSize: 14,
           marginLeft: -10,
         },
