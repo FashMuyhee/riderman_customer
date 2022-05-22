@@ -1,5 +1,7 @@
 import { LocationValue } from "@screens/request-delivery/request-delivery";
 
+export type PaymentMethod = "Cash" | 'Card' | 'Wallet'
+
 export type IDeliveryRequestBody = {
   pickupLocation: LocationValue;
   deliveryLocation: LocationValue;
