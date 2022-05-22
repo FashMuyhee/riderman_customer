@@ -27,6 +27,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
   textTransform,
   variant = 'filled',
   bg = 'main',
+  color = 'white',
   ...extraProps
 }) => {
   const bottomStyle: StyleProp<ViewStyle> = {
@@ -50,7 +51,7 @@ const Button: React.FunctionComponent<ButtonProps> = ({
     if (variant == 'outlined') {
       return 'main';
     }
-    return 'white';
+    return color;
   };
 
   const shadow = () => {
