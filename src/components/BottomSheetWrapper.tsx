@@ -43,23 +43,22 @@ export type IBottomSheetWrapperSnappyProps = {
   index?: number;
 };
 
-const BottomSheetWrapperSnappy = React.forwardRef<BottomSheet, IBottomSheetWrapperSnappyProps>(
-  ({children, snapPoints = ['25%', '50%'], index = -1, dragClose = true}, ref) => {
-    return (
-      <BottomSheet
-        keyboardBlurBehavior="restore"
-        keyboardBehavior="fillParent"
-        android_keyboardInputMode="adjustResize"
-        enablePanDownToClose={dragClose}
-        handleIndicatorStyle={{backgroundColor: '#f5f5f5', width: 60}}
-        backgroundStyle={{backgroundColor: '#fff'}}
-        index={index}
-        ref={ref}
-        snapPoints={snapPoints}>
-        {children}
-      </BottomSheet>
-    );
-  },
-);
+const BottomSheetWrapperSnappy = React.forwardRef<BottomSheet, IBottomSheetWrapperSnappyProps>(({children, snapPoints = ['25%', '50%'], index = -1, dragClose = true}, ref) => {
+  return (
+    <BottomSheet
+      keyboardBlurBehavior="restore"
+      keyboardBehavior="fillParent"
+      android_keyboardInputMode="adjustResize"
+      enablePanDownToClose={dragClose}
+      handleIndicatorStyle={{backgroundColor: '#f5f5f5', width: 60}}
+      backgroundStyle={{backgroundColor: '#fff'}}
+      index={index}
+      ref={ref}
+      animationConfigs={{damping: 30}}
+      snapPoints={snapPoints}>
+      {children}
+    </BottomSheet>
+  );
+});
 
 export {BottomSheetWrapper, BottomSheetWrapperSnappy};
