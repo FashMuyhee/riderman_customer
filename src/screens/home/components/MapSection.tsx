@@ -68,7 +68,6 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
           <Marker key={index} coordinate={{...bike}}>
             <Image
               source={bikeIllus}
-              borderWidth={1}
               resizeMode="center"
               alt="bike"
               w="30px"
@@ -93,7 +92,6 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
           }}>
           <Image
             source={userPin}
-            borderWidth={1}
             resizeMode="center"
             alt="user_location"
             w="80px"
@@ -107,7 +105,7 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
         bg="white"
         size={10}
         position="absolute"
-        bottom={hp(7)}
+        bottom={hp(12)}
         right="30px"
         rounded={'full'}
         shadow="1"
