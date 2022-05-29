@@ -1,0 +1,34 @@
+import {RidermanAvatar, Rating} from '@components';
+import {hp} from '@utils/responsive';
+import {View, Text, HStack} from 'native-base';
+import React from 'react';
+import {ImageSourcePropType} from 'react-native';
+
+type RiderBriefProps = {
+  image: ImageSourcePropType;
+  plateNo: string;
+  fullname: string;
+  rating: number;
+};
+
+const RiderBrief = (props: RiderBriefProps) => {
+  return (
+    <HStack px="10px" mt="3%" alignItems="center" justifyContent="space-between">
+      <RidermanAvatar image={props.image} deliveryCount={300} />
+      <View w="50%">
+        <Text fontWeight="semibold" fontSize={hp(1.4)}>
+          {props.fullname}
+        </Text>
+        <Rating number={props.rating} />
+      </View>
+      <View w="30%">
+        <Text textAlign="right">Plate No.</Text>
+        <Text textAlign="right" >
+          {props.plateNo}
+        </Text>
+      </View>
+    </HStack>
+  );
+};
+
+export default RiderBrief;
