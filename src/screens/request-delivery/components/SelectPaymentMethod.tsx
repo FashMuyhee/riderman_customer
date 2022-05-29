@@ -12,24 +12,34 @@ export type ISelectPaymentMethodProps = {
   onChange: (method: PaymentMethod) => void;
 };
 
+export const PaymentMethodIcon = ({selected, method}: {selected: boolean; method: PaymentMethod}) => {
+  if (method === 'Card') {
+    return <CreditCardIcon selected={selected} />;
+  }
+  if (method === 'Cash') {
+    return <MoneyIcon selected={selected} />;
+  }
+  if (method === 'Wallet') {
+    return <WalletIcon selected={selected} />;
+  }
+  return null;
+};
+
 const SelectPaymentMethod: React.FC<ISelectPaymentMethodProps> = ({method, onChange}) => {
   const methods: PaymentMethod[] = ['Card', 'Cash', 'Wallet'];
 
   const PaymentMethod = ({title, selected}: {title: PaymentMethod; selected: boolean}) => {
-    const Icon = ({selected}: {selected: boolean}) => {
-      if (title === 'Card') {
-        return <CreditCardIcon selected={selected} />;
-      }
-      if (title === 'Cash') {
-        return <MoneyIcon selected={selected} />;
-      }
-      if (title === 'Wallet') {
-        return <WalletIcon selected={selected} />;
-      }
-      return null;
-    };
-
-    return <Button onPress={() => onChange(title)} w="32%" h="45px" bg={selected ? 'main' : 'white'} leftIcon={<Icon selected={selected} />} title={title} color={selected ? 'white' : 'main'} />;
+    return (
+      <Button
+        onPress={() => onChange(title)}
+        w="32%"
+        h="45px"
+        bg={selected ? 'main' : 'white'}
+        leftIcon={<PaymentMethodIcon selected={selected} method={title} />}
+        title={title}
+        color={selected ? 'white' : 'main'}
+      />
+    );
   };
 
   return (
