@@ -11,7 +11,7 @@ interface RatingProp extends IHStackProps {
 
 const Rating = ({number, ...rest}: RatingProp) => {
   return (
-    <HStack {...rest} space="1" alignItems="center" justifyContent="space-between">
+    <HStack {...rest} space="1" alignItems="center" justifyContent="space-between" w="25px">
       <StarIcon />
       <Text fontSize={hp(1.4)}>{number}</Text>
     </HStack>
