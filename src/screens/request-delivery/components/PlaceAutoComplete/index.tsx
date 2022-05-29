@@ -10,7 +10,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import LocationIcon from '@components/icons/location';
-import TimeTwoIcon from '@components/icons/time2';
+import HistoryIcon from '@components/icons/history';
 import LocationPinIcon from '@components/icons/location-pin';
 import placeAPI from './placeApi';
 import {useDebounce} from '@hooks/useDebounce';
@@ -64,7 +64,7 @@ const LocationItem = ({onPress, predictions, isHistory}: LocationItemProps) => {
       flexDir="row"
       alignItems="flex-start"
       justifyContent="flex-start">
-      {isHistory ? <TimeTwoIcon /> : <LocationPinIcon />}
+      {isHistory ? <HistoryIcon /> : <LocationPinIcon />}
       <View ml="10px">
         <Text isTruncated w={wp(85)} fontSize="13px">
           {predictions.description}

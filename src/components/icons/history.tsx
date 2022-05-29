@@ -1,7 +1,7 @@
 import React from 'react';
 import {Svg, Path} from 'react-native-svg';
 
-const TimeTwoIcon = () => {
+const HistoryIcon = () => {
   return (
     <Svg width="20" height="20" viewBox="0 0 15 15" fill="none">
       <Path
@@ -18,4 +18,4 @@ const TimeTwoIcon = () => {
   );
 };
 
-export default TimeTwoIcon;
+export default HistoryIcon;
