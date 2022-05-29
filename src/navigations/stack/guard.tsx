@@ -1,6 +1,7 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
 import Home from '@screens/home/home';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
+import RequestPreview from '@screens/request-delivery/request-preview';
 import SelectRider from '@screens/request-delivery/select-rider';
 import DeliverySummary from '@screens/request-delivery/summary';
 import {useTheme} from 'native-base';
@@ -32,6 +33,10 @@ const GuardStack = () => {
           fontFamily: 'Poppins-Medium',
           fontSize: 16,
         },
+        headerBackTitle: 'Back',
+        headerBackTitleStyle: {
+          fontSize: 14,
+        },
       }}>
       <StackNav.Screen component={Home} options={{headerShown: false}} name="home" />
       <StackNav.Screen
@@ -54,6 +59,13 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="select_rider"
+      />
+      <StackNav.Screen
+        component={RequestPreview}
+        options={{
+          headerShown: false,
+        }}
+        name="request_preview"
       />
     </StackNav.Navigator>
   );

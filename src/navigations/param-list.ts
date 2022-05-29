@@ -13,4 +13,5 @@ export type GuardStackParamList = {
   request_delivery: undefined;
   delivery_summary: { item: IDeliveryRequestBody[] }
   select_rider: undefined
+  request_preview: undefined
 };
