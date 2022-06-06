@@ -11,9 +11,11 @@ import bikeIllus from '@images/icons/bike.png';
 import {G_MAP_KEY} from '@env';
 import MapViewDirections from 'react-native-maps-directions';
 
-export type IMapSectionProps = {};
+export type IMapSectionProps = {
+  height?: number;
+};
 
-const MapSection: React.FC<IMapSectionProps> = ({}) => {
+const MapSection: React.FC<IMapSectionProps> = ({height = hp(40)}) => {
   const {location, loading, getLocation} = useGetLocation();
   const {colors} = useTheme();
   const mapRef = useRef<MapView>(null);
@@ -29,7 +31,7 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
   ]);
 
   return (
-    <View h={hp(40)} w="full">
+    <View h={height} w="full">
       <MapView
         ref={mapRef}
         initialRegion={{
@@ -45,13 +47,7 @@ const MapSection: React.FC<IMapSectionProps> = ({}) => {
         rotateEnabled={false}
         loadingEnabled={loading}
         loadingIndicatorColor={colors.main}>
-        <MapViewDirections
-          origin={coordinates[0]}
-          destination={coordinates[1]}
-          apikey={G_MAP_KEY}
-          strokeWidth={4}
-          strokeColor={colors.main}
-        />
+        <MapViewDirections origin={coordinates[0]} destination={coordinates[1]} apikey={G_MAP_KEY} strokeWidth={4} strokeColor={colors.main} />
         <Marker coordinate={coordinates[0]} />
         <Marker coordinate={coordinates[1]} />
       </MapView>
