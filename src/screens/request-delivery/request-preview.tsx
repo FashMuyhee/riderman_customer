@@ -2,7 +2,7 @@ import {MoneyText, ScreenWrapper, Button} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, Text, Image, Center, ScrollView, Box, HStack} from 'native-base';
-import React from 'react';
+import React, {useRef} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -15,6 +15,8 @@ import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
 import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
+import RequestProgressSheet from './components/RequestProgressSheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -62,6 +64,8 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       packageType: ['Bag', 'Shoe'],
     },
   ];
+
+  const progressRef = useRef<BottomSheet>(null);
   return (
     <ScreenWrapper barColor="white" barStyle="dark-content">
       <ScrollView>
@@ -103,9 +107,10 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         </Box>
         <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
           <Button bg="black" title="Go To Home" w="48%" />
-          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} />
+          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={()=>progressRef.current?.snapToIndex(0)} />
         </HStack>
       </ScrollView>
+      <RequestProgressSheet ref={progressRef} onClose={() => progressRef.current?.close()} />
     </ScreenWrapper>
   );
 };
