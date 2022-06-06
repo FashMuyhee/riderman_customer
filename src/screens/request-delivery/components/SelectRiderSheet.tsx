@@ -4,7 +4,6 @@ import {BottomSheetWrapperSnappy} from '@components/BottomSheetWrapper';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {hp} from '@utils/responsive';
 import rider from '@images/rider.png';
-import StarIcon from '@components/icons/star';
 import {MoneyText, Rating, RidermanAvatar} from '@components';
 import SelectPaymentMethod from './SelectPaymentMethod';
 import {PaymentMethod} from '@models/delivery';

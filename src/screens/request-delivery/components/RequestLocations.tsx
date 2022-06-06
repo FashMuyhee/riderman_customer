@@ -15,7 +15,7 @@ const RequestLocations = ({deliveryLocations, pickUp}: RequestLocationsProps) =>
       <VStack justifyContent="center" alignItems="center">
         <LocationRadiusIcon />
         {deliveryLocations.map((item, key) => (
-          <React.Fragment key={item}>
+          <React.Fragment key={key}>
             <View borderColor="accent" borderWidth={2} h="15px" />
             <LocationPinIcon />
           </React.Fragment>
@@ -26,7 +26,7 @@ const RequestLocations = ({deliveryLocations, pickUp}: RequestLocationsProps) =>
           {pickUp}
         </Text>
         {deliveryLocations.map((item, key) => (
-          <Text fontSize={hp(1.5)} mt="10px" key={item} isTruncated>
+          <Text fontSize={hp(1.5)} mt="10px" key={key} isTruncated>
             {item}
           </Text>
         ))}
