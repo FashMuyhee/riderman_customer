@@ -1,8 +1,8 @@
 import {MoneyText, ScreenWrapper, Button} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, Text, Image, Center, ScrollView, Box, HStack} from 'native-base';
-import React, {useRef} from 'react';
+import {View, Text, Image, Center, ScrollView, Box, HStack, useDisclose} from 'native-base';
+import React, {useEffect, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -15,8 +15,8 @@ import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
 import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
-import RequestProgressSheet from './components/RequestProgressSheet';
-import BottomSheet from '@gorhom/bottom-sheet';
+import RequestProgressSheet, {RequestProgressStatus} from './components/RequestProgressSheet';
+import CancelRequestSheet from './components/CancelRequestSheet';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -65,7 +65,24 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     },
   ];
 
-  const progressRef = useRef<BottomSheet>(null);
+  const {isOpen, onToggle} = useDisclose();
+  const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
+  const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
+
+  const handleCloseCancelModal = () => {
+    onToggle();
+    toggleProgress();
+  };
+
+  const simulateStatus = async () => {
+    setTimeout(() => {
+      setProgressStatus('too-long');
+    }, 10000);
+  };
+  useEffect(() => {
+    simulateStatus();
+  });
+
   return (
     <ScreenWrapper barColor="white" barStyle="dark-content">
       <ScrollView>
@@ -106,11 +123,12 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
         </Box>
         <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
-          <Button bg="black" title="Go To Home" w="48%" />
-          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={()=>progressRef.current?.snapToIndex(0)} />
+          <Button bg="black" title="Go To Home" w="48%" onPress={() => navigation.navigate('home')} />
+          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={toggleProgress} />
         </HStack>
       </ScrollView>
-      <RequestProgressSheet ref={progressRef} onClose={() => progressRef.current?.close()} />
+      <RequestProgressSheet onKeepWaiting={() => setProgressStatus('progress')} progressStatus={progressStatus} visible={visibleProgress} onClose={toggleProgress} onCancel={onToggle} />
+      <CancelRequestSheet visible={isOpen} onCancel={onToggle} onClose={handleCloseCancelModal} />
     </ScreenWrapper>
   );
 };

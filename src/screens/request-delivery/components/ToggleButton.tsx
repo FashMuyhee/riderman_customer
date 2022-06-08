@@ -90,7 +90,7 @@ const ToggleButton = (props: Props) => {
           <XIcon />
         </Animated.View>
       </PanGestureHandler>
-      <Animated.Text style={[textStyle, {color: '#A1A9C5', textAlign: 'center', zIndex: -1}]}>Swipe To Cancel</Animated.Text>
+      <Animated.Text style={[textStyle, {color: '#A1A9C5', textAlign: 'center', zIndex: -1}]}>Slide to cancel pickup</Animated.Text>
     </View>
   );
 };

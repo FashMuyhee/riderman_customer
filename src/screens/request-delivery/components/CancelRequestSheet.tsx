@@ -5,12 +5,12 @@ import attention from '@images/illustrations/attention.png';
 import {Image, Modal} from 'react-native';
 import {Button} from '@components';
 
-type IProps = {
+export type CancelRequestSheetProps = {
   onClose: () => void;
   onCancel: () => void;
   visible: boolean;
 };
-const CancelRequestSheet = ({onClose, visible, onCancel}: IProps) => {
+const CancelRequestSheet = ({onClose, visible, onCancel}: CancelRequestSheetProps) => {
   return (
     <Modal visible={visible} transparent statusBarTranslucent>
       <View w="full" h="full" bg="rgba(38, 50, 56, 0.69)" alignItems="center" justifyContent="flex-end">
