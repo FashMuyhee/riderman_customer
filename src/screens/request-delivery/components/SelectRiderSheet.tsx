@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {ChevronRightIcon, HStack, Pressable, Text, View} from 'native-base';
 import {BottomSheetWrapperSnappy} from '@components/BottomSheetWrapper';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
@@ -9,6 +9,7 @@ import SelectPaymentMethod from './SelectPaymentMethod';
 import {PaymentMethod} from '@models/delivery';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {GuardStackParamList} from '@navigations/param-list';
+import {RequestContext} from '@contexts/RequestContext';
 
 export interface SelectRiderProps {
   handleCompanyInfo: (companyId: string) => void;
@@ -16,8 +17,8 @@ export interface SelectRiderProps {
 
 const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handleCompanyInfo}, ref) => {
   const snapPoints = useMemo(() => ['60%', '80%'], []);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Cash');
   const {navigate} = useNavigation<NavigationProp<GuardStackParamList>>();
+  const {setPaymentMethod, paymentMethod,amount} = useContext(RequestContext);
 
   const RiderItem = () => {
     return (
@@ -71,7 +72,7 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
             Confirm
           </Text>
           <HStack alignItems="center" space="2">
-            <MoneyText color="white" fontSize={hp(1.5)} moneyValue={6000} />
+            <MoneyText color="white" fontSize={hp(1.5)} moneyValue={amount} />
             <ChevronRightIcon color="white" />
           </HStack>
         </Pressable>

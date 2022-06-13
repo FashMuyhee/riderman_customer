@@ -2,7 +2,7 @@ import {MoneyText, ScreenWrapper, Button} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, Text, Image, Center, ScrollView, Box, HStack, useDisclose} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -17,6 +17,7 @@ import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
 import RequestProgressSheet, {RequestProgressStatus} from './components/RequestProgressSheet';
 import CancelRequestSheet from './components/CancelRequestSheet';
+import {RequestContext} from '@contexts/RequestContext';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -38,7 +39,7 @@ export const PackageBrief = ({contactName, contactPhone, packageType, index}: Pa
         ))}
       </HStack>
       <HStack mt="3%" alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center"  w="48%" space="4">
+        <HStack alignItems="center" w="48%" space="4">
           <UserIcon />
           <Text>{contactName}</Text>
         </HStack>
@@ -68,6 +69,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
+  const {amount, paymentMethod} = useContext(RequestContext);
 
   const handleCloseCancelModal = () => {
     toggleCancel();
@@ -105,10 +107,10 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             </View>
             <View justifyContent="center" alignItems="center" w="20%">
               <HStack alignItems="center" space="1">
-                <PaymentMethodIcon method="Cash" selected={false} />
-                <Text>Cash</Text>
+                <PaymentMethodIcon method={paymentMethod} selected={false} />
+                <Text>{paymentMethod}</Text>
               </HStack>
-              <MoneyText bold moneyValue={6000} />
+              <MoneyText bold moneyValue={amount} />
             </View>
           </HStack>
           {/* rider info */}
@@ -122,7 +124,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         </Box>
         <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
           <Button bg="black" title="Go To Home" w="48%" onPress={() => navigation.navigate('home')} />
-          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={toggleProgress} />
+          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={() => navigation.navigate('payment_screen')} />
         </HStack>
       </ScrollView>
       <RequestProgressSheet onKeepWaiting={() => setProgressStatus('progress')} progressStatus={progressStatus} visible={visibleProgress} onClose={toggleProgress} onCancel={toggleCancel} />
