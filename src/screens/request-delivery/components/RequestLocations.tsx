@@ -16,17 +16,17 @@ const RequestLocations = ({deliveryLocations, pickUp}: RequestLocationsProps) =>
         <LocationRadiusIcon />
         {deliveryLocations.map((item, key) => (
           <View key={key}>
-            <View borderColor="accent" borderWidth={2} h="15px" />
+            <View bg="accent" alignSelf="center" h="15px" w="2px"/>
             <LocationPinIcon />
           </View>
         ))}
       </VStack>
       <VStack>
-        <Text isTruncated fontSize={hp(1.5)}>
+        <Text isTruncated fontSize={hp(1.3)}>
           {pickUp}
         </Text>
         {deliveryLocations.map((item, key) => (
-          <Text fontSize={hp(1.5)} mt="10px" key={key} isTruncated>
+          <Text fontSize={hp(1.3)} mt="10px" key={key} isTruncated>
             {item}
           </Text>
         ))}
