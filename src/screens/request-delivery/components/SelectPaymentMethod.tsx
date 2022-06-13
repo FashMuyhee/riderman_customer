@@ -26,7 +26,7 @@ export const PaymentMethodIcon = ({selected, method}: {selected: boolean; method
 };
 
 const SelectPaymentMethod: React.FC<ISelectPaymentMethodProps> = ({method, onChange}) => {
-  const methods: PaymentMethod[] = ['Card', 'Cash', 'Wallet'];
+  const methods: PaymentMethod[] = ['Cash', 'Card', 'Wallet'];
 
   const PaymentMethod = ({title, selected}: {title: PaymentMethod; selected: boolean}) => {
     return (
