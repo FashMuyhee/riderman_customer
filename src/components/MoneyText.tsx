@@ -10,16 +10,16 @@ interface MoneyTextProps extends ITextProps {
   currency?: ICurrency;
 }
 
+export const moneyFormat = (value: number | string) => {
+  const moneyValue = typeof value === 'number' ? value : parseFloat(value);
+  const money = isNaN(moneyValue) ? 0 : moneyValue;
+  const formatted = money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return formatted;
+};
+
 const MoneyText = ({moneyValue, showCurrency = true, percentage, currency = 'ngn', ...restProps}: MoneyTextProps) => {
   // @ts-ignore
   const value = isNaN(moneyValue) ? 0 : moneyValue;
-
-  const moneyFormat = (value: number | string) => {
-    const moneyValue = typeof value === 'number' ? value : parseFloat(value);
-    const money = isNaN(moneyValue) ? 0 : moneyValue;
-    const formatted = money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return formatted;
-  };
 
   const getCurrency = () => {
     switch (currency) {
