@@ -1,5 +1,6 @@
 import { BottomSheetWrapper, BottomSheetWrapperSnappy } from "./BottomSheetWrapper";
 import Button from "./Button";
+import DashedDivider from "./DashedDivider";
 import FlatList from "./FlatList";
 import MoneyText from "./MoneyText";
 import MultiSelectInput from "./MutilSelectInput";
@@ -13,5 +14,4 @@ import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
 
 
-export { MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating }
-
+export { MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider }
