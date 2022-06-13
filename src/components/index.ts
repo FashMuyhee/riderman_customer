@@ -9,9 +9,11 @@ import PhoneInput from "./PhoneInput";
 import { PressableInput } from "./PressableInput";
 import Rating from "./Rating";
 import RidermanAvatar from "./RidermanAvatar";
+import SaveCardItem from "./SaveCardItem";
 import ScreenWrapper from "./ScreenWrapper";
 import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
 
 
-export { MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider }
+export { MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider,SaveCardItem
+ }
