@@ -16,7 +16,7 @@ const GuardStack = () => {
   const {colors} = useTheme();
   return (
     <StackNav.Navigator
-      initialRouteName="payment_screen"
+      initialRouteName="home"
       screenOptions={{
         headerShown: true,
         presentation: 'card',
