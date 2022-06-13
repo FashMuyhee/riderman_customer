@@ -3,7 +3,7 @@ import React from 'react';
 import {PaymentMethod} from '@models/delivery';
 import {Image, ImageBackground} from 'react-native';
 import walletBg from '@images/wallet-bg.png';
-import {MoneyText} from '@components';
+import {MoneyText, SaveCardItem} from '@components';
 import cash from '@images/illustrations/cash-on-delivery.png';
 import InfoGradient from '@components/icons/info-gradient';
 
@@ -40,11 +40,26 @@ const PaymentMethodSection = ({method}: Props) => {
       </View>
     );
   };
-  return (
-    <View w="full">
-      <Cash />
-    </View>
-  );
+
+  const Card = () => {
+    return (
+      <HStack w="full">
+        <SaveCardItem />
+      </HStack>
+    );
+  };
+  const renderMethodBanner = () => {
+    if (method == 'Card') {
+      return <Card />;
+    }
+    if (method == 'Cash') {
+      return <Cash />;
+    }
+    if (method == 'Wallet') {
+      return <Wallet />;
+    }
+  };
+  return <View w="full">{renderMethodBanner()}</View>;
 };
 
 export default PaymentMethodSection;
