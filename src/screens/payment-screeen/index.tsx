@@ -2,7 +2,7 @@ import {MoneyText, ScreenWrapper, Button, DashedDivider} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, Text, Image, ScrollView, Box, HStack} from 'native-base';
-import React from 'react';
+import React, {useContext} from 'react';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
 import rider from '@images/rider.png';
@@ -13,6 +13,7 @@ import RequestLocations from '../request-delivery/components/RequestLocations';
 import {PackageBrief} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
+import {RequestContext} from '@contexts/RequestContext';
 
 interface IProps {
   navigation: StackNavigationProp<GuardStackParamList, 'payment_screen'>;
@@ -31,6 +32,7 @@ const PaymentScreen = ({navigation}: IProps) => {
       packageType: ['Bag', 'Shoe'],
     },
   ];
+  const {amount, paymentMethod} = useContext(RequestContext);
 
   return (
     <ScreenWrapper barColor="white" barStyle="dark-content">
@@ -45,7 +47,7 @@ const PaymentScreen = ({navigation}: IProps) => {
               To activate delivery tracking, you will need to make payment for the dispatcher’s service
             </Text>
           </View>
-          <PaymentMethodSection method="Cash" />
+          <PaymentMethodSection method={'Card'} />
           <Box>
             {/* comoany info */}
             <DashedDivider />
@@ -62,10 +64,10 @@ const PaymentScreen = ({navigation}: IProps) => {
               </View>
               <View justifyContent="center" alignItems="center" w="20%">
                 <HStack alignItems="center" space="1">
-                  <PaymentMethodIcon method="Cash" selected={false} />
-                  <Text>Cash</Text>
+                  <PaymentMethodIcon method={paymentMethod} selected={false} />
+                  <Text>{paymentMethod}</Text>
                 </HStack>
-                <MoneyText bold moneyValue={6000} />
+                <MoneyText bold moneyValue={amount} />
               </View>
             </HStack>
             <DashedDivider />
@@ -81,8 +83,8 @@ const PaymentScreen = ({navigation}: IProps) => {
             <DashedDivider />
           </Box>
           <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
-            <Button bg="black" title="Cancel Pickup" w="48%" onPress={() => navigation.navigate('home')} />
-            <Button title={`Pay \u20A6 ${moneyFormat(6000)}`} w="48%" />
+            <Button bg="black" title="Cancel Pickup" w={paymentMethod == 'Cash' ? 'full' : '48%'} onPress={() => navigation.navigate('home')} />
+            {paymentMethod != 'Cash' && <Button title={`Pay \u20A6 ${moneyFormat(amount)}`} w="48%" />}
           </HStack>
         </View>
       </ScrollView>
