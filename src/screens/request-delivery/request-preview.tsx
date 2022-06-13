@@ -38,7 +38,7 @@ export const PackageBrief = ({contactName, contactPhone, packageType, index}: Pa
         ))}
       </HStack>
       <HStack mt="3%" alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" w="48%" space="5">
+        <HStack alignItems="center"  w="48%" space="4">
           <UserIcon />
           <Text>{contactName}</Text>
         </HStack>
@@ -65,23 +65,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     },
   ];
 
-  const {isOpen, onToggle} = useDisclose();
+  const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
 
   const handleCloseCancelModal = () => {
-    onToggle();
+    toggleCancel();
     toggleProgress();
   };
 
-  const simulateStatus = async () => {
-    setTimeout(() => {
-      setProgressStatus('too-long');
-    }, 10000);
-  };
   useEffect(() => {
-    simulateStatus();
-  });
+    //simulate progress sheet opening
+    setTimeout(() => {
+      toggleProgress();
+    }, 3000);
+  }, []);
 
   return (
     <ScreenWrapper barColor="white" barStyle="dark-content">
@@ -127,8 +125,8 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={toggleProgress} />
         </HStack>
       </ScrollView>
-      <RequestProgressSheet onKeepWaiting={() => setProgressStatus('progress')} progressStatus={progressStatus} visible={visibleProgress} onClose={toggleProgress} onCancel={onToggle} />
-      <CancelRequestSheet visible={isOpen} onCancel={onToggle} onClose={handleCloseCancelModal} />
+      <RequestProgressSheet onKeepWaiting={() => setProgressStatus('progress')} progressStatus={progressStatus} visible={visibleProgress} onClose={toggleProgress} onCancel={toggleCancel} />
+      <CancelRequestSheet visible={visibleCancel} onCancel={toggleCancel} onClose={handleCloseCancelModal} />
     </ScreenWrapper>
   );
 };
