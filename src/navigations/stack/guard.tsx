@@ -1,5 +1,6 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
 import Home from '@screens/home/home';
+import PaymentScreen from '@screens/payment-screeen';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
 import RequestPreview from '@screens/request-delivery/request-preview';
 import SelectRider from '@screens/request-delivery/select-rider';
@@ -15,7 +16,7 @@ const GuardStack = () => {
   const {colors} = useTheme();
   return (
     <StackNav.Navigator
-      initialRouteName="delivery_summary"
+      initialRouteName="payment_screen"
       screenOptions={{
         headerShown: true,
         presentation: 'card',
@@ -66,6 +67,13 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="request_preview"
+      />
+      <StackNav.Screen
+        component={PaymentScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="payment_screen"
       />
     </StackNav.Navigator>
   );
