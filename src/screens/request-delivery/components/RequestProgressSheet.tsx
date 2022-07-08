@@ -3,7 +3,7 @@ import React from 'react';
 import MapSection from './MapSection';
 import {hp} from '@utils/responsive';
 import fastTime from '@images/illustrations/fast-time.png';
-import {Image, Modal} from 'react-native';
+import {Image, Modal, StatusBar, Platform, useWindowDimensions} from 'react-native';
 import CallIcon from '@components/icons/call';
 import {Button} from '@components';
 import ToggleButton from './ToggleButton';
@@ -86,10 +86,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
 
   const ACTION_HEIGHT = progressStatus === 'decline' ? hp(35) : hp(40);
   const MAP_HEIGHT = progressStatus === 'decline' ? hp(65) : hp(60);
+  const STATUSBAR_HEIGHT = StatusBar.currentHeight;
+  const DEVICE_HEIGHT = useWindowDimensions().height;
+  const wrapperHeight = Platform.OS === 'ios' ? DEVICE_HEIGHT : DEVICE_HEIGHT + STATUSBAR_HEIGHT;
 
   return (
     <Modal visible={visible} statusBarTranslucent transparent>
-      <View h={hp(100)} bg="white">
+      <View h={wrapperHeight} bg="white">
         <MapSection height={MAP_HEIGHT} />
         <View w="full" borderTopRadius="3xl" position="absolute" bg="white" bottom="1" h={ACTION_HEIGHT}>
           <Center mt="5%" px="10px">
