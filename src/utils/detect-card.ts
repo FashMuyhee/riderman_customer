@@ -1,38 +1,46 @@
 
-type Card = 'visa' | 'mastercard' | 'amex' | 'diners' | 'discover' | 'jcb'
+type Card = 'VISA' | 'MASTERCARD' | 'AMEX' | 'DINERS' | 'DISCOVER' | 'JCB'
 
 /**
  * Detect card type from input number
- * @param number 
+ * @param cc 
  * @returns Card
  */
-const detectCard = (number: string): Card => {
-  const cards = {
-    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-    mastercard: /^5[1-5][0-9]{14}$/,
-    amex: /^3[47][0-9]{13}$/,
-    diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
-    jcb: /^(?:2131|1800|35\d{3})\d{11}$/
-  };
+const detectCard = (cc: string): Card | undefined => {
+  let amex = new RegExp('^3[47][0-9]{13}$');
+  let visa = new RegExp('^4[0-9]{12}(?:[0-9]{3})?$');
 
-  if (cards.visa.test(number)) {
-    return 'visa'
+  let mastercard = new RegExp('^5[1-5][0-9]{14}$');
+  let mastercard2 = new RegExp('^2[2-7][0-9]{14}$');
+
+  let disco1 = new RegExp('^6011[0-9]{12}[0-9]*$');
+  let disco2 = new RegExp('^62[24568][0-9]{13}[0-9]*$');
+  let disco3 = new RegExp('^6[45][0-9]{14}[0-9]*$');
+
+  let diners = new RegExp('^3[0689][0-9]{12}[0-9]*$');
+  let jcb = new RegExp('^35[0-9]{14}[0-9]*$');
+
+
+  if (visa.test(cc)) {
+    return 'VISA';
   }
-  if (cards.mastercard.test(number)) {
-    return 'mastercard'
+  if (amex.test(cc)) {
+    return 'AMEX';
   }
-  if (cards.amex.test(number)) {
-    return 'amex'
+  if (mastercard.test(cc) || mastercard2.test(cc)) {
+    return 'MASTERCARD';
   }
-  if (cards.diners.test(number)) {
-    return 'diners'
+  if (disco1.test(cc) || disco2.test(cc) || disco3.test(cc)) {
+    return 'DISCOVER';
   }
-  if (cards.discover.test(number)) {
-    return 'discover'
+  if (diners.test(cc)) {
+    return 'DINERS';
+  }
+  if (jcb.test(cc)) {
+    return 'JCB';
   }
 
-  return 'jcb'
+  return undefined;
 
 };
 export default detectCard
