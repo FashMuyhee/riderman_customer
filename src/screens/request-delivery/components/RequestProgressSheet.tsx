@@ -113,7 +113,7 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
                 <Button title="Keep waiting" w="47%" onPress={onKeepWaiting} />
               </HStack>
             )}
-            {(progressStatus === 'accepted' || progressStatus === 'progress') && <Button w="90%" mt="7%" title="Call Rider" leftIcon={<CallIcon />} />}
+            {(progressStatus === 'accepted' || progressStatus === 'progress') && <Button w="90%" mt="7%" title="Call Rider" onPress={() => navigation.navigate('payment_screen')} leftIcon={<CallIcon />} />}
             {progressStatus != 'decline' && <ToggleButton onToggle={handleShowCancel} />}
           </Center>
         </View>

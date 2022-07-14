@@ -37,8 +37,8 @@ const PaymentScreen = ({navigation}: IProps) => {
   return (
     <ScreenWrapper barColor="white" barStyle="dark-content">
       <ScrollView bounces={false}>
-        <View h={hp(100)} w="full" bg="coolGray.200" />
-        <View px="10px" pt="10px" bg="white" position="absolute" bottom="0" borderTopRadius="2xl" w="full" minH={hp(70)}>
+        <View h={hp(100)} w="full" bg="red.200" />
+        <View px="10px" pt="10px" bg="teal.600" position="absolute" bottom="0" borderTopRadius="2xl" w="full" minH={hp(70)}>
           <View my="10px" px="20px">
             <Text textAlign="center" bold mb="4px">
               RIDER HAS ARRIVED FOR PICKUP!
@@ -47,6 +47,7 @@ const PaymentScreen = ({navigation}: IProps) => {
               To activate delivery tracking, you will need to make payment for the dispatcher’s service
             </Text>
           </View>
+          {/* selected payment method */}
           <PaymentMethodSection method={'Card'} />
           <Box>
             {/* comoany info */}
@@ -82,7 +83,8 @@ const PaymentScreen = ({navigation}: IProps) => {
             </ScrollView>
             <DashedDivider />
           </Box>
-          <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
+          {/* bottom button */}
+          <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
             <Button bg="black" title="Cancel Pickup" w={paymentMethod == 'Cash' ? 'full' : '48%'} onPress={() => navigation.navigate('home')} />
             {paymentMethod != 'Cash' && <Button title={`Pay \u20A6 ${moneyFormat(amount)}`} w="48%" />}
           </HStack>

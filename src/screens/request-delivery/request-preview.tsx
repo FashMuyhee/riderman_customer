@@ -122,7 +122,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           ))}
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
         </Box>
-        <HStack alignItems="center" justifyContent="space-between" mb={hp(5)} mt="5%" px="10px">
+        <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
           <Button bg="black" title="Go To Home" w="48%" onPress={() => navigation.navigate('home')} />
           <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={() => navigation.navigate('payment_screen')} />
         </HStack>
