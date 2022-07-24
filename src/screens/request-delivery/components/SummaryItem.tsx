@@ -9,7 +9,7 @@ export type ISummaryItemProps = {
 };
 
 export const PackageNote = ({note, rounded = false, bRadius = false}: {note: string; rounded?: boolean; bRadius?: boolean}) => (
-  <HStack px="5%" alignItems="center" bg="lightAccent" h="35px" mt="5px" borderRadius={rounded ? 'md' : undefined} borderBottomRadius={bRadius ? 'xl' : undefined}>
+  <HStack px="5%" alignItems="center" bg="lightAccent" h="30px" mt="5px" borderRadius={rounded ? 'md' : undefined} borderBottomRadius={bRadius ? 'xl' : undefined}>
     <NotesIcon />
     <Text ml="10px" color="main" fontSize="11px">
       {note}

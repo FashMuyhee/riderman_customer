@@ -33,7 +33,9 @@ export const PackageBrief = ({contactName, contactPhone, packageType, index}: Pa
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
-        <Text bold>D{index}</Text>
+        <Text ontSize="12px" bold>
+          D{index}
+        </Text>
         {packageType?.map((item, key) => (
           <PackageType type={item} key={key} />
         ))}
@@ -41,17 +43,18 @@ export const PackageBrief = ({contactName, contactPhone, packageType, index}: Pa
       <HStack mt="3%" alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" w="48%" space="4">
           <UserIcon />
-          <Text>{contactName}</Text>
+          <Text fontSize="12px">{contactName}</Text>
         </HStack>
         <HStack alignItems="center" w="48%" space="5">
           <PhoneIcon />
-          <Text>{contactPhone}</Text>
+          <Text fontSize="12px">{contactPhone}</Text>
         </HStack>
       </HStack>
       <PackageNote rounded note="No break am " />
     </View>
   );
 };
+
 const RequestPreview = ({navigation}: RequestPreview) => {
   const packageBrief = [
     {
