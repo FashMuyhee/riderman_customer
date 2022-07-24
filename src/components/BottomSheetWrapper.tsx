@@ -74,7 +74,7 @@ const BottomSheetWrapperSnappy = React.forwardRef<BottomSheet, IBottomSheetWrapp
         backgroundStyle={{backgroundColor: '#fff'}}
         index={index}
         ref={ref}
-        animationConfigs={{damping: 30}}
+        animationConfigs={{damping: 20, stiffness: 90,}}
         snapPoints={snapPoints}>
         {children}
       </BottomSheet>
