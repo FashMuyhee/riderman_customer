@@ -68,7 +68,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
         </HStack>
       )}
       <Pressable w="full" onPress={onPress}>
-        <HStack borderColor={'grey.300'} bg={'white'} alignItems="center" justifyContent={'space-between'} rounded={'10px'} py="5px" px="10px" borderWidth={focus ? 2 : 1} space="1">
+        <HStack borderColor={'#eee'} bg={'white'} alignItems="center" justifyContent={'space-between'} rounded={'6px'} py="5px" px="10px" borderWidth={focus ? 2 : 1} space="1">
           {leftIcon && (
             <View h={'30px'} alignItems={'center'} justifyContent="center" w="30px">
               {leftIcon}
@@ -82,7 +82,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
               keyboardType={keyboardType}
               returnKeyType={returnKeyType}
               placeholder={placeholder}
-              fontSize={'14px'}
+              fontSize={'12px'}
               selectionColor={'main'}
               value={value}
               onChangeText={onChange}
