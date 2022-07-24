@@ -33,7 +33,7 @@ export const PackageBrief = ({contactName, contactPhone, packageType, index}: Pa
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
-        <Text ontSize="12px" bold>
+        <Text fontSize="12px" bold>
           D{index}
         </Text>
         {packageType?.map((item, key) => (
