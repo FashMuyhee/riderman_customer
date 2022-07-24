@@ -1,7 +1,7 @@
 import {MoneyText, ScreenWrapper, Button, DashedDivider} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, Text, Image, ScrollView, Box, HStack} from 'native-base';
+import {View, Text, Image, ScrollView, Box, HStack, Pressable} from 'native-base';
 import React, {useContext} from 'react';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -14,6 +14,10 @@ import {PackageBrief} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
 import {RequestContext} from '@contexts/RequestContext';
+import AddNewCardSheet from './components/AddNewCard';
+import BottomSheet from '@gorhom/bottom-sheet';
+import MapSection from '@screens/request-delivery/components/MapSection';
+import {STATUSBAR_HEIGHT} from '@utils/constant';
 
 interface IProps {
   navigation: StackNavigationProp<GuardStackParamList, 'payment_screen'>;
@@ -33,12 +37,15 @@ const PaymentScreen = ({navigation}: IProps) => {
     },
   ];
   const {amount, paymentMethod} = useContext(RequestContext);
+  const addNewRef = React.useRef<BottomSheet>(null);
 
   return (
-    <ScreenWrapper barColor="white" barStyle="dark-content">
+    <ScreenWrapper barColor="white" barStyle="dark-content" translucentBar>
       <ScrollView bounces={false}>
-        <View h={hp(100)} w="full" bg="red.200" />
-        <View px="10px" pt="10px" bg="teal.600" position="absolute" bottom="0" borderTopRadius="2xl" w="full" minH={hp(70)}>
+        <View h={hp(100) + STATUSBAR_HEIGHT} w="full">
+          <MapSection height={hp(100)} />
+        </View>
+        <View px="10px" pt="10px" bg="bg" position="absolute" bottom="0" borderTopRadius="2xl" w="full" minH={hp(70)}>
           <View my="10px" px="20px">
             <Text textAlign="center" bold mb="4px">
               RIDER HAS ARRIVED FOR PICKUP!
@@ -48,7 +55,17 @@ const PaymentScreen = ({navigation}: IProps) => {
             </Text>
           </View>
           {/* selected payment method */}
-          <PaymentMethodSection method={'Card'} />
+          <PaymentMethodSection method={paymentMethod} />
+          {paymentMethod == 'Card' && (
+            <Pressable onPress={() => addNewRef.current?.snapToIndex(0)} justifyContent="space-between" flexDirection="row" h="20px" w="95px" alignItems="center">
+              <Text fontSize="11px" color="main">
+                +
+              </Text>
+              <Text underline fontSize="11px" color="main">
+                Add New Card
+              </Text>
+            </Pressable>
+          )}
           <Box>
             {/* comoany info */}
             <DashedDivider />
@@ -84,11 +101,12 @@ const PaymentScreen = ({navigation}: IProps) => {
             <DashedDivider />
           </Box>
           {/* bottom button */}
-          <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
+          <HStack alignItems="center" justifyContent="space-between" mb="10px" mt="5%" px="10px">
             <Button bg="black" title="Cancel Pickup" w={paymentMethod == 'Cash' ? 'full' : '48%'} onPress={() => navigation.navigate('home')} />
             {paymentMethod != 'Cash' && <Button title={`Pay \u20A6 ${moneyFormat(amount)}`} w="48%" />}
           </HStack>
         </View>
+        <AddNewCardSheet ref={addNewRef} onClose={() => addNewRef.current?.close()} />
       </ScrollView>
     </ScreenWrapper>
   );
