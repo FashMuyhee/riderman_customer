@@ -22,8 +22,10 @@ const RiderBrief = (props: RiderBriefProps) => {
         <Rating number={props.rating} />
       </View>
       <View w="30%">
-        <Text textAlign="right">Plate No.</Text>
-        <Text textAlign="right" >
+        <Text fontSize="12px" textAlign="right">
+          Plate No.
+        </Text>
+        <Text bold fontSize="12px" textAlign="right">
           {props.plateNo}
         </Text>
       </View>
