@@ -46,14 +46,6 @@ const PaymentMethodSection = ({method}: Props) => {
       <VStack space="2" w="full">
         <SaveCardItem selected number="4187427415564246" expiry="10/27" />
         <SaveCardItem selected={false} number="4187427415564246" expiry="10/27" />
-        <HStack space="2">
-          <Text fontSize="11px" color="main">
-            +
-          </Text>
-          <Text underline fontSize="11px" color="main">
-            Add New Card
-          </Text>
-        </HStack>
       </VStack>
     );
   };
