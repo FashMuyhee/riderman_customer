@@ -1,6 +1,8 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
 import Home from '@screens/home/home';
+import PackageStatusScreen from '@screens/package-status';
 import PaymentScreen from '@screens/payment-screeen';
+import RateDeliveryScreen from '@screens/rate-delivery';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
 import RequestPreview from '@screens/request-delivery/request-preview';
 import SelectRider from '@screens/request-delivery/select-rider';
@@ -74,6 +76,20 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="payment_screen"
+      />
+      <StackNav.Screen
+        component={PackageStatusScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="package_status"
+      />
+      <StackNav.Screen
+        component={RateDeliveryScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="rate_delivery"
       />
     </StackNav.Navigator>
   );
