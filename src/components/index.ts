@@ -1,5 +1,6 @@
 import { BottomSheetWrapper, BottomSheetWrapperSnappy } from "./BottomSheetWrapper";
 import Button from "./Button";
+import CreditCardLogo from "./CreditCardLogo";
 import DashedDivider from "./DashedDivider";
 import FlatList from "./FlatList";
 import MoneyText from "./MoneyText";
@@ -15,5 +16,7 @@ import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
 
 
-export { MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider,SaveCardItem
- }
+export {
+  MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider, SaveCardItem
+  , CreditCardLogo
+}
