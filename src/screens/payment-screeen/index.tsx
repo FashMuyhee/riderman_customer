@@ -69,7 +69,7 @@ const PaymentScreen = ({navigation}: IProps) => {
           <Box>
             {/* comoany info */}
             <DashedDivider />
-            <HStack h="60px" alignItems="center" justifyContent="space-between" px="10px">
+            <HStack h="50px" mt="10px" alignItems="center" justifyContent="space-between" px="10px">
               <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
               <View w="60%">
                 <Text fontSize={hp(1.3)} fontWeight="600">
@@ -93,7 +93,7 @@ const PaymentScreen = ({navigation}: IProps) => {
             <RiderBrief image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
             <RequestLocations pickUp="26, Obafemi Awolowo Road" deliveryLocations={['Murtala Mohammed Internationational Airport Lagos', 'Bayeku Igbogbo Ikorodu, Ikorodu, Lagos']} />
             <DashedDivider />
-            <ScrollView h="110px" showsVerticalScrollIndicator={false}>
+            <ScrollView h="100px" showsVerticalScrollIndicator={false}>
               {packageBrief.map((item, key) => (
                 <PackageBrief key={key} {...item} index={key + 1} />
               ))}
@@ -101,9 +101,9 @@ const PaymentScreen = ({navigation}: IProps) => {
             <DashedDivider />
           </Box>
           {/* bottom button */}
-          <HStack alignItems="center" justifyContent="space-between" mb="10px" mt="5%" px="10px">
-            <Button bg="black" title="Cancel Pickup" w={paymentMethod == 'Cash' ? 'full' : '48%'} onPress={() => navigation.navigate('home')} />
-            {paymentMethod != 'Cash' && <Button title={`Pay \u20A6 ${moneyFormat(amount)}`} w="48%" />}
+          <HStack bottom="0" alignItems="center" justifyContent="space-between" mb="10px" mt="5%" px="10px">
+            <Button bg="black" title="Cancel Pickup" w={paymentMethod == 'Cash' ? 'full' : '48%'} onPress={() => navigation.navigate('package_status')} />
+            {paymentMethod != 'Cash' && <Button title={`Pady \u20A6 ${moneyFormat(amount)}`} w="48%" onPress={() => navigation.navigate('package_status')} />}
           </HStack>
         </View>
         <AddNewCardSheet ref={addNewRef} onClose={() => addNewRef.current?.close()} />
