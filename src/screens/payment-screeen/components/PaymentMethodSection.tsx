@@ -1,4 +1,4 @@
-import {View, Text, Center, HStack} from 'native-base';
+import {View, Text, Center, HStack, VStack} from 'native-base';
 import React from 'react';
 import {PaymentMethod} from '@models/delivery';
 import {Image, ImageBackground} from 'react-native';
@@ -43,11 +43,21 @@ const PaymentMethodSection = ({method}: Props) => {
 
   const Card = () => {
     return (
-      <HStack w="full">
-        <SaveCardItem />
-      </HStack>
+      <VStack space="2" w="full">
+        <SaveCardItem selected number="4187427415564246" expiry="10/27" />
+        <SaveCardItem selected={false} number="4187427415564246" expiry="10/27" />
+        <HStack space="2">
+          <Text fontSize="11px" color="main">
+            +
+          </Text>
+          <Text underline fontSize="11px" color="main">
+            Add New Card
+          </Text>
+        </HStack>
+      </VStack>
     );
   };
+
   const renderMethodBanner = () => {
     if (method == 'Card') {
       return <Card />;
@@ -59,7 +69,11 @@ const PaymentMethodSection = ({method}: Props) => {
       return <Wallet />;
     }
   };
-  return <View w="full">{renderMethodBanner()}</View>;
+  return (
+    <View px="10px" w="full">
+      {renderMethodBanner()}
+    </View>
+  );
 };
 
 export default PaymentMethodSection;
