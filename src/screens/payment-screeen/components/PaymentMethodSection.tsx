@@ -11,22 +11,22 @@ type Props = {
   method: PaymentMethod;
 };
 
-const PaymentMethodSection = ({method}: Props) => {
-  const Wallet = () => {
-    return (
-      <View w="full" h="100px">
-        <ImageBackground source={walletBg} style={{width: '100%', height: '100%', justifyContent: 'center'}} resizeMode="contain">
-          <Center>
-            <Text fontSize={'13px'} color="white">
-              Wallet Balance
-            </Text>
-            <MoneyText moneyValue={50000} fontWeight="600" fontSize="20px" color="white" />
-          </Center>
-        </ImageBackground>
-      </View>
-    );
-  };
+export const Wallet = () => {
+  return (
+    <View w="full" h="100px">
+      <ImageBackground source={walletBg} style={{width: '100%', height: '100%', justifyContent: 'center'}} resizeMode="contain">
+        <Center>
+          <Text fontSize={'13px'} color="white">
+            Wallet Balance
+          </Text>
+          <MoneyText moneyValue={50000} fontWeight="600" fontSize="20px" color="white" />
+        </Center>
+      </ImageBackground>
+    </View>
+  );
+};
 
+const PaymentMethodSection = ({method}: Props) => {
   const Cash = () => {
     return (
       <View w="full">
