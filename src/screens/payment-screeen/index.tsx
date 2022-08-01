@@ -14,7 +14,7 @@ import {PackageBrief} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
 import {RequestContext} from '@contexts/RequestContext';
-import AddNewCardSheet from './components/AddNewCard';
+import AddNewCardSheet from '../wallet/component/AddNewCard';
 import BottomSheet from '@gorhom/bottom-sheet';
 import MapSection from '@screens/request-delivery/components/MapSection';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
