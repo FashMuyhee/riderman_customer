@@ -1,18 +1,33 @@
 import detectCard from '@utils/detect-card';
-import {View, HStack, Text} from 'native-base';
+import {View, HStack, Text, Pressable} from 'native-base';
 import React from 'react';
 import CreditCardLogo from './CreditCardLogo';
 import Checkbox from './icons/checkbox';
+import DeleteIcon from './icons/delete';
 
 type IProps = {
   number: string;
   expiry: string;
-  selected: boolean;
+  selected?: boolean;
+  onDelete?: (cardId?: string) => void;
+  withDelete?: boolean;
+  cardId?: string;
 };
 
-const SaveCardItem = ({expiry, number, selected}: IProps) => {
+const SaveCardItem = ({expiry, number, selected, onDelete, withDelete, cardId}: IProps) => {
+  const renderBorderWith = () => {
+    if (selected) return 1.5;
+    if (withDelete) return 1;
+    return 0;
+  };
+
+  const renderBorderColor = () => {
+    if (selected) return 'main';
+    if (withDelete) return '#eaeaea';
+  };
+
   return (
-    <HStack alignItems="center" w="full" py="5px" px="10px" h="60px" borderWidth={selected ? 1.5 : 0} borderColor="main" rounded="md">
+    <HStack mb="10px" alignItems="center" w="full" py="5px" px="10px" h="60px" borderWidth={renderBorderWith()} borderColor={renderBorderColor()} rounded="md">
       <CreditCardLogo creditCardNumber={number} />
       <View w="78%" ml="20px">
         <Text fontWeight="600" fontSize="13px">
@@ -22,11 +37,15 @@ const SaveCardItem = ({expiry, number, selected}: IProps) => {
           Expires {expiry}
         </Text>
       </View>
-      {selected && (
-        <View alignSelf="center">
-          <Checkbox />
-        </View>
-      )}
+      <View alignSelf="center">
+        {selected && <Checkbox />}
+        {withDelete && (
+          // @ts-ignore
+          <Pressable onPress={() => onDelete(cardId)}>
+            <DeleteIcon />
+          </Pressable>
+        )}
+      </View>
     </HStack>
   );
 };
