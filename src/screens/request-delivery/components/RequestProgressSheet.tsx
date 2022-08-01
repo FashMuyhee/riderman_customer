@@ -13,6 +13,7 @@ import decline from '@images/illustrations/decline.png';
 import warning from '@images/illustrations/warning.png';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {GuardStackParamList} from '@navigations/param-list';
+import {STATUSBAR_HEIGHT} from '@utils/constant';
 
 export type RequestProgressStatus = 'decline' | 'progress' | 'accepted' | 'too-long';
 interface IProps extends CancelRequestSheetProps {
@@ -86,9 +87,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
 
   const ACTION_HEIGHT = progressStatus === 'decline' ? hp(35) : hp(40);
   const MAP_HEIGHT = progressStatus === 'decline' ? hp(65) : hp(60);
-  const STATUSBAR_HEIGHT = StatusBar.currentHeight;
   const DEVICE_HEIGHT = useWindowDimensions().height;
   const wrapperHeight = Platform.OS === 'ios' ? DEVICE_HEIGHT : DEVICE_HEIGHT + STATUSBAR_HEIGHT;
+
+  const handleSelectNewRider = () => {
+    onClose();
+    navigation.navigate('select_rider');
+  };
 
   return (
     <Modal visible={visible} statusBarTranslucent transparent>
@@ -104,16 +109,28 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
             {progressStatus === 'decline' && (
               <HStack w="full" mt="7%" justifyContent="space-around">
                 <Button title="Cancel Request" w="47%" bg="black" onPress={handleShowCancel} />
-                <Button title="Select New Rider" w="47%" onPress={() => navigation.navigate('select_rider')} />
+                <Button title="Select New Rider" w="47%" onPress={handleSelectNewRider} />
               </HStack>
             )}
             {progressStatus === 'too-long' && (
               <HStack w="95%" mt="7%" justifyContent="space-around">
-                <Button title="Select New Rider" bg="black" w="47%" onPress={() => navigation.navigate('select_rider')} />
+                <Button title="Select New Rider" bg="black" w="47%" onPress={handleSelectNewRider} />
                 <Button title="Keep waiting" w="47%" onPress={onKeepWaiting} />
               </HStack>
             )}
-            {(progressStatus === 'accepted' || progressStatus === 'progress') && <Button w="90%" mt="7%" title="Call Rider" onPress={() => navigation.navigate('payment_screen')} leftIcon={<CallIcon />} />}
+            {/* todo go to dailer screen */}
+            {(progressStatus === 'accepted' || progressStatus === 'progress') && (
+              <Button
+                w="90%"
+                mt="7%"
+                title="Call Rider"
+                onPress={() => {
+                  onClose();
+                  navigation.navigate('payment_screen');
+                }}
+                leftIcon={<CallIcon />}
+              />
+            )}
             {progressStatus != 'decline' && <ToggleButton onToggle={handleShowCancel} />}
           </Center>
         </View>
