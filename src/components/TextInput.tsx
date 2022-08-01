@@ -2,8 +2,7 @@ import React from 'react';
 import {Input, VStack, IBoxProps, Text, View, HStack, Pressable, useTheme} from 'native-base';
 import {KeyboardType, ReturnKeyType} from 'react-native';
 import {ColorType} from 'native-base/lib/typescript/components/types';
-import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
-import {FONT_FAMILY, INPUT_HEIGHT} from '@utils/constant';
+import {INPUT_HEIGHT} from '@utils/constant';
 
 export interface TextInputProps extends IBoxProps {
   keyboardType?: KeyboardType;
