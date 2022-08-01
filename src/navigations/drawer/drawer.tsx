@@ -1,19 +1,25 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawerContent';
-import {useTheme} from 'native-base';
+import {ChevronLeftIcon, useTheme, View, Pressable} from 'native-base';
 import GuardStack from '../stack/guard';
 import TimeIcon from '@components/icons/time';
+import MyWallet from '@screens/wallet';
+import DrawerWalletIcon from '@components/icons/drawer-wallet';
+import {FONT} from '@utils/constant';
+import {useNavigation} from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   const {colors} = useTheme();
+  const {goBack} = useNavigation();
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
       defaultStatus="closed"
-      initialRouteName="stack"
+      initialRouteName="guard_stack"
       screenOptions={{
         headerShown: false,
         drawerStyle: {
@@ -31,10 +37,24 @@ const DrawerNavigator = () => {
         drawerType: 'front',
         drawerActiveBackgroundColor: colors.bg,
         drawerLabelStyle: {
-          fontFamily: 'Poppins-Regular',
+          fontFamily: FONT.REGULAR,
           fontSize: 14,
           marginLeft: -10,
         },
+        headerStyle: {
+          backgroundColor: colors.main,
+        },
+        headerTitleStyle: {
+          fontFamily: FONT.REGULAR,
+          color: 'white',
+          textTransform: 'capitalize',
+          fontSize: 16,
+        },
+        headerLeft: () => (
+          <Pressable onPress={goBack} ml="10%">
+            <ChevronLeftIcon color="white" size={4} />
+          </Pressable>
+        ),
       }}>
       <Drawer.Screen
         name="guard_stack"
@@ -53,6 +73,15 @@ const DrawerNavigator = () => {
           drawerLabel: 'Delivery History',
           drawerIcon: ({focused}) => <TimeIcon isFocused={focused} />,
           headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="wallet"
+        component={MyWallet}
+        options={{
+          drawerLabel: 'Wallet',
+          drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
+          headerShown: true,
         }}
       />
     </Drawer.Navigator>
