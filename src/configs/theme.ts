@@ -36,49 +36,49 @@ const theme = extendTheme({
     },
   },
   fontConfig: {
-    poppins: {
+    Montserrat: {
       100: {
-        normal: 'Poppins-ExtraLight',
-        italic: 'Poppins-ExtraLightItalic',
+        normal: 'Montserrat-ExtraLight',
+        italic: 'Montserrat-ExtraLightItalic',
       },
       200: {
-        normal: 'Poppins-ExtraLight',
-        italic: 'Poppins-ExtraLightItalic',
+        normal: 'Montserrat-ExtraLight',
+        italic: 'Montserrat-ExtraLightItalic',
       },
       300: {
-        normal: 'Poppins-Light',
-        italic: 'Poppins-LightItalic',
+        normal: 'Montserrat-Light',
+        italic: 'Montserrat-LightItalic',
       },
       400: {
-        normal: 'Poppins-Regular',
-        italic: 'Poppins-Italic',
+        normal: 'Montserrat-Regular',
+        italic: 'Montserrat-Italic',
       },
       500: {
-        normal: 'Poppins-Regular',
-        italic: 'Poppins-Italic',
+        normal: 'Montserrat-Regular',
+        italic: 'Montserrat-Italic',
       },
       600: {
-        normal: 'Poppins-SemiBold',
-        italic: 'Poppins-SemiBoldItalic',
+        normal: 'Montserrat-SemiBold',
+        italic: 'Montserrat-SemiBoldItalic',
       },
       700: {
-        normal: 'Poppins-Bold',
-        italic: 'Poppins-BoldItalic',
+        normal: 'Montserrat-Bold',
+        italic: 'Montserrat-BoldItalic',
       },
       800: {
-        normal: 'Poppins-ExtraBold',
-        italic: 'Poppins-ExtraBoldItalic',
+        normal: 'Montserrat-ExtraBold',
+        italic: 'Montserrat-ExtraBoldItalic',
       },
       900: {
-        normal: 'Poppins-Black',
-        italic: 'Poppins-BlackItalic',
+        normal: 'Montserrat-Black',
+        italic: 'Montserrat-BlackItalic',
       },
     },
   },
   fonts: {
-    heading: 'poppins',
-    body: 'poppins',
-    mono: 'poppins',
+    heading: 'Montserrat',
+    body: 'Montserrat',
+    mono: 'Montserrat',
   },
 });
 

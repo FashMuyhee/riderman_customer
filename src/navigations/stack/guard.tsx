@@ -7,6 +7,7 @@ import {RequestDelivery} from '@screens/request-delivery/request-delivery';
 import RequestPreview from '@screens/request-delivery/request-preview';
 import SelectRider from '@screens/request-delivery/select-rider';
 import DeliverySummary from '@screens/request-delivery/summary';
+import {FONT} from '@utils/constant';
 import {useTheme} from 'native-base';
 import React from 'react';
 import {Platform} from 'react-native';
@@ -33,7 +34,7 @@ const GuardStack = () => {
         headerTintColor: 'white',
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          fontFamily: 'Poppins-Medium',
+          fontFamily: FONT.REGULAR,
           fontSize: 16,
         },
         headerBackTitle: 'Back',
