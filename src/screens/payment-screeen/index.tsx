@@ -18,6 +18,7 @@ import AddNewCardSheet from '../wallet/component/AddNewCard';
 import BottomSheet from '@gorhom/bottom-sheet';
 import MapSection from '@screens/request-delivery/components/MapSection';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
+import AddCardBtn from './components/AddCardBtn';
 
 interface IProps {
   navigation: StackNavigationProp<GuardStackParamList, 'payment_screen'>;
@@ -56,16 +57,7 @@ const PaymentScreen = ({navigation}: IProps) => {
           </View>
           {/* selected payment method */}
           <PaymentMethodSection method={paymentMethod} />
-          {paymentMethod == 'Card' && (
-            <Pressable onPress={() => addNewRef.current?.snapToIndex(0)} justifyContent="space-between" flexDirection="row" h="20px" w="95px" alignItems="center">
-              <Text fontSize="11px" color="main">
-                +
-              </Text>
-              <Text underline fontSize="11px" color="main">
-                Add New Card
-              </Text>
-            </Pressable>
-          )}
+          {paymentMethod == 'Card' && <AddCardBtn onPress={() => addNewRef.current?.snapToIndex(0)} />}
           <Box>
             {/* comoany info */}
             <DashedDivider />

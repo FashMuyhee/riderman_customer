@@ -21,8 +21,8 @@ const MyWallet = () => {
         Payment Cards
       </Text>
       <View mt="5%">
-        <SaveCardItem expiry="09/32" number="5531886652142950" withDelete cardId="11" />
-        <SaveCardItem expiry="09/32" number="4242424242424242" withDelete cardId="11" />
+        <SaveCardItem onDelete={console.log} expiry="09/32" number="5531886652142950" withDelete cardId="11" />
+        <SaveCardItem onDelete={console.log} expiry="09/32" number="4242424242424242" withDelete cardId="11" />
       </View>
       <AddCardBtn onPress={() => addNewRef.current?.snapToIndex(0)} />
       <AddNewCardSheet ref={addNewRef} onClose={() => addNewRef.current?.close()} />
