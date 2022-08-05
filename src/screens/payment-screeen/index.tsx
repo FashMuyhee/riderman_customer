@@ -8,7 +8,7 @@ import logo from '@images/company-logo.png';
 import rider from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from '../request-delivery/components/SelectPaymentMethod';
-import RiderBrief from '../request-delivery/components/RiderBrief';
+import RiderBrief from '../request-delivery/components/RiderInfo';
 import RequestLocations from '../request-delivery/components/RequestLocations';
 import {PackageBrief} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';

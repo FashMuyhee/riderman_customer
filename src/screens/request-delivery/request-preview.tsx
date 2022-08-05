@@ -9,7 +9,7 @@ import logo from '@images/company-logo.png';
 import rider from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from './components/SelectPaymentMethod';
-import RiderBrief from './components/RiderBrief';
+import RiderBrief from './components/RiderInfo';
 import RequestLocations from './components/RequestLocations';
 import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
