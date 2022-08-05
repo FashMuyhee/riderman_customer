@@ -22,8 +22,8 @@ const Home: React.FC<IHomeProps> = ({navigation}) => {
         <Text fontSize="12px" color="grey.200" mt="8px">
           What would you like to get delivered?
         </Text>
-        <PressableInput onPress={() => navigation.navigate('request_delivery')} mt="15px" placeholder="Request Pickup" value='' />
-        <Button title="Delivery History" mt="10px" />
+        <PressableInput onPress={() => navigation.navigate('request_delivery')} mt="15px" placeholder="Request Pickup" value="" />
+        <Button title="Delivery History" mt="10px" onPress={() => navigation.navigate('delivery_history')} />
       </View>
     </ScreenWrapper>
   );
