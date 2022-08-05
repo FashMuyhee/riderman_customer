@@ -17,4 +17,5 @@ export type GuardStackParamList = {
   payment_screen: undefined,
   package_status: undefined,
   rate_delivery: undefined,
+  delivery_history: undefined
 };

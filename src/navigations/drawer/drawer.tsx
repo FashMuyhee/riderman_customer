@@ -8,6 +8,7 @@ import MyWallet from '@screens/wallet';
 import DrawerWalletIcon from '@components/icons/drawer-wallet';
 import {FONT} from '@utils/constant';
 import {useNavigation} from '@react-navigation/native';
+import DeliveryHistoryTab from '@screens/delivery-history';
 
 const Drawer = createDrawerNavigator();
 
@@ -68,7 +69,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen
         name="delivery_history"
-        component={GuardStack}
+        component={DeliveryHistoryTab}
         options={{
           drawerLabel: 'Delivery History',
           drawerIcon: ({focused}) => <TimeIcon isFocused={focused} />,

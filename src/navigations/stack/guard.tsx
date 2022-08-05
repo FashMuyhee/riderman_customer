@@ -1,4 +1,5 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
+import DeliveryHistoryTab from '@screens/delivery-history';
 import Home from '@screens/home/home';
 import PackageStatusScreen from '@screens/package-status';
 import PaymentScreen from '@screens/payment-screeen';
@@ -91,6 +92,14 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="rate_delivery"
+      />
+      {/* DELIVERY HISTORY */}
+      <StackNav.Screen
+        component={DeliveryHistoryTab}
+        options={{
+          headerTitle: 'Delivery History',
+        }}
+        name="delivery_history"
       />
     </StackNav.Navigator>
   );
