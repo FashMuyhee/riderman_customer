@@ -10,7 +10,7 @@ import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from '../request-delivery/components/SelectPaymentMethod';
 import RiderBrief from '../request-delivery/components/RiderInfo';
 import RequestLocations from '../request-delivery/components/RequestLocations';
-import {PackageBrief} from '../request-delivery/request-preview';
+import {PackageDetail} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
 import {RequestContext} from '@contexts/RequestContext';
@@ -87,7 +87,7 @@ const PaymentScreen = ({navigation}: IProps) => {
             <DashedDivider />
             <ScrollView h="100px" showsVerticalScrollIndicator={false}>
               {packageBrief.map((item, key) => (
-                <PackageBrief key={key} {...item} index={key + 1} />
+                <PackageDetail key={key} {...item} index={key + 1} />
               ))}
             </ScrollView>
             <DashedDivider />

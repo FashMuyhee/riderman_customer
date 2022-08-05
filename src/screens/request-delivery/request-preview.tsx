@@ -23,13 +23,13 @@ interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
 }
 
-type PackageBriefProps = {
+type PackageInfoProps = {
   contactName: string;
   contactPhone: string;
   packageType: string[];
   index: number;
 };
-export const PackageBrief = ({contactName, contactPhone, packageType, index}: PackageBriefProps) => {
+export const PackageDetail = ({contactName, contactPhone, packageType, index}: PackageInfoProps) => {
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
@@ -121,7 +121,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           <RequestLocations pickUp="26, Obafemi Awolowo Road" deliveryLocations={['Murtala Mohammed Internationational Airport Lagos', 'Bayeku Igbogbo Ikorodu, Ikorodu, Lagos']} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
           {packageBrief.map((item, key) => (
-            <PackageBrief key={key} {...item} index={key + 1} />
+            <PackageDetail key={key} {...item} index={key + 1} />
           ))}
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
         </Box>
