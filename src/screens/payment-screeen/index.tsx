@@ -8,7 +8,7 @@ import logo from '@images/company-logo.png';
 import rider from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from '../request-delivery/components/SelectPaymentMethod';
-import RiderBrief from '../request-delivery/components/RiderInfo';
+import RiderInfo from '../request-delivery/components/RiderInfo';
 import RequestLocations from '../request-delivery/components/RequestLocations';
 import {PackageDetail} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
@@ -82,7 +82,7 @@ const PaymentScreen = ({navigation}: IProps) => {
             </HStack>
             <DashedDivider />
             {/* rider info */}
-            <RiderBrief image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
+            <RiderInfo image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
             <RequestLocations pickUp="26, Obafemi Awolowo Road" deliveryLocations={['Murtala Mohammed Internationational Airport Lagos', 'Bayeku Igbogbo Ikorodu, Ikorodu, Lagos']} />
             <DashedDivider />
             <ScrollView h="100px" showsVerticalScrollIndicator={false}>

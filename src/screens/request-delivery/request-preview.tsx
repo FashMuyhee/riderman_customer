@@ -9,7 +9,7 @@ import logo from '@images/company-logo.png';
 import rider from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from './components/SelectPaymentMethod';
-import RiderBrief from './components/RiderInfo';
+import RiderInfo from './components/RiderInfo';
 import RequestLocations from './components/RequestLocations';
 import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
@@ -117,7 +117,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             </View>
           </HStack>
           {/* rider info */}
-          <RiderBrief image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
+          <RiderInfo image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
           <RequestLocations pickUp="26, Obafemi Awolowo Road" deliveryLocations={['Murtala Mohammed Internationational Airport Lagos', 'Bayeku Igbogbo Ikorodu, Ikorodu, Lagos']} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
           {packageBrief.map((item, key) => (

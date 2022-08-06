@@ -4,14 +4,14 @@ import {View, Text, HStack} from 'native-base';
 import React from 'react';
 import {ImageSourcePropType} from 'react-native';
 
-type RiderBriefProps = {
+type IProps = {
   image: ImageSourcePropType;
   plateNo: string;
   fullname: string;
   rating: number;
 };
 
-const RiderBrief = (props: RiderBriefProps) => {
+const RiderInfo = (props: IProps) => {
   return (
     <HStack px="10px" mt="3%" alignItems="center" justifyContent="space-between">
       <RidermanAvatar image={props.image} deliveryCount={300} />
@@ -33,4 +33,4 @@ const RiderBrief = (props: RiderBriefProps) => {
   );
 };
 
-export default RiderBrief;
+export default RiderInfo;
