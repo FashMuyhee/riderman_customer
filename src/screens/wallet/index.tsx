@@ -14,7 +14,7 @@ const MyWallet = () => {
       <Wallet />
       <HStack mb="10px" mt="10%" alignItems="center" justifyContent="space-between">
         <Button title="Add to Wallet" w="48%" bg="bg" color="black" />
-        <Button title="Add to Wallet" w="48%" bg="black" color="white" />
+        <Button title="Withdrawn" w="48%" bg="black" color="white" />
       </HStack>
       <DashedDivider />
       <Text mt="3%" fontWeight="600" fontSize="12px" color="#263238">
