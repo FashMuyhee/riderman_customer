@@ -1,6 +1,7 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
 import DeliveryHistoryTab from '@screens/delivery-history';
 import Home from '@screens/home/home';
+import Notifications from '@screens/notifications';
 import PackageStatusScreen from '@screens/package-status';
 import PaymentScreen from '@screens/payment-screeen';
 import RateDeliveryScreen from '@screens/rate-delivery';
@@ -43,6 +44,7 @@ const GuardStack = () => {
           fontSize: 14,
         },
       }}>
+        {/* RIDE REQUEST  */}
       <StackNav.Screen component={Home} options={{headerShown: false}} name="home" />
       <StackNav.Screen
         component={RequestDelivery}
@@ -100,6 +102,14 @@ const GuardStack = () => {
           headerTitle: 'Delivery History',
         }}
         name="delivery_history"
+      />
+      {/* NOTIFICATION */}
+      <StackNav.Screen
+        component={Notifications}
+        options={{
+          headerTitle: 'Notifications',
+        }}
+        name="notifications"
       />
     </StackNav.Navigator>
   );
