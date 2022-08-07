@@ -2,10 +2,10 @@ import { StatusBar } from "react-native";
 
 export const INPUT_HEIGHT = '35px';
 export const FONT = {
-  LIGHT: 'Montserrat-Light',
-  REGULAR: 'Montserrat-Regular',
-  SEMI_BOLD: 'Montserrat-SemiBold',
-  BOLD: 'Montserrat-Bold',
+  LIGHT: 'WorkSans-Light',
+  REGULAR: 'WorkSans-Regular',
+  SEMI_BOLD: 'WorkSans-SemiBold',
+  BOLD: 'WorkSans-Bold',
 }
 // @ts-ignore
 export const STATUSBAR_HEIGHT = StatusBar.currentHeight + 2

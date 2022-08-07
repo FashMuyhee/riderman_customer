@@ -36,49 +36,49 @@ const theme = extendTheme({
     },
   },
   fontConfig: {
-    Montserrat: {
+    WorkSans: {
       100: {
-        normal: 'Montserrat-ExtraLight',
-        italic: 'Montserrat-ExtraLightItalic',
+        normal: 'WorkSans-ExtraLight',
+        italic: 'WorkSans-ExtraLightItalic',
       },
       200: {
-        normal: 'Montserrat-ExtraLight',
-        italic: 'Montserrat-ExtraLightItalic',
+        normal: 'WorkSans-ExtraLight',
+        italic: 'WorkSans-ExtraLightItalic',
       },
       300: {
-        normal: 'Montserrat-Light',
-        italic: 'Montserrat-LightItalic',
+        normal: 'WorkSans-Light',
+        italic: 'WorkSans-LightItalic',
       },
       400: {
-        normal: 'Montserrat-Regular',
-        italic: 'Montserrat-Italic',
+        normal: 'WorkSans-Regular',
+        italic: 'WorkSans-Italic',
       },
       500: {
-        normal: 'Montserrat-Regular',
-        italic: 'Montserrat-Italic',
+        normal: 'WorkSans-Regular',
+        italic: 'WorkSans-Italic',
       },
       600: {
-        normal: 'Montserrat-SemiBold',
-        italic: 'Montserrat-SemiBoldItalic',
+        normal: 'WorkSans-SemiBold',
+        italic: 'WorkSans-SemiBoldItalic',
       },
       700: {
-        normal: 'Montserrat-Bold',
-        italic: 'Montserrat-BoldItalic',
+        normal: 'WorkSans-Bold',
+        italic: 'WorkSans-BoldItalic',
       },
       800: {
-        normal: 'Montserrat-ExtraBold',
-        italic: 'Montserrat-ExtraBoldItalic',
+        normal: 'WorkSans-ExtraBold',
+        italic: 'WorkSans-ExtraBoldItalic',
       },
       900: {
-        normal: 'Montserrat-Black',
-        italic: 'Montserrat-BlackItalic',
+        normal: 'WorkSans-Black',
+        italic: 'WorkSans-BlackItalic',
       },
     },
   },
   fonts: {
-    heading: 'Montserrat',
-    body: 'Montserrat',
-    mono: 'Montserrat',
+    heading: 'WorkSans',
+    body: 'WorkSans',
+    mono: 'WorkSans',
   },
 });
 
