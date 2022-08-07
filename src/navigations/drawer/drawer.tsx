@@ -9,6 +9,8 @@ import DrawerWalletIcon from '@components/icons/drawer-wallet';
 import {FONT} from '@utils/constant';
 import {useNavigation} from '@react-navigation/native';
 import DeliveryHistoryTab from '@screens/delivery-history';
+import {Platform} from 'react-native';
+import ArrowBackIcon from '@components/icons/arrow-back';
 
 const Drawer = createDrawerNavigator();
 
@@ -53,7 +55,10 @@ const DrawerNavigator = () => {
         },
         headerLeft: () => (
           <Pressable onPress={goBack} ml="10%">
-            <ChevronLeftIcon color="white" size={4} />
+            {Platform.select({
+              ios: <ChevronLeftIcon color="white" size={4} />,
+              android: <ArrowBackIcon />,
+            })}
           </Pressable>
         ),
       }}>
@@ -73,7 +78,8 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: 'Delivery History',
           drawerIcon: ({focused}) => <TimeIcon isFocused={focused} />,
-          headerShown: false,
+          headerShown: true,
+          headerTitle:'Delivery History'
         }}
       />
       <Drawer.Screen
