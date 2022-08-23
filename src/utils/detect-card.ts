@@ -1,3 +1,5 @@
+import { formatWithMask, Masks } from "react-native-mask-input";
+
 
 type Cards = 'VISA' | 'MASTERCARD' | 'AMEX' | 'DINERS' | 'DISCOVER' | 'JCB'
 
@@ -15,23 +17,23 @@ const detectCard = (cc: string): ICard | undefined => {
   let mastercard = new RegExp('^5[1-5][0-9]{14}$');
   let mastercard2 = new RegExp('^2[2-7][0-9]{14}$');
 
-  const regEx = /^(\d{0,4})(\d{0,4})(\d{0,4})(\d{0,4})$/g
-
-  const formattedValue = cc.replace(regEx, (regEx, $1, $2, $3, $4) =>
-    [$1, $2, $3, $4].filter(group => !!group).join(' ')
-  )
+  const { obfuscated } = formatWithMask({
+    text: cc,
+    mask: Masks.CREDIT_CARD,
+    obfuscationCharacter: '*',
+  });
 
   if (visa.test(cc)) {
     return {
       cardType: 'VISA',
-      formattedValue
+      formattedValue: obfuscated
     }
   }
 
   if (mastercard.test(cc) || mastercard2.test(cc)) {
     return {
       cardType: 'MASTERCARD',
-      formattedValue
+      formattedValue: obfuscated
     }
   }
 
