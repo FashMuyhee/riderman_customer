@@ -1,5 +1,6 @@
 import detectCard from '@utils/detect-card';
 import {View, HStack, Text, Pressable} from 'native-base';
+import {ColorType} from 'native-base/lib/typescript/components/types';
 import React from 'react';
 import CreditCardLogo from './CreditCardLogo';
 import Checkbox from './icons/checkbox';
@@ -11,10 +12,12 @@ type IProps = {
   selected?: boolean;
   onDelete?: (cardId?: string) => void;
   withDelete?: boolean;
+  shadow?: boolean;
+  bgColor?: ColorType;
   cardId?: string;
 };
 
-const SaveCardItem = ({expiry, number, selected, onDelete, withDelete, cardId}: IProps) => {
+const SaveCardItem = ({expiry, number, selected, onDelete, withDelete, cardId, bgColor, shadow}: IProps) => {
   const renderBorderWith = () => {
     if (selected) return 1.5;
     if (withDelete) return 1;
@@ -26,8 +29,9 @@ const SaveCardItem = ({expiry, number, selected, onDelete, withDelete, cardId}: 
     if (withDelete) return '#eaeaea';
   };
 
+
   return (
-    <HStack mb="10px" alignItems="center" w="full" py="5px" px="10px" h="60px" borderWidth={renderBorderWith()} borderColor={renderBorderColor()} rounded="md">
+    <HStack mb="10px" bg={bgColor} shadow="2" alignItems="center" w="full" py="5px" px="10px" h="60px" borderWidth={renderBorderWith()} borderColor={renderBorderColor()} rounded="lg">
       <CreditCardLogo creditCardNumber={number} />
       <View w="78%" ml="20px">
         <Text fontWeight="600" fontSize="13px">
