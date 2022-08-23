@@ -5,6 +5,7 @@ import RequestLocations from '../../request-delivery/components/RequestLocations
 import DeliveryDetailSheet from './DeliveryDetailSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {DeliveryStatus} from '@models/delivery';
+import TipRiderSheet from './TipRiderSheet';
 
 type Props = {
   status: DeliveryStatus;
@@ -12,6 +13,7 @@ type Props = {
 
 const HistoryList = ({status}: Props) => {
   const deliveryDetailSheet = React.useRef<BottomSheet>(null);
+  const tipSheet = React.useRef<BottomSheet>(null);
 
   return (
     <ScreenWrapper pad>
@@ -19,7 +21,16 @@ const HistoryList = ({status}: Props) => {
       <Pressable onPress={() => deliveryDetailSheet.current?.snapToIndex(0)} bg="white" borderWidth={1} borderColor="grey.500" py="15px" rounded="lg" px="10px">
         <RequestLocations mt="0%" deliveryLocations={['26, Obafemi Awolowo Road', 'Bayeku Igbogbo, Ikorodu, Lagos']} pickUp="Mushilab Nigeria Limited, Abeokuta" />
       </Pressable>
-      <DeliveryDetailSheet deliveryStatus={status} ref={deliveryDetailSheet} onClose={() => deliveryDetailSheet.current?.close()} />
+      <DeliveryDetailSheet
+        handleTipRider={() => {
+          deliveryDetailSheet.current?.close();
+          tipSheet.current?.snapToIndex(0);
+        }}
+        deliveryStatus={status}
+        ref={deliveryDetailSheet}
+        onClose={() => deliveryDetailSheet.current?.close()}
+      />
+      <TipRiderSheet ref={tipSheet} onClose={() => tipSheet.current?.close()} />
     </ScreenWrapper>
   );
 };

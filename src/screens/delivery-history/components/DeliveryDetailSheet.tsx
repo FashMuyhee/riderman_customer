@@ -15,8 +15,8 @@ import CallIcon from '@components/icons/call';
 import {DeliveryStatus} from '@models/delivery';
 import {Image as RNImage} from 'react-native';
 
-const DeliveryDetailSheet = React.forwardRef<BottomSheet, {onClose: () => void; deliveryStatus: DeliveryStatus}>(({onClose, deliveryStatus}, ref) => {
-  const snapPoints = useMemo(() => ['60%', '80%'], []);
+const DeliveryDetailSheet = React.forwardRef<BottomSheet, {onClose: () => void; deliveryStatus: DeliveryStatus; handleTipRider: () => void}>(({onClose, deliveryStatus, handleTipRider}, ref) => {
+  const snapPoints = useMemo(() => ['65%', '80%'], []);
 
   const renderButtons = () => {
     if (deliveryStatus === 'Active' || deliveryStatus === 'Processing') {
@@ -32,7 +32,7 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, {onClose: () => void; 
       );
     }
 
-    return <Button title="Tip Rider" leftIcon={<RNImage source={nairaCoin} style={{width: 30, height: 30, resizeMode: 'contain'}} />} />;
+    return <Button onPress={handleTipRider} title="Tip Rider" leftIcon={<RNImage source={nairaCoin} style={{width: 30, height: 30, resizeMode: 'contain'}} />} />;
   };
   return (
     <BottomSheetWrapperSnappy noIndicator showBackdrop index={-1} ref={ref} snapPoints={snapPoints}>
