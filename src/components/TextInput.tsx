@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input, VStack, IBoxProps, Text, View, HStack, Pressable, useTheme} from 'native-base';
+import {Input, VStack, IBoxProps, Text, View, HStack, Pressable, useTheme, Divider} from 'native-base';
 import {KeyboardType, ReturnKeyType} from 'react-native';
 import {ColorType} from 'native-base/lib/typescript/components/types';
 import {INPUT_HEIGHT} from '@utils/constant';
@@ -26,6 +26,7 @@ export interface TextInputProps extends IBoxProps {
   onBlur?: () => void;
   isBottomSheet?: boolean;
   labelColor?: ColorType;
+  leftIconDivider?: boolean;
 }
 
 const TextInput: React.FunctionComponent<TextInputProps> = props => {
@@ -51,6 +52,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
     isBottomSheet,
     textAlign = 'left',
     labelColor = 'black',
+    leftIconDivider = false,
     ...boxProps
   } = props;
 
@@ -69,9 +71,10 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
       <Pressable w="full" onPress={onPress}>
         <HStack borderColor={'#eee'} bg={'white'} alignItems="center" justifyContent={'space-between'} rounded={'6px'} py="5px" px="10px" borderWidth={focus ? 2 : 1} space="1">
           {leftIcon && (
-            <View h={'30px'} alignItems={'center'} justifyContent="center" w="30px">
+            <HStack h={'30px'} alignItems={'center'} w="30px">
               {leftIcon}
-            </View>
+              {leftIconDivider && <Divider orientation="vertical" ml="5px" color="#EEEEEE" />}
+            </HStack>
           )}
           <View flexGrow={1}>
             <Input
