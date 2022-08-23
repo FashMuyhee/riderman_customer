@@ -19,7 +19,7 @@ const DeliveryHistoryTab = (props: IProps) => {
         tabBarActiveTintColor: colors.main,
         tabBarLabelStyle: {
           fontFamily: FONT.SEMI_BOLD,
-          fontSize: 14,
+          fontSize: 12,
           textTransform: 'capitalize',
         },
         tabBarPressColor: 'white',
