@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Riderman</string>
+	<string>riderman customer</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -54,11 +54,11 @@
 	<key>UIAppFonts</key>
 	<!-- location permission -->
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Give Riderman permission  to use Location</string>
+	<string>Give riderman customer permission  to use Location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Give Riderman permission  to use Location</string>
+	<string>Give riderman customer permission  to use Location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Give Riderman permission  to use Location</string>
+	<string>Give riderman customer permission  to use Location</string>
 	<!-- location permission -->
 	<array>
 		<string>font-black.ttf</string>

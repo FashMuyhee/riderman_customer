@@ -1,4 +1,4 @@
-package com.ridername.customer.newarchitecture;
+package com.riderman.customer.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.ridername.customer.BuildConfig;
-import com.ridername.customer.newarchitecture.components.MainComponentsRegistry;
-import com.ridername.customer.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.riderman.customer.BuildConfig;
+import com.riderman.customer.newarchitecture.components.MainComponentsRegistry;
+import com.riderman.customer.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
