@@ -1,12 +1,16 @@
 import React, {useCallback, useState} from 'react';
-import {TextInput} from '@components';
+import {PressableInput, TextInput} from '@components';
 import {TextInputProps} from '@components/TextInput';
 import {hp, wp} from '@utils/responsive';
 import {View, Pressable, Text, useDisclose, Input, useTheme} from 'native-base';
-import {Modal} from 'react-native';
-import Animated, {useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated';
+import {Modal, Platform} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import LocationIcon from '@components/icons/location';
-import TimeTwoIcon from '@components/icons/time2';
+import HistoryIcon from '@components/icons/history';
 import LocationPinIcon from '@components/icons/location-pin';
 import placeAPI from './placeApi';
 import {useDebounce} from '@hooks/useDebounce';
@@ -16,14 +20,24 @@ export type PlacePredictionType = {
   place_id: string;
   reference: string;
   matched_substrings: any[];
-  structured_formatting: {main_text: string; main_text_matched_substrings: Array<any>; secondary_text: string};
+  structured_formatting: {
+    main_text: string;
+    main_text_matched_substrings: Array<any>;
+    secondary_text: string;
+  };
   terms: Object[];
   types: string[];
 };
 
 export interface IPlaceAutoCompleteProps extends TextInputProps {
   value: string;
-  onPlaceChange: ({desc, location}: {desc: string; location: {lat: number; lng: number}}) => void;
+  onPlaceChange: ({
+    desc,
+    location,
+  }: {
+    desc: string;
+    location: {lat: number; lng: number};
+  }) => void;
 }
 
 export type LocationItemProps = {
@@ -50,7 +64,7 @@ const LocationItem = ({onPress, predictions, isHistory}: LocationItemProps) => {
       flexDir="row"
       alignItems="flex-start"
       justifyContent="flex-start">
-      {isHistory ? <TimeTwoIcon /> : <LocationPinIcon />}
+      {isHistory ? <HistoryIcon /> : <LocationPinIcon />}
       <View ml="10px">
         <Text isTruncated w={wp(85)} fontSize="13px">
           {predictions.description}
@@ -63,7 +77,12 @@ const LocationItem = ({onPress, predictions, isHistory}: LocationItemProps) => {
   );
 };
 
-const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxProps, onPlaceChange, value}) => {
+const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
+  placeholder,
+  boxProps,
+  onPlaceChange,
+  value,
+}) => {
   const {isOpen, onClose, onOpen} = useDisclose();
   const SCREEN_HEIGHT = hp(100);
   const translateY = useSharedValue(0);
@@ -115,14 +134,19 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
    * @param isHistory
    * @returns
    */
-  const _renderPlacesPrediction = (placePredictions: PlacePredictionType[] | Array<any>, isHistory: boolean) => {
+  const _renderPlacesPrediction = (
+    placePredictions: PlacePredictionType[] | Array<any>,
+    isHistory: boolean,
+  ) => {
     /**
      * get place lat and longitude on press
      * @param placeId
      */
     const handlePressLocation = async (placeId: string, desc: string) => {
       try {
-        const res: {lat: number; lng: number} = await placeAPI.getPlaceID(placeId);
+        const res: {lat: number; lng: number} = await placeAPI.getPlaceID(
+          placeId,
+        );
         onPlaceChange({desc, location: res});
         closeSearchModal();
       } catch (error) {
@@ -132,8 +156,13 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
 
     return (
       <>
-        {placePredictions.map((item, key) => (
-          <LocationItem isHistory={isHistory} predictions={item} key={key} onPress={handlePressLocation} />
+        {placePredictions?.map((item, key) => (
+          <LocationItem
+            isHistory={isHistory}
+            predictions={item}
+            key={key}
+            onPress={handlePressLocation}
+          />
         ))}
       </>
     );
@@ -141,7 +170,11 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
 
   return (
     <>
-      <TextInput {...boxProps} value={value} placeholder={placeholder} onPress={() => openSearchModal()} disabled />
+      <PressableInput
+        value={value}
+        placeholder={placeholder}
+        onPress={() => openSearchModal()}
+      />
       <Modal visible={isOpen} transparent onRequestClose={closeSearchModal}>
         <Animated.View
           style={[
@@ -191,6 +224,19 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
               {/* search result */}
               {showSuggestions && _renderPlacesPrediction(suggestions, false)}
             </View>
+            {Platform.OS === 'ios' && (
+              <Text
+                color="main"
+                textAlign="center"
+                left="45%"
+                right="45%"
+                bottom="3%"
+                fontSize="12px"
+                position="absolute"
+                onPress={closeSearchModal}>
+                Close
+              </Text>
+            )}
           </View>
         </Animated.View>
       </Modal>

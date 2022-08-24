@@ -8,16 +8,27 @@ export type ISummaryItemProps = {
   isLast: boolean;
 };
 
+export const PackageNote = ({note, rounded = false, bRadius = false}: {note: string; rounded?: boolean; bRadius?: boolean}) => (
+  <HStack px="5%" alignItems="center" bg="lightAccent" h="30px" mt="5px" borderRadius={rounded ? 'md' : undefined} borderBottomRadius={bRadius ? 'xl' : undefined}>
+    <NotesIcon />
+    <Text ml="10px" color="main" fontSize="11px">
+      {note}
+    </Text>
+  </HStack>
+);
+
+export const PackageType = ({type}: {type: string}) => (
+  <Badge bg="main" px="15px" rounded="5px" _text={{color: 'white', textAlign: 'center', textTransform: 'capitalize'}}>
+    {type}
+  </Badge>
+);
+
 const SummaryItem: React.FC<ISummaryItemProps> = ({isLast}) => {
   return (
     <View mb={isLast ? hp(22) : 0} rounded="xl" h={hp(30)} mt="20px" w="full" bg="white">
       <HStack px="20px" mt="10px" alignItems="center" justifyContent="flex-start" space="2">
-        <Badge bg="main" rounded="md" _text={{color: 'white', textAlign: 'center', textTransform: 'capitalize'}}>
-          Clothes
-        </Badge>
-        <Badge bg="main" rounded="md" _text={{color: 'white', textAlign: 'center', textTransform: 'capitalize'}}>
-          Clothes
-        </Badge>
+        <PackageType type="Cloth" />
+        <PackageType type="Food" />
       </HStack>
       <View borderWidth={0.6} borderRadius="1px" borderStyle={'dashed'} borderColor="#eeeeee" mt="10px" mx="20px" />
       <HStack alignItems="center" mt="10px" px="20px" justifyContent="space-between">
@@ -52,12 +63,7 @@ const SummaryItem: React.FC<ISummaryItemProps> = ({isLast}) => {
         <Text fontSize="11px">080 234 678 89</Text>
         <Text fontSize="11px">5.3km</Text>
       </HStack>
-      <HStack px="5%" alignItems="center" bg="lightAccent" h="35px" mt="5px" borderBottomRadius="xl">
-        <NotesIcon />
-        <Text ml="10px" color="main" fontSize="11px">
-          Items are delicate
-        </Text>
-      </HStack>
+      <PackageNote bRadius note="Items are delicate" />
     </View>
   );
 };

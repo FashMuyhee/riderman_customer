@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react';
 import {Text, useTheme, VStack} from 'native-base';
 // @ts-ignore
 import TelInput from 'react-native-phone-input';
+import {FONT} from '@utils/constant';
 
 export type IPhoneInputProps = {
   onChange: (phone: string) => void;
@@ -28,26 +29,20 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value}) => {
           borderColor: colors.grey[100],
           borderRadius: 10,
           paddingHorizontal: 15,
-          height: 50,
+          height: 57,
           marginBottom: 10,
         }}
         initialCountry="ng"
         flagStyle={{width: 25, height: 15, resizeMode: 'center'}}
         textProps={{placeholder: 'Phone', selectionColor: colors.accent}}
-        textStyle={{fontFamily: 'font-regular', color: 'black', marginTop: 5}}
+        textStyle={{fontFamily: FONT.REGULAR, color: 'black', marginTop: 5}}
         onPressFlag={() => false}
         autoFormat
         initialValue={value}
         onChangePhoneNumber={handleChange}
       />
       {!isValid && (
-        <Text
-          color="grey.200"
-          textTransform={'capitalize'}
-          fontSize="13px"
-          mb="5px"
-          mt="-5px"
-          fontWeight={'500'}>
+        <Text color="grey.200" textTransform={'capitalize'} fontSize="13px" mb="5px" mt="-5px" fontWeight={'500'}>
           Invalid Phone number
         </Text>
       )}

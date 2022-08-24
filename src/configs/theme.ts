@@ -36,49 +36,49 @@ const theme = extendTheme({
     },
   },
   fontConfig: {
-    poppins: {
+    WorkSans: {
       100: {
-        normal: 'font-extralight',
-        italic: 'font-extralightitalic',
+        normal: 'WorkSans-ExtraLight',
+        italic: 'WorkSans-ExtraLightItalic',
       },
       200: {
-        normal: 'font-extralight',
-        italic: 'font-extralightitalic',
+        normal: 'WorkSans-ExtraLight',
+        italic: 'WorkSans-ExtraLightItalic',
       },
       300: {
-        normal: 'font-light',
-        italic: 'font-lightitalic',
+        normal: 'WorkSans-Light',
+        italic: 'WorkSans-LightItalic',
       },
       400: {
-        normal: 'font-regular',
-        italic: 'font-italic',
+        normal: 'WorkSans-Regular',
+        italic: 'WorkSans-Italic',
       },
       500: {
-        normal: 'font-regular',
-        italic: 'font-italic',
+        normal: 'WorkSans-Regular',
+        italic: 'WorkSans-Italic',
       },
       600: {
-        normal: 'font-semibold',
-        italic: 'font-semibolditalic',
+        normal: 'WorkSans-SemiBold',
+        italic: 'WorkSans-SemiBoldItalic',
       },
       700: {
-        normal: 'font-bold',
-        italic: 'font-bolditalic',
+        normal: 'WorkSans-Bold',
+        italic: 'WorkSans-BoldItalic',
       },
       800: {
-        normal: 'font-extrabold',
-        italic: 'font-extrabolditalic',
+        normal: 'WorkSans-ExtraBold',
+        italic: 'WorkSans-ExtraBoldItalic',
       },
       900: {
-        normal: 'font-black',
-        italic: 'font-blackitalic',
+        normal: 'WorkSans-Black',
+        italic: 'WorkSans-BlackItalic',
       },
     },
   },
   fonts: {
-    heading: 'poppins',
-    body: 'poppins',
-    mono: 'poppins',
+    heading: 'WorkSans',
+    body: 'WorkSans',
+    mono: 'WorkSans',
   },
 });
 

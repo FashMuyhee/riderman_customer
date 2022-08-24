@@ -1,8 +1,15 @@
 import {createStackNavigator, CardStyleInterpolators} from '@react-navigation/stack';
+import DeliveryHistoryTab from '@screens/delivery-history';
 import Home from '@screens/home/home';
+import Notifications from '@screens/notifications';
+import PackageStatusScreen from '@screens/package-status';
+import PaymentScreen from '@screens/payment-screeen';
+import RateDeliveryScreen from '@screens/rate-delivery';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
+import RequestPreview from '@screens/request-delivery/request-preview';
 import SelectRider from '@screens/request-delivery/select-rider';
 import DeliverySummary from '@screens/request-delivery/summary';
+import {FONT} from '@utils/constant';
 import {useTheme} from 'native-base';
 import React from 'react';
 import {Platform} from 'react-native';
@@ -14,7 +21,7 @@ const GuardStack = () => {
   const {colors} = useTheme();
   return (
     <StackNav.Navigator
-      initialRouteName="request_delivery"
+      initialRouteName="home"
       screenOptions={{
         headerShown: true,
         presentation: 'card',
@@ -29,10 +36,15 @@ const GuardStack = () => {
         headerTintColor: 'white',
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          fontFamily: 'font-medium',
+          fontFamily: FONT.REGULAR,
           fontSize: 16,
         },
+        headerBackTitle: 'Back',
+        headerBackTitleStyle: {
+          fontSize: 14,
+        },
       }}>
+        {/* RIDE REQUEST  */}
       <StackNav.Screen component={Home} options={{headerShown: false}} name="home" />
       <StackNav.Screen
         component={RequestDelivery}
@@ -54,6 +66,50 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="select_rider"
+      />
+      <StackNav.Screen
+        component={RequestPreview}
+        options={{
+          headerShown: false,
+        }}
+        name="request_preview"
+      />
+      <StackNav.Screen
+        component={PaymentScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="payment_screen"
+      />
+      <StackNav.Screen
+        component={PackageStatusScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="package_status"
+      />
+      <StackNav.Screen
+        component={RateDeliveryScreen}
+        options={{
+          headerShown: false,
+        }}
+        name="rate_delivery"
+      />
+      {/* DELIVERY HISTORY */}
+      <StackNav.Screen
+        component={DeliveryHistoryTab}
+        options={{
+          headerTitle: 'Delivery History',
+        }}
+        name="delivery_history"
+      />
+      {/* NOTIFICATION */}
+      <StackNav.Screen
+        component={Notifications}
+        options={{
+          headerTitle: 'Notifications',
+        }}
+        name="notifications"
       />
     </StackNav.Navigator>
   );
