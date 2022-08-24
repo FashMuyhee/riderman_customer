@@ -1,4 +1,4 @@
-package com.riderman_customer;
+package com.ridername.customer;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "riderman_customer";
+    return "Riderman";
   }
 
   /**

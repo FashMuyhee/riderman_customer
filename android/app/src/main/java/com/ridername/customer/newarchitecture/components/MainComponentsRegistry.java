@@ -1,4 +1,4 @@
-package com.riderman_customer.newarchitecture.components;
+package com.ridername.customer.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

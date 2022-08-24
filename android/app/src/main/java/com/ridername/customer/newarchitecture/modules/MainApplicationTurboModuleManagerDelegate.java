@@ -1,4 +1,4 @@
-package com.riderman_customer.newarchitecture.modules;
+package com.ridername.customer.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
