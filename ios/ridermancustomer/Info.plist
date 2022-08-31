@@ -61,24 +61,20 @@
 	<string>Give riderman customer permission  to use Location</string>
 	<!-- location permission -->
 	<array>
-		<string>font-black.ttf</string>
-		<string>font-blackitalic.ttf</string>
-		<string>font-bold.ttf</string>
-		<string>font-bolditalic.ttf</string>
-		<string>font-extrabold.ttf</string>
-		<string>font-extrabolditalic.ttf</string>
-		<string>font-extralight.ttf</string>
-		<string>font-extralightitalic.ttf</string>
-		<string>font-italic.ttf</string>
-		<string>font-light.ttf</string>
-		<string>font-lightitalic.ttf</string>
-		<string>font-medium.ttf</string>
-		<string>font-mediumitalic.ttf</string>
-		<string>font-regular.ttf</string>
-		<string>font-semibold.ttf</string>
-		<string>font-semibolditalic.ttf</string>
-		<string>font-thin.ttf</string>
-		<string>font-thinitalic.ttf</string>
+		<string>WorkSans-Black.ttf</string>
+		<string>WorkSans-BlackItalic.ttf</string>
+		<string>WorkSans-Bold.ttf</string>
+		<string>WorkSans-BoldItalic.ttf</string>
+		<string>WorkSans-ExtraBold.ttf</string>
+		<string>WorkSans-ExtraBoldItalic.ttf</string>
+		<string>WorkSans-ExtraLight.ttf</string>
+		<string>WorkSans-ExtraLightItalic.ttf</string>
+		<string>WorkSans-Italic.ttf</string>
+		<string>WorkSans-Light.ttf</string>
+		<string>WorkSans-LightItalic.ttf</string>
+		<string>WorkSans-Regular.ttf</string>
+		<string>WorkSans-SemiBold.ttf</string>
+		<string>WorkSans-SemiBoldItalic.ttf</string>
 	</array>
 </dict>
 </plist>
