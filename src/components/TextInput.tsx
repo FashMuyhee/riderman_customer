@@ -19,7 +19,7 @@ export interface TextInputProps extends IBoxProps {
   label?: string;
   onFocus?: () => void;
   inputBg?: string;
-  inputHint?: ColorType;
+  inputHint?: string;
   rightIcon?: React.ReactElement;
   leftIcon?: React.ReactElement;
   secureText?: boolean;
