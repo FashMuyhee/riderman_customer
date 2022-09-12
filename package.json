@@ -9,7 +9,9 @@
     "start_port": "react-native start --port=6000",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "adb-connect": "adb reverse tcp:8081 tcp:8081"
+    "adb-connect": "adb reverse tcp:8081 tcp:8081",
+    "android-debug-build": " npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && gradlew assembleDebug && cd ..",
+    "android-release-build": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && cd android && gradlew assembleRelease && cd .."
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
