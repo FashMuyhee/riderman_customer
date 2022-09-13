@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Alert, Linking, PermissionsAndroid, Platform, ToastAndroid } from 'react-native';
 import Geolocation, { GeoPosition } from 'react-native-geolocation-service';
 
@@ -38,6 +38,7 @@ const hasLocationPermission = async () => {
     return hasPermission;
   }
 
+
   if (Platform.OS === 'android' && Platform.Version < 23) {
     return true;
   }
@@ -54,18 +55,19 @@ const hasLocationPermission = async () => {
     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
   );
 
-  if (status === PermissionsAndroid.RESULTS.GRANTED) {
+  if (status === 'granted') {
     return true;
   }
 
-  if (status === PermissionsAndroid.RESULTS.DENIED) {
+  if (status === 'denied') {
     ToastAndroid.show(
-      'Location permission denied by user.',
+      'Location permission denied',
       ToastAndroid.LONG,
     );
-  } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+  }
+  if (status === 'never_ask_again') {
     ToastAndroid.show(
-      'Location permission revoked by user.',
+      'Location permission revoked',
       ToastAndroid.LONG,
     );
   }
@@ -75,29 +77,40 @@ const hasLocationPermission = async () => {
 
 
 const useGetLocation = () => {
-  const [location, setLocation] = useState<GeoPosition | null>({
-    coords: {
-      latitude: 6.7275658,
-      longitude: 3.3086788,
-    }
-  });
-  const [isLading, setIsLoading] = useState(true)
-
   const watchId = useRef(null);
+  const [location, setLocation] = useState<GeoPosition | null>(null);
+  const [isLoading, setIsLoading] = useState(true)
+
+
+
+  const getLocation = async () => {
+    const hasPermission = await hasLocationPermission();
+    if (hasPermission) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          setLocation(position);
+        },
+        (error) => {
+          console.log(error);
+        },
+        {
+          accuracy: {
+            android: 'high',
+            ios: 'best',
+          },
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 10000,
+          distanceFilter: 0,
+        },
+      );
+    }
+  };
 
   const getLocationUpdates = async () => {
 
     const hasPermission = await hasLocationPermission();
-
-    if (!hasPermission) {
-      setIsLoading(false)
-      return;
-    }
-
-    /*   if (Platform.OS === 'android' && foregroundService) {
-        await startForegroundService();
-      }
-   */
+    if (!hasPermission) return false
 
     // @ts-ignore
     watchId.current = Geolocation.watchPosition(
@@ -112,16 +125,13 @@ const useGetLocation = () => {
       {
         accuracy: {
           android: 'high',
-          ios: 'best',
+          ios: 'bestForNavigation',
         },
         enableHighAccuracy: true,
         distanceFilter: 0,
         interval: 5000,
         fastestInterval: 2000,
         forceRequestLocation: true,
-        // forceLocationManager: useLocationManager,
-        // showLocationDialog: locationDialog,
-        // useSignificantChanges: significantChanges,
       },
     );
   };
@@ -133,38 +143,6 @@ const useGetLocation = () => {
     }
   }
 
-  const getLocation = async () => {
-    const hasPermission = await hasLocationPermission();
-
-    if (!hasPermission) {
-      return;
-    }
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        setLocation(position);
-      },
-      (error) => {
-        Alert.alert(`Code ${error.code}`, error.message);
-        setLocation(null);
-        console.log(error);
-      },
-      {
-        accuracy: {
-          android: 'high',
-          ios: 'best',
-        },
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-        distanceFilter: 0,
-        // forceRequestLocation: forceLocation,
-        // forceLocationManager: useLocationManager,
-        // showLocationDialog: locationDialog,
-      },
-    );
-  };
-
   useEffect(() => {
     getLocationUpdates()
     return () => {
@@ -172,7 +150,7 @@ const useGetLocation = () => {
     }
   }, [])
 
-  return { location, loading: isLading, getLocation }
+  return { location, loading: isLoading, getLocation }
 
 }
 
