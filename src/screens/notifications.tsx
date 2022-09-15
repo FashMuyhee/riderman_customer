@@ -27,11 +27,13 @@ const NotificationItem = ({company, rider, message, timeDate}: NotificationProps
       py="10px"
       borderLeftColor="lightAccent">
       <View w="3/4">
-        <Text>{`${rider} from ${company} ${message}`}</Text>
+        <Text fontSize="xs">{`${rider} from ${company} ${message}`}</Text>
       </View>
       <View alignItems="flex-end" w="100px" justifyContent="space-between">
         <Circle bg="red.700" size={3} />
-        <Text color="muted.400">5:30PM</Text>
+        <Text fontSize="xs" color="muted.400">
+          5:30PM
+        </Text>
       </View>
     </HStack>
   );
