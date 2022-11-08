@@ -3,6 +3,9 @@ import {Input, VStack, IBoxProps, Text, View, HStack, Pressable, useTheme, Divid
 import {KeyboardType, ReturnKeyType} from 'react-native';
 import {ColorType} from 'native-base/lib/typescript/components/types';
 import {INPUT_HEIGHT} from '@utils/constant';
+import { isEmptyString } from '@utils/helper';
+
+export type HintType = 'warning' | 'error' | 'success' | 'default';
 
 export interface TextInputProps extends IBoxProps {
   keyboardType?: KeyboardType;
@@ -19,7 +22,6 @@ export interface TextInputProps extends IBoxProps {
   label?: string;
   onFocus?: () => void;
   inputBg?: string;
-  inputHint?: string;
   rightIcon?: React.ReactElement;
   leftIcon?: React.ReactElement;
   secureText?: boolean;
@@ -27,6 +29,9 @@ export interface TextInputProps extends IBoxProps {
   isBottomSheet?: boolean;
   labelColor?: ColorType;
   leftIconDivider?: boolean;
+  hintType?: HintType;
+  hintMessage?: string;
+  hasError?: boolean;
 }
 
 const TextInput: React.FunctionComponent<TextInputProps> = props => {
@@ -43,7 +48,9 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
     label,
     onFocus,
     inputBg,
-    inputHint,
+    hintMessage,
+    hasError = false,
+    hintType,
     rightIcon,
     leftIcon,
     secureText,
@@ -58,6 +65,25 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
 
   const [focus, setFocus] = React.useState(false);
   const {colors} = useTheme();
+
+  const getBorderColor = () => {
+    let color = 'grey.600';
+    if (hasError) {
+      color = colors.error[400];
+    } else if (hintType == 'warning') {
+      color = colors.warning[500];
+    } else if (hintType == 'success') {
+      color = colors.success[500];
+    } else if (hintType == 'error') {
+      color = colors.error[400];
+    } else if (!isEmptyString(value)) {
+      color = colors.success[500];
+    } else {
+      color = 'grey.100';
+    }
+
+    return color;
+  };
 
   return (
     <VStack {...boxProps} minH="50px" mb="10px">
@@ -112,11 +138,16 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
       </Pressable>
 
       {/* @ts-ignore */}
-      {inputHint?.length > 0 && (
-        <Text color="textMute" textTransform={'capitalize'} fontSize="13px" mt="5px" fontWeight={'500'}>
-          {inputHint}
-        </Text>
-      )}
+      {hintMessage?.length > 0 && (
+          <Text
+            color={getBorderColor()}
+            textTransform='capitalize'
+            fontSize="12px"
+            italic
+            fontWeight={'500'}>
+            {hintMessage}
+          </Text>
+        )}
     </VStack>
   );
 };

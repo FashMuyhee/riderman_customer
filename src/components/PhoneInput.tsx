@@ -3,13 +3,18 @@ import {Text, useTheme, VStack} from 'native-base';
 // @ts-ignore
 import TelInput from 'react-native-phone-input';
 import {FONT} from '@utils/constant';
+import {HintType} from './TextInput';
+import {isEmptyString} from '@utils/helper';
 
 export type IPhoneInputProps = {
   onChange: (phone: string) => void;
   value: string;
+  hintType?: HintType;
+  hintMessage?: string;
+  hasError?: boolean;
 };
 
-const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value}) => {
+const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, hintType, hasError}) => {
   const {colors} = useTheme();
   const inputRef = useRef<TelInput>();
   const [isValid, setIsValid] = useState(true);
@@ -19,14 +24,35 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value}) => {
     onChange(displayValue);
   };
 
+  const getBorderColor = () => {
+    let color = colors.grey[500];
+
+    if (!isValid || hasError) {
+      color = colors.error[400];
+    } else if (hintType == 'warning') {
+      color = colors.warning[500];
+    } else if (hintType == 'success') {
+      color = colors.success[500];
+    } else if (hintType == 'error') {
+      color = colors.error[400];
+    } else if (!isEmptyString(value)) {
+      color = colors.success[500];
+    } else {
+      color = colors.grey[100];
+    }
+
+    return color;
+  };
+
   return (
     <VStack>
       <TelInput
+      // @ts-ignore
         ref={inputRef}
         style={{
           backgroundColor: colors.white,
           borderWidth: 1,
-          borderColor: colors.grey[100],
+          borderColor: getBorderColor(),
           borderRadius: 10,
           paddingHorizontal: 15,
           height: 57,
@@ -42,8 +68,14 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value}) => {
         onChangePhoneNumber={handleChange}
       />
       {!isValid && (
-        <Text color="grey.200" textTransform={'capitalize'} fontSize="13px" mb="5px" mt="-5px" fontWeight={'500'}>
+        <Text color="error.400" textTransform={'capitalize'} fontSize="12px" italic fontWeight={'500'}>
           Invalid Phone number
+        </Text>
+      )}
+      {/* @ts-ignore */}
+      {hintMessage?.length > 0 && (
+        <Text color={getBorderColor()} textTransform={'capitalize'} fontSize="12px" italic fontWeight={'500'}>
+          {hintMessage}
         </Text>
       )}
     </VStack>
