@@ -2,15 +2,32 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {View, Text, HStack, VStack} from 'native-base';
 import {AuthStackParamList} from '@navigations/param-list';
-import {ScreenWrapper, PasswordTextInput, Button, TextInput} from '@components';
+import {ScreenWrapper, PasswordTextInput, Button, TextInput, PhoneInput} from '@components';
 import {hp} from '@utils/responsive';
 import Navbar from './components/Navbar';
+import {registerSchema} from '@utils/validator';
+import {useFormik} from 'formik';
+import {isEmptyString} from '@utils/helper';
 
 export type IRegisterProps = {
   navigation: StackNavigationProp<AuthStackParamList, 'r_password'>;
 };
 
 const Register: React.FC<IRegisterProps> = ({navigation}) => {
+  const {values, handleChange, handleSubmit, errors, isValid} = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+      fName: '',
+      lName: '',
+      phone: '',
+    },
+    onSubmit: values => {
+      console.log('registered');
+    },
+    validationSchema: registerSchema,
+  });
+
   return (
     <ScreenWrapper pad={false} bgColor="main">
       <Navbar />
@@ -19,29 +36,28 @@ const Register: React.FC<IRegisterProps> = ({navigation}) => {
           <Text fontSize="3xl" textAlign="center" bold>
             Register
           </Text>
-          <Text
-            fontSize="11px"
-            w="80%"
-            mt="5px"
-            alignSelf="center"
-            textAlign="center"
-            color="grey.200">
+          <Text fontSize="11px" w="80%" mt="5px" alignSelf="center" textAlign="center" color="grey.200">
             Complete the sign up process to get started
           </Text>
         </View>
-        <TextInput placeholder="First Name" />
-        <TextInput placeholder="Last Name" mt="10px" />
-        <TextInput placeholder="Email" mt="10px" keyboardType="email-address" />
-        <PasswordTextInput placeholder="Password" mt="10px" />
+        <TextInput placeholder="First Name" hasError={!isEmptyString(errors.fName)} hintMessage={errors.fName} onChange={handleChange('fName')} value={values.fName} />
+        <TextInput placeholder="Last Name" mt="10px" hasError={!isEmptyString(errors.lName)} hintMessage={errors.lName} onChange={handleChange('lName')} value={values.lName} />
+        <TextInput
+          placeholder="Email"
+          mt="10px"
+          keyboardType="email-address"
+          hasError={!isEmptyString(errors.email)}
+          hintMessage={errors.email}
+          onChange={handleChange('email')}
+          value={values.email}
+        />
+        <PhoneInput hasError={!isEmptyString(errors.phone)} hintMessage={errors.phone} onChange={handleChange('phone')} value={values.phone} />
+        <PasswordTextInput placeholder="Password" mt="10px" hasError={!isEmptyString(errors.password)} hintMessage={errors.password} onChange={handleChange('password')} value={values.password} />
 
         <Button title="Register" mt="20px" />
         <HStack mt="30px" alignSelf="center" space="2">
           <Text fontSize="12px">Don’t have an account?</Text>
-          <Text
-            fontSize="12px"
-            color="main"
-            underline
-            onPress={() => navigation.navigate('login')}>
+          <Text fontSize="12px" color="main" underline onPress={() => navigation.navigate('login')}>
             Login
           </Text>
         </HStack>
