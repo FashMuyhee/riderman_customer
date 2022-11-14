@@ -9,12 +9,14 @@ import {AuthContext} from '@contexts/AuthContext';
 import {useFormik} from 'formik';
 import {loginSchema} from '@utils/validator';
 import {isEmptyString} from '@utils/helper';
+import authService from '@services/Auth';
+import {ILoginForm} from '@models/auth';
 
-export type ILoginProps = {
+export type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'login'>;
 };
 
-const Login: React.FC<ILoginProps> = ({navigation}) => {
+const Login: React.FC<Props> = ({navigation}) => {
   const {authenticate} = React.useContext(AuthContext);
 
   const {values, handleChange, handleSubmit, errors, isValid} = useFormik({
@@ -23,19 +25,25 @@ const Login: React.FC<ILoginProps> = ({navigation}) => {
       password: '',
     },
     onSubmit: values => {
-      authenticate(
-        {
-          dp: 'dd',
-          email: values.email,
-          fName: 'Davidson',
-          lName: 'Ahmend',
-          uid: '49',
-        },
-        'ddnfjnfgu49r32i3209',
-      );
+      handleLogin(values);
     },
     validationSchema: loginSchema,
   });
+
+  const handleLogin = async (body: ILoginForm) => {
+    const res = await authService.login(body);
+    // TODO:USER DATA SETTING
+    // authenticate(
+    //   {
+    //     dp: 'dd',
+    //     email: values.email,
+    //     fName: 'Davidson',
+    //     lName: 'Ahmend',
+    //     uid: '49',
+    //   },
+    //   'ddnfjnfgu49r32i3209',
+    // );
+  };
 
   return (
     <ScreenWrapper pad={false}>
@@ -56,7 +64,7 @@ const Login: React.FC<ILoginProps> = ({navigation}) => {
               hintMessage={errors.email}
               onChange={handleChange('email')}
               value={values.email}
-              keyboardType="email-address" 
+              keyboardType="email-address"
               placeholder="Email or Phone Number"
             />
             <PasswordTextInput

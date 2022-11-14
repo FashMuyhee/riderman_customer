@@ -7,23 +7,30 @@ import {hp} from '@utils/responsive';
 import Navbar from './components/Navbar';
 import {forgotPasswordSchema} from '@utils/validator';
 import {useFormik} from 'formik';
-import { isEmptyString } from '@utils/helper';
+import {isEmptyString} from '@utils/helper';
+import authService from '@services/Auth';
+import {storage} from '@services/TokenManager';
 
-export type IForgetPasswordProps = {
+export type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'f_password'>;
 };
 
-const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
-
+const ForgetPassword: React.FC<Props> = ({navigation}) => {
   const {values, handleChange, handleSubmit, errors, isValid} = useFormik({
     initialValues: {
       phone: '',
     },
     onSubmit: values => {
-      console.log('submitted');
+      handleSendToken(values);
     },
     validationSchema: forgotPasswordSchema,
   });
+
+  const handleSendToken = async (body: {phone: string}) => {
+    const res = await authService.sendForgotPasswordToken(body);
+    storage.set('_FP_PHONE', body.phone);
+    // TODO:success and error
+  };
 
   return (
     <ScreenWrapper pad={false} bgColor="main">
@@ -38,12 +45,7 @@ const ForgetPassword: React.FC<IForgetPasswordProps> = ({navigation}) => {
           </Text>
         </View>
         {/* @ts-ignore */}
-        <PhoneInput
-          hasError={!isEmptyString(errors.phone)}
-          hintMessage={errors.phone}
-          value={values.phone}
-          onChange={handleChange('phone')}
-        />
+        <PhoneInput hasError={!isEmptyString(errors.phone)} hintMessage={errors.phone} value={values.phone} onChange={handleChange('phone')} onSubmit={handleSubmit} />
         <HStack w="60%" alignItems="center" space="2" mt="15px" alignSelf={'center'}>
           <Text fontSize="11px">Remember password? </Text>
           <Text fontSize="11px" onPress={() => navigation.navigate('login')} underline color="main">

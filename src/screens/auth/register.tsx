@@ -8,25 +8,32 @@ import Navbar from './components/Navbar';
 import {registerSchema} from '@utils/validator';
 import {useFormik} from 'formik';
 import {isEmptyString} from '@utils/helper';
+import authService from '@services/Auth';
+import {IRegisterForm} from '@models/auth';
 
-export type IRegisterProps = {
+export type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'r_password'>;
 };
 
-const Register: React.FC<IRegisterProps> = ({navigation}) => {
+const Register: React.FC<Props> = ({navigation}) => {
   const {values, handleChange, handleSubmit, errors, isValid} = useFormik({
     initialValues: {
       email: '',
       password: '',
-      fName: '',
-      lName: '',
+      firstName: '',
+      lastName: '',
       phone: '',
     },
     onSubmit: values => {
-      console.log('registered');
+      handleRegister(values);
     },
     validationSchema: registerSchema,
   });
+
+  const handleRegister = async (body: IRegisterForm) => {
+    const res = await authService.register(body);
+    // TODO:success response
+  };
 
   return (
     <ScreenWrapper pad={false} bgColor="main">
@@ -40,8 +47,8 @@ const Register: React.FC<IRegisterProps> = ({navigation}) => {
             Complete the sign up process to get started
           </Text>
         </View>
-        <TextInput placeholder="First Name" hasError={!isEmptyString(errors.fName)} hintMessage={errors.fName} onChange={handleChange('fName')} value={values.fName} />
-        <TextInput placeholder="Last Name" mt="10px" hasError={!isEmptyString(errors.lName)} hintMessage={errors.lName} onChange={handleChange('lName')} value={values.lName} />
+        <TextInput placeholder="First Name" hasError={!isEmptyString(errors.firstName)} hintMessage={errors.firstName} onChange={handleChange('firstName')} value={values.firstName} />
+        <TextInput placeholder="Last Name" mt="10px" hasError={!isEmptyString(errors.lastName)} hintMessage={errors.lastName} onChange={handleChange('lastName')} value={values.lastName} />
         <TextInput
           placeholder="Email"
           mt="10px"
@@ -54,7 +61,7 @@ const Register: React.FC<IRegisterProps> = ({navigation}) => {
         <PhoneInput hasError={!isEmptyString(errors.phone)} hintMessage={errors.phone} onChange={handleChange('phone')} value={values.phone} />
         <PasswordTextInput placeholder="Password" mt="10px" hasError={!isEmptyString(errors.password)} hintMessage={errors.password} onChange={handleChange('password')} value={values.password} />
 
-        <Button title="Register" mt="20px" />
+        <Button title="Register" mt="20px" onPress={handleSubmit} />
         <HStack mt="30px" alignSelf="center" space="2">
           <Text fontSize="12px">Don’t have an account?</Text>
           <Text fontSize="12px" color="main" underline onPress={() => navigation.navigate('login')}>
