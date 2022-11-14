@@ -8,13 +8,14 @@ import {isEmptyString} from '@utils/helper';
 
 export type IPhoneInputProps = {
   onChange: (phone: string) => void;
+  onSubmit?: () => void;
   value: string;
   hintType?: HintType;
   hintMessage?: string;
   hasError?: boolean;
 };
 
-const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, hintType, hasError}) => {
+const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, hintType, hasError, onSubmit}) => {
   const {colors} = useTheme();
   const inputRef = useRef<TelInput>();
   const [isValid, setIsValid] = useState(true);
@@ -47,7 +48,7 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, h
   return (
     <VStack>
       <TelInput
-      // @ts-ignore
+        // @ts-ignore
         ref={inputRef}
         style={{
           backgroundColor: colors.white,
@@ -60,7 +61,7 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, h
         }}
         initialCountry="ng"
         flagStyle={{width: 25, height: 15, resizeMode: 'center'}}
-        textProps={{placeholder: 'Phone', selectionColor: colors.accent}}
+        textProps={{placeholder: 'Phone', selectionColor: colors.accent, onSubmitEditing: onSubmit}}
         textStyle={{fontFamily: FONT.REGULAR, color: 'black', marginTop: 5}}
         onPressFlag={() => false}
         autoFormat
