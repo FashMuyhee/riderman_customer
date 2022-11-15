@@ -53,3 +53,8 @@ export const getStartedSchema = yup.object().shape({
     .test('len', 'Account Number must be 10 Digit', val => val?.length === 10).required('Required').matches(/^[0-9]+$/, "Numbers Only"),
   bankName: yup.string().required('Required'),
 });
+
+export const phoneNumberFormat = (phone: string) => {
+  console.log(phone.split(" ").join("").replace('+', ''))
+  return phone.split(" ").join("").replace('+', '')
+}
