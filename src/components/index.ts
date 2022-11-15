@@ -16,8 +16,10 @@ import ScreenWrapper from "./ScreenWrapper";
 import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
 import ActivityModal from './ActivityModal'
+import RenderSnackbar from "./RenderSnackbar";
 
 export {
   MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider, SaveCardItem
+  , RenderSnackbar
   , CreditCardLogo, DateListTitle, ActivityModal
 }
