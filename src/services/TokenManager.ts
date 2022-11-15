@@ -13,18 +13,14 @@ class TokenManagerService {
    * store user auth session
    * @param  {} {token
    * @param  {} expireTime
-   * @param  {} refresh
-   * @param  {StoredUserSession} refreshTokenExpireTime}
    */
-  storeUserSession({ token, expireTime, refresh, refreshTokenExpireTime }: StoredUserSession) {
+  storeUserSession({ token, expireTime }: StoredUserSession) {
     storage.delete('_session');
     storage.set(
       '_session',
       JSON.stringify({
         expireTime,
         token,
-        refresh,
-        refreshTokenExpireTime,
       }),
     );
   }
