@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {View, Text, ScrollView, HStack} from 'native-base';
 import {AuthStackParamList} from '@navigations/param-list';
-import {PasswordTextInput, ScreenWrapper, TextInput, Button} from '@components';
+import {PasswordTextInput, ScreenWrapper, TextInput, Button, RenderSnackbar} from '@components';
 import SliderImage from './components/SliderImage';
 import {hp} from '@utils/responsive';
 import {AuthContext} from '@contexts/AuthContext';
@@ -33,16 +33,16 @@ const Login: React.FC<Props> = ({navigation}) => {
   const handleLogin = async (body: ILoginForm) => {
     try {
       const res = await authService.login(body);
-      authenticate(res.data as IUser, res.token as string);
+      if (res?.statusCode === 200) {
+        authenticate(res.data as IUser, res.token as string);
+      } else if (res?.statusCode === 401) {
+        RenderSnackbar({text: 'Invalid Input', duration: 'LONG'});
+      } else {
+        RenderSnackbar({text: 'Something went wrong,Please Try Again', duration: 'LONG'});
+      }
       setSubmitting(false);
     } catch (error) {
-      // @ts-ignore
-      // TODO:toast
-      if (error?.statusCode === 400) {
-        console.log('Invalid Input');
-      } else {
-        console.log('something went wrong');
-      }
+      RenderSnackbar({text: 'Something went wrong,Please Try Again', duration: 'LONG'});
       setSubmitting(false);
     }
   };
@@ -82,7 +82,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               Forgot Password?
             </Text>
           </View>
-          <Button mt="15px" title="Login" isLoading={isSubmitting} onPress={handleSubmit} />
+          <Button isDisabled={!isValid} mt="15px" title="Login" isLoading={isSubmitting} onPress={handleSubmit} />
           <HStack mt="15px" alignSelf="center" space="2">
             <Text fontSize="12px">Don’t have an account?</Text>
             <Text fontSize="12px" color="main" onPress={() => navigation.navigate('register')}>
