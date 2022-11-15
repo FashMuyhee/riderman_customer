@@ -3,7 +3,7 @@ import {Input, VStack, IBoxProps, Text, View, HStack, Pressable, useTheme, Divid
 import {KeyboardType, ReturnKeyType} from 'react-native';
 import {ColorType} from 'native-base/lib/typescript/components/types';
 import {INPUT_HEIGHT} from '@utils/constant';
-import { isEmptyString } from '@utils/helper';
+import {isEmptyString} from '@utils/helper';
 
 export type HintType = 'warning' | 'error' | 'success' | 'default';
 
@@ -95,7 +95,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
         </HStack>
       )}
       <Pressable w="full" onPress={onPress}>
-        <HStack borderColor={'#eee'} bg={'white'} alignItems="center" justifyContent={'space-between'} rounded={'6px'} py="5px" px="10px" borderWidth={focus ? 2 : 1} space="1">
+        <HStack borderColor={getBorderColor()} bg={'white'} alignItems="center" justifyContent={'space-between'} rounded={'6px'} py="5px" px="10px" borderWidth={focus ? 2 : 1} space="1">
           {leftIcon && (
             <HStack h={'30px'} alignItems={'center'} w="30px">
               {leftIcon}
@@ -110,7 +110,7 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
               keyboardType={keyboardType}
               returnKeyType={returnKeyType}
               placeholder={placeholder}
-              fontSize={'12px'}
+              fontSize={'14px'}
               selectionColor={'main'}
               value={value}
               onChangeText={onChange}
@@ -139,15 +139,10 @@ const TextInput: React.FunctionComponent<TextInputProps> = props => {
 
       {/* @ts-ignore */}
       {hintMessage?.length > 0 && (
-          <Text
-            color={getBorderColor()}
-            textTransform='capitalize'
-            fontSize="12px"
-            italic
-            fontWeight={'500'}>
-            {hintMessage}
-          </Text>
-        )}
+        <Text color={getBorderColor()} textTransform="capitalize" fontSize="12px" italic fontWeight={'500'}>
+          {hintMessage}
+        </Text>
+      )}
     </VStack>
   );
 };
