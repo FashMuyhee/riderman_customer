@@ -5,19 +5,21 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {ScreenWrapper, TransparentNavbar, TextInput, Button, PressableInput} from '@components';
 import {hp} from '@utils/responsive';
 import MapSection from './components/MapSection';
+import {AuthContext} from '@contexts/AuthContext';
 
 export type IHomeProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'home'>;
 };
 
 const Home: React.FC<IHomeProps> = ({navigation}) => {
+  const {user} = React.useContext(AuthContext);
   return (
     <ScreenWrapper translucentBar barStyle="dark-content">
       <TransparentNavbar isHome />
       <MapSection />
       <View bg="bg" borderTopRadius="3xl" w="full" h={hp(30)} position="absolute" px="32px" py="25px" bottom="0">
         <Text fontWeight="semibold" fontSize="20px">
-          Hi , James 👋
+          Hi , {user?.first_name} 👋
         </Text>
         <Text fontSize="12px" color="grey.200" mt="8px">
           What would you like to get delivered?
