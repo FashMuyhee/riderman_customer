@@ -1,14 +1,13 @@
 import React from 'react';
 import {View, Image, HStack, Text, Pressable, Divider} from 'native-base';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerContentComponentProps,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps} from '@react-navigation/drawer';
 import avatar from '@images/avatar.png';
 import EditIcon from '@components/icons/edit';
+import {AuthContext} from '@contexts/AuthContext';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
+  const {user} = React.useContext(AuthContext);
+
   return (
     <View style={{flex: 1, marginTop: '5%'}}>
       <DrawerContentScrollView {...props} style={{paddingHorizontal: 30}}>
@@ -27,13 +26,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             />
             <View>
               <Text bold fontSize="14px">
-                James Lewis
+                {user?.first_name} {user?.last_name}
               </Text>
-              <Pressable
-                w={70}
-                alignItems="center"
-                flexDirection="row"
-                justifyContent="space-between">
+              <Pressable w={70} alignItems="center" flexDirection="row" justifyContent="space-between">
                 <Text color="grey.200" fontSize="10px">
                   Edit Profile
                 </Text>

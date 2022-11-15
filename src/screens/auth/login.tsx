@@ -10,7 +10,7 @@ import {useFormik} from 'formik';
 import {loginSchema} from '@utils/validator';
 import {isEmptyString} from '@utils/helper';
 import authService from '@services/Auth';
-import {ILoginForm} from '@models/auth';
+import {ILoginForm, IUser} from '@models/auth';
 
 export type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'login'>;
@@ -19,10 +19,10 @@ export type Props = {
 const Login: React.FC<Props> = ({navigation}) => {
   const {authenticate} = React.useContext(AuthContext);
 
-  const {values, handleChange, handleSubmit, errors, isValid} = useFormik({
+  const {values, handleChange, handleSubmit, errors, isValid, isSubmitting, setSubmitting} = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'jmatt@squaresilk.com',
+      password: 'rootuser',
     },
     onSubmit: values => {
       handleLogin(values);
@@ -31,18 +31,20 @@ const Login: React.FC<Props> = ({navigation}) => {
   });
 
   const handleLogin = async (body: ILoginForm) => {
-    const res = await authService.login(body);
-    // TODO:USER DATA SETTING
-    // authenticate(
-    //   {
-    //     dp: 'dd',
-    //     email: values.email,
-    //     fName: 'Davidson',
-    //     lName: 'Ahmend',
-    //     uid: '49',
-    //   },
-    //   'ddnfjnfgu49r32i3209',
-    // );
+    try {
+      const res = await authService.login(body);
+      authenticate(res.data as IUser, res.token as string);
+      setSubmitting(false);
+    } catch (error) {
+      // @ts-ignore
+      // TODO:toast
+      if (error?.statusCode === 400) {
+        console.log('Invalid Input');
+      } else {
+        console.log('something went wrong');
+      }
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -80,7 +82,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               Forgot Password?
             </Text>
           </View>
-          <Button mt="15px" title="Login" />
+          <Button mt="15px" title="Login" isLoading={isSubmitting} onPress={handleSubmit} />
           <HStack mt="15px" alignSelf="center" space="2">
             <Text fontSize="12px">Don’t have an account?</Text>
             <Text fontSize="12px" color="main" onPress={() => navigation.navigate('register')}>
