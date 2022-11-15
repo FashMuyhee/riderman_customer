@@ -56,13 +56,13 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, h
           borderColor: getBorderColor(),
           borderRadius: 10,
           paddingHorizontal: 15,
-          height: 57,
+          height: 50,
           marginBottom: 10,
         }}
         initialCountry="ng"
         flagStyle={{width: 25, height: 15, resizeMode: 'center'}}
         textProps={{placeholder: 'Phone', selectionColor: colors.accent, onSubmitEditing: onSubmit}}
-        textStyle={{fontFamily: FONT.REGULAR, color: 'black', marginTop: 5}}
+        textStyle={{fontFamily: FONT.REGULAR, color: 'black'}}
         onPressFlag={() => false}
         autoFormat
         initialValue={value}
