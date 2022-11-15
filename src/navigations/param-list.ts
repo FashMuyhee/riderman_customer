@@ -6,6 +6,7 @@ export type AuthStackParamList = {
   r_password: undefined;
   verify: undefined;
   register: undefined;
+  verify_forgot: undefined
 };
 
 export type GuardStackParamList = {
