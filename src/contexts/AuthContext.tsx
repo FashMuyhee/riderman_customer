@@ -1,19 +1,13 @@
+import {IUser} from '@models/auth';
+import tokenManagerService from '@services/TokenManager';
 import React, {createContext} from 'react';
 import {useMMKVObject, useMMKVBoolean, useMMKVString} from 'react-native-mmkv';
 
-export type User = {
-  uid: string;
-  fName: string;
-  lName: string;
-  email: string;
-  dp: string;
-};
-
 export interface IAuthContext {
-  user?: User | null;
+  user?: IUser | null;
   token?: string;
   isAuth?: boolean;
-  authenticate: (user: User, token: string) => void;
+  authenticate: (user: IUser, token: string) => void;
   logout: () => void;
   setToken: (token: string) => void;
 }
@@ -27,16 +21,12 @@ export const AuthContext = createContext<IAuthContext>({
   isAuth: false,
 });
 
-export const AuthContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [user, setUser] = useMMKVObject<User | null>('_user');
+export const AuthContextProvider = ({children}: {children: React.ReactNode}) => {
+  const [user, setUser] = useMMKVObject<IUser | null>('_user');
   const [isAuth, setIsAuth] = useMMKVBoolean('_isAuth');
   const [token, setToken] = useMMKVString('_token');
 
-  const handleLogin = (user: User, token: string) => {
+  const handleLogin = (user: IUser, token: string) => {
     setUser(user);
     setToken(token);
     setIsAuth(true);
@@ -46,6 +36,7 @@ export const AuthContextProvider = ({
     setUser(null);
     setIsAuth(false);
     setToken('');
+    tokenManagerService.clearUserSession();
   };
 
   const handleResetToken = (token: string) => {
