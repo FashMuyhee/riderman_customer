@@ -15,9 +15,9 @@ import SaveCardItem from "./SaveCardItem";
 import ScreenWrapper from "./ScreenWrapper";
 import TextInput from "./TextInput";
 import TransparentNavbar from "./TransparentNavbar";
-
+import ActivityModal from './ActivityModal'
 
 export {
   MoneyText, ScreenWrapper, TextInput, PasswordTextInput, Button, TransparentNavbar, MultiSelectInput, PhoneInput, BottomSheetWrapper, FlatList, BottomSheetWrapperSnappy, PressableInput, RidermanAvatar, Rating, DashedDivider, SaveCardItem
-  , CreditCardLogo, DateListTitle
+  , CreditCardLogo, DateListTitle, ActivityModal
 }
