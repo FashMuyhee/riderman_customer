@@ -19,7 +19,6 @@ const PinInput: React.FC<IPinInputProps> = ({value, onChange, onFinish}) => {
       onFulfill={onFinish}
       codeLength={6}
       cellSpacing={10}
-      autoFocus
       restrictToNumbers
       containerStyle={{
         alignSelf: 'center',
