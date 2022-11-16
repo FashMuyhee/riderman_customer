@@ -1,13 +1,12 @@
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {View, Text, ScrollView, HStack} from 'native-base';
+import {View, Text, HStack} from 'native-base';
 import {AuthStackParamList} from '@navigations/param-list';
-import {ScreenWrapper} from '@components';
+import {ActivityModal, RenderSnackbar, ScreenWrapper} from '@components';
 import {hp} from '@utils/responsive';
 import Navbar from './components/Navbar';
 import PinInput from './components/PinInput';
 import authService from '@services/Auth';
-import {storage} from '@services/TokenManager';
 
 export type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'verify'>;
@@ -15,18 +14,35 @@ export type Props = {
 
 const VerifyCode: React.FC<Props> = ({navigation}) => {
   const [token, setToken] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (body: string) => {
-    const phone = storage.getString('_FP_PHONE') as string;
-    const res = await authService.verifyToken({phone, token: body});
-    storage.set('_FP_TOKEN', body);
-
+    setIsLoading(true);
+    const res = await authService.verifyAccount('email', body);
+    if (res?.success) {
+      navigation.replace('login');
+      setIsLoading(false);
+      RenderSnackbar({text: 'Verification Successful'});
+      return;
+    }
+    RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
     // TODO:success
   };
 
   const handleResendToken = async () => {
-    const phone = storage.getString('_FP_PHONE') as string;
-    const res = await authService.sendForgotPasswordToken({phone});
+    setIsLoading(true);
+    const res = await authService.resendAccountVerify('email');
+    if (res?.success) {
+      setTimeout(() => {
+        RenderSnackbar({text: 'Verification code sent to your email of phone number'});
+      }, 300);
+      setIsLoading(false);
+      return;
+    }
+    setTimeout(() => {
+      RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
+    }, 300);
+    setIsLoading(false);
     // TODO:success
   };
 
@@ -53,6 +69,7 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
           </Text>
         </HStack>
       </View>
+      <ActivityModal isLoading={isLoading} />
     </ScreenWrapper>
   );
 };

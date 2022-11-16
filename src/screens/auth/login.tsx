@@ -18,7 +18,7 @@ export type Props = {
 
 const Login: React.FC<Props> = ({navigation}) => {
   const {authenticate} = React.useContext(AuthContext);
-
+  // dannyff@fallinhay.com
   const {values, handleChange, handleSubmit, errors, isValid, isSubmitting, setSubmitting} = useFormik({
     initialValues: {
       email: 'jmatt@squaresilk.com',
@@ -35,7 +35,7 @@ const Login: React.FC<Props> = ({navigation}) => {
       const res = await authService.login(body);
       if (res?.statusCode === 200) {
         authenticate(res.data as IUser, res.token as string);
-      } else if (res?.statusCode === 401) {
+      } else if (res?.statusCode === 400) {
         RenderSnackbar({text: 'Invalid Input', duration: 'LONG'});
       } else {
         RenderSnackbar({text: 'Something went wrong,Please Try Again', duration: 'LONG'});
