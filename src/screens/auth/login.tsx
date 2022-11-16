@@ -66,6 +66,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               hintMessage={errors.email}
               onChange={handleChange('email')}
               value={values.email}
+              disabled={isSubmitting}
               keyboardType="email-address"
               placeholder="Email or Phone Number"
             />
@@ -77,6 +78,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               hintMessage={errors.password}
               hasError={!isEmptyString(errors.password)}
               onSubmit={handleSubmit}
+              disabled={isSubmitting}
             />
             <Text fontSize="12px" alignSelf="flex-end" color="main" mt="6px" onPress={() => navigation.navigate('f_password')}>
               Forgot Password?

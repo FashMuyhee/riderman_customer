@@ -104,7 +104,7 @@ const Register: React.FC<Props> = ({navigation}) => {
           <Button title="Register" mt="20px" onPress={handleSubmit} isLoading={isSubmitting} isDisabled={!isValid} />
           <HStack mt="30px" alignSelf="center" space="2">
             <Text fontSize="12px">Don’t have an account?</Text>
-            <Text fontSize="12px" color="main" underline onPress={() => navigation.navigate('verify')}>
+            <Text fontSize="12px" color="main" underline onPress={() => navigation.navigate('login')}>
               Login
             </Text>
           </HStack>

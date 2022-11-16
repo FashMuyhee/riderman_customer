@@ -12,7 +12,7 @@ export type IHomeProps = {
 };
 
 const Home: React.FC<IHomeProps> = ({navigation}) => {
-  const {user} = React.useContext(AuthContext);
+  const {user, logout} = React.useContext(AuthContext);
   return (
     <ScreenWrapper translucentBar barStyle="dark-content">
       <TransparentNavbar isHome />
@@ -21,7 +21,7 @@ const Home: React.FC<IHomeProps> = ({navigation}) => {
         <Text fontWeight="semibold" fontSize="20px">
           Hi , {user?.first_name} 👋
         </Text>
-        <Text fontSize="12px" color="grey.200" mt="8px">
+        <Text fontSize="12px" color="grey.200" mt="8px" onPress={logout}>
           What would you like to get delivered?
         </Text>
         <PressableInput onPress={() => navigation.navigate('request_delivery')} mt="15px" placeholder="Request Pickup" value="" />

@@ -19,7 +19,6 @@ export type Props = {
 const ResetPassword: React.FC<Props> = ({navigation}) => {
   const token = storage.getString('_FP_TOKEN') as string;
   const phone = storage.getString('_FP_PHONE') as string;
-  console.log("🚀 ~ file: reset-password.tsx ~ line 22 ~ phone", phone)
 
   const {values, handleChange, handleSubmit, errors, isValid, isSubmitting, setSubmitting} = useFormik({
     initialValues: {
@@ -35,7 +34,6 @@ const ResetPassword: React.FC<Props> = ({navigation}) => {
   const handleReset = async (password: string) => {
     const body: IRsetPasswordForm = {newPassword: password, token, phone};
     const res = await authService.resetPassword(body);
-    console.log("🚀 ~ file: reset-password.tsx ~ line 37 ~ handleReset ~ res", res)
     try {
       if (res?.statusCode == 200) {
         storage.delete('_FP_TOKEN');
@@ -70,8 +68,24 @@ const ResetPassword: React.FC<Props> = ({navigation}) => {
             New Password must be more than 8 digits long
           </Text>
         </View>
-        <PasswordTextInput value={values.password} placeholder="New Password" hasError={!isEmptyString(errors.password)} hintMessage={errors.password} onChange={handleChange('password')} />
-        <PasswordTextInput value={values.c_password} placeholder="Confirm Password" hasError={!isEmptyString(errors.c_password)} hintMessage={errors.c_password} onChange={handleChange('c_password')} mt="20px" onSubmit={handleSubmit} />
+        <PasswordTextInput
+          value={values.password}
+          disabled={isSubmitting}
+          placeholder="New Password"
+          hasError={!isEmptyString(errors.password)}
+          hintMessage={errors.password}
+          onChange={handleChange('password')}
+        />
+        <PasswordTextInput
+          value={values.c_password}
+          disabled={isSubmitting}
+          placeholder="Confirm Password"
+          hasError={!isEmptyString(errors.c_password)}
+          hintMessage={errors.c_password}
+          onChange={handleChange('c_password')}
+          mt="20px"
+          onSubmit={handleSubmit}
+        />
         <Button title="Continue" mt="20px" isDisabled={!isValid} isLoading={isSubmitting} onPress={handleSubmit} />
       </View>
     </ScreenWrapper>
