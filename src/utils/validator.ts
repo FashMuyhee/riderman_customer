@@ -55,6 +55,5 @@ export const getStartedSchema = yup.object().shape({
 });
 
 export const phoneNumberFormat = (phone: string) => {
-  console.log(phone.split(" ").join("").replace('+', ''))
   return phone.split(" ").join("").replace('+', '')
 }
