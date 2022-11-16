@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {View, Text, ScrollView, HStack} from 'native-base';
 import {AuthStackParamList} from '@navigations/param-list';
-import {ScreenWrapper} from '@components';
+import {ActivityModal, RenderSnackbar, ScreenWrapper} from '@components';
 import {hp} from '@utils/responsive';
 import Navbar from './components/Navbar';
 import PinInput from './components/PinInput';
@@ -15,18 +15,42 @@ export type Props = {
 
 const VerifyForgotCode: React.FC<Props> = ({navigation}) => {
   const [token, setToken] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const phone = storage.getString('_FP_PHONE') as string;
 
   const handleSubmit = async (body: string) => {
-    const phone = storage.getString('_FP_PHONE') as string;
-    const res = await authService.verifyForgetPasswordToken({phone, token: body});
-    storage.set('_FP_TOKEN', body);
+    try {
+      setIsLoading(true);
+      const res = await authService.verifyForgetPasswordToken({phone, token: body});
+
+      if (res?.statusCode == 200) {
+        storage.set('_FP_TOKEN', body);
+        navigation.replace('r_password');
+      } else {
+        setTimeout(() => {
+          RenderSnackbar({text: 'Invalid Code,Click Resend  for another Code', duration: 'LONG'});
+        }, 500);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setTimeout(() => {
+        RenderSnackbar({text: 'Invalid Code,Click Resend  for another Code', duration: 'LONG'});
+      }, 300);
+      setIsLoading(false);
+    }
 
     // TODO:success
   };
 
   const handleResendToken = async () => {
-    const phone = storage.getString('_FP_PHONE') as string;
+    setIsLoading(true);
     const res = await authService.sendForgotPasswordToken({phone});
+    if (res?.statusCode === 200) {
+      setTimeout(() => {
+        RenderSnackbar({text: 'Cose Sent', duration: 'LONG'});
+      }, 300);
+      setIsLoading(false);
+    }
     // TODO:success
   };
 
@@ -53,6 +77,7 @@ const VerifyForgotCode: React.FC<Props> = ({navigation}) => {
           </Text>
         </HStack>
       </View>
+      <ActivityModal isLoading={isLoading} />
     </ScreenWrapper>
   );
 };
