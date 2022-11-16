@@ -13,9 +13,10 @@ export type IPhoneInputProps = {
   hintType?: HintType;
   hintMessage?: string;
   hasError?: boolean;
+  disabled?: boolean;
 };
 
-const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, hintType, hasError, onSubmit}) => {
+const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, hintType, hasError, onSubmit, disabled}) => {
   const {colors} = useTheme();
   const inputRef = useRef<TelInput>();
   const [isValid, setIsValid] = useState(true);
@@ -61,7 +62,7 @@ const PhoneInput: React.FC<IPhoneInputProps> = ({onChange, value, hintMessage, h
         }}
         initialCountry="ng"
         flagStyle={{width: 25, height: 15, resizeMode: 'center'}}
-        textProps={{placeholder: 'Phone', selectionColor: colors.accent, onSubmitEditing: onSubmit}}
+        textProps={{placeholder: 'Phone', selectionColor: colors.accent, onSubmitEditing: onSubmit, editable: !disabled}}
         textStyle={{fontFamily: FONT.REGULAR, color: 'black'}}
         onPressFlag={() => false}
         autoFormat
