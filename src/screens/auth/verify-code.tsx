@@ -18,7 +18,7 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
 
   const handleSubmit = async (body: string) => {
     setIsLoading(true);
-    const res = await authService.verifyAccount('email', body);
+    const res = await authService.verifyAccount(body);
     if (res?.success) {
       navigation.replace('login');
       setIsLoading(false);
@@ -31,7 +31,7 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
 
   const handleResendToken = async () => {
     setIsLoading(true);
-    const res = await authService.resendAccountVerify('email');
+    const res = await authService.resendAccountVerify();
     if (res?.success) {
       setTimeout(() => {
         RenderSnackbar({text: 'Verification code sent to your email of phone number'});

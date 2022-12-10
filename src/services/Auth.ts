@@ -76,11 +76,11 @@ class AuthService {
   /**
    * resend account verification token
    */
-  async resendAccountVerify(channel: Channel = 'email') {
+  async resendAccountVerify() {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: `/verify-user/resend-token/${channel}`,
+        url: `/verify-user/send-token`,
       });
       const data: IGeneralResponse = result.data;
       if (data.success) {
@@ -100,11 +100,11 @@ class AuthService {
   /**
    * resend account verification token
    */
-  async verifyAccount(channel: Channel = 'email', token: string) {
+  async verifyAccount(token: string) {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: `/verify-user/${channel}`,
+        url: `/verify-user`,
         data: { token }
       });
       const data: IGeneralResponse = result.data;
@@ -126,11 +126,11 @@ class AuthService {
    * send token for forget password
    * @param  {{email:string}} {email}
    */
-  async sendForgotPasswordToken(body: { phone: string }, channel: Channel = 'email') {
+  async sendForgotPasswordToken(body: { phone: string }) {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: `/forgot-password/send-token/${channel}`,
+        url: `/forgot-password/send-token`,
         data: body
       });
       const data: IGeneralResponse = result.data;
@@ -153,11 +153,11 @@ class AuthService {
    * send token for forget password
    * @param  {{email:string}} {email}
    */
-  async verifyForgetPasswordToken(body: IVerifyTokenForm, channel: Channel = 'email') {
+  async verifyForgetPasswordToken(body: IVerifyTokenForm) {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: `/forgot-password/verify-token/${channel}`,
+        url: `/forgot-password/verify-token`,
         data: body,
       });
       const data: IGeneralResponse = result.data;
@@ -177,11 +177,11 @@ class AuthService {
   }
 
 
-  async resetPassword(body: IRsetPasswordForm, channel: Channel = 'email') {
+  async resetPassword(body: IRsetPasswordForm) {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: `/forgot-password/reset/${channel}`,
+        url: `/forgot-password/reset`,
         data: body,
       });
       const data: IGeneralResponse = result.data;
