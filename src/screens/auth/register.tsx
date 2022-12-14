@@ -38,9 +38,17 @@ const Register: React.FC<Props> = ({navigation}) => {
         RenderSnackbar({text: 'Registration Successful', duration: 'LONG'});
         navigation.navigate('verify');
       } else if (res?.statusCode === 400) {
-        // setErrors({email:})
-        // TODO: toast for success
-        RenderSnackbar({text: 'Please check your input', duration: 'LONG'});
+        if (res.errors) {
+          setSubmitting(false);
+          if (res.errors?.email) {
+            RenderSnackbar({text: res.errors?.email[0], duration: 'LONG'});
+            return;
+          }
+          if (res.errors?.phone) {
+            RenderSnackbar({text: res.errors?.phone[0], duration: 'LONG'});
+            return;
+          }
+        }
       }
       setSubmitting(false);
     } catch (error) {

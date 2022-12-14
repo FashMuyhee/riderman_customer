@@ -67,7 +67,9 @@ class AuthService {
         message: error?.response.data.message,
         success: false,
         //@ts-ignore
-        statusCode: error?.response?.data?.statusCode
+        statusCode: error?.response?.data?.statusCode,
+        //@ts-ignore
+        errors: error?.response.data?.errors
       };
       return message;
     }
