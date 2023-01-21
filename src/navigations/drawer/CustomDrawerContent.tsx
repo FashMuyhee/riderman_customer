@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Image, HStack, Text, Pressable, Divider} from 'native-base';
-import {DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps} from '@react-navigation/drawer';
+import {DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps, DrawerItem} from '@react-navigation/drawer';
 import avatar from '@images/avatar.png';
 import EditIcon from '@components/icons/edit';
 import {AuthContext} from '@contexts/AuthContext';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
-  const {user} = React.useContext(AuthContext);
+  const {user, logout} = React.useContext(AuthContext);
 
   return (
     <View style={{flex: 1, marginTop: '5%'}}>
@@ -40,6 +40,16 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         <Divider mb="30px" mt="10px" />
         <View>
           <DrawerItemList {...props} />
+        </View>
+        <View bottom="0px" w="90%" h="140px" pt="4" borderTopWidth={'1'} borderTopColor={'border'}>
+          <DrawerItem
+            label="Logout"
+            onPress={logout}
+            // icon={() => {
+            //   return <Feather name="log-out" size={27} color={'#7A7992'} />;
+            // }}
+            style={{marginLeft: -6}}
+          />
         </View>
       </DrawerContentScrollView>
     </View>
