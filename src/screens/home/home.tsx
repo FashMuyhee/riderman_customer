@@ -12,16 +12,16 @@ export type IHomeProps = {
 };
 
 const Home: React.FC<IHomeProps> = ({navigation}) => {
-  const {user, logout} = React.useContext(AuthContext);
+  const {user,} = React.useContext(AuthContext);
   return (
     <ScreenWrapper translucentBar barStyle="dark-content">
       <TransparentNavbar isHome />
       <MapSection />
       <View bg="bg" borderTopRadius="3xl" w="full" h={hp(30)} position="absolute" px="32px" py="25px" bottom="0">
         <Text fontWeight="semibold" fontSize="20px">
-          Hi , {user?.first_name} 👋
+          Hi , {user?.firstName} 👋
         </Text>
-        <Text fontSize="12px" color="grey.200" mt="8px" onPress={logout}>
+        <Text fontSize="12px" color="grey.200" mt="8px">
           What would you like to get delivered?
         </Text>
         <PressableInput onPress={() => navigation.navigate('request_delivery')} mt="15px" placeholder="Request Pickup" value="" />
