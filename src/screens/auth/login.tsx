@@ -21,8 +21,8 @@ const Login: React.FC<Props> = ({navigation}) => {
   // dannyff@fallinhay.com
   const {values, handleChange, handleSubmit, errors, isValid, isSubmitting, setSubmitting} = useFormik({
     initialValues: {
-      email: 'jmatt@squaresilk.com',
-      password: 'rootuser',
+      email: '',
+      password: '',
     },
     onSubmit: values => {
       handleLogin(values);
@@ -36,7 +36,7 @@ const Login: React.FC<Props> = ({navigation}) => {
       if (res?.statusCode === 200) {
         authenticate(res.data as IUser, res.token as string);
       } else if (res?.statusCode === 400) {
-        RenderSnackbar({text: 'Invalid Input', duration: 'LONG'});
+        RenderSnackbar({text: 'Incorrect Email or Password', duration: 'LONG'});
       } else {
         RenderSnackbar({text: 'Something went wrong,Please Try Again', duration: 'LONG'});
       }
