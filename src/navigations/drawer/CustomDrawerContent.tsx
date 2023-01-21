@@ -26,7 +26,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             />
             <View>
               <Text bold fontSize="14px">
-                {user?.first_name} {user?.last_name}
+                {user?.firstName} {user?.lastName}
               </Text>
               <Pressable w={70} alignItems="center" flexDirection="row" justifyContent="space-between">
                 <Text color="grey.200" fontSize="10px">

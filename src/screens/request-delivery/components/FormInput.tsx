@@ -6,8 +6,7 @@ import LocationRadiusIcon from '@components/icons/location-radius';
 import PlaceAutoComplete from './PlaceAutoComplete';
 import PackageIcon from '@components/icons/package';
 import DeleteIcon from '@components/icons/delete';
-import {IDeliveryRequestBody} from '@models/delivery';
-import {LocationValue} from '../request-delivery';
+import {IDeliveryRequestBody, LocationValue} from '@models/delivery';
 
 export type IFormInputProps = {
   body: IDeliveryRequestBody;
@@ -60,7 +59,6 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
     );
   };
 
-
   return isLast || isOpen ? (
     <>
       <View mt="15px">
@@ -85,17 +83,13 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
           <VStack w="93%">
             {isFirst ? (
               <>
-                <PlaceAutoComplete placeholder="Pickup:" value={body.pickupLocation.desc} onPlaceChange={onFormChange(index, 'pickupLocation')} />
-                <PlaceAutoComplete
-                  placeholder="Delivery:"
-                  value={body.deliveryLocation.desc}
-                  onPlaceChange={onFormChange(index, 'deliveryLocation')}
-                />
+                <PlaceAutoComplete placeholder="Pickup:" value={body.pickupLocation.address} onPlaceChange={onFormChange(index, 'pickupLocation')} />
+                <PlaceAutoComplete placeholder="Delivery:" value={body.deliveryLocation.address} onPlaceChange={onFormChange(index, 'deliveryLocation')} />
               </>
             ) : (
               <PlaceAutoComplete
                 placeholder="Delivery:"
-                value={body.deliveryLocation.desc}
+                value={body.deliveryLocation.address}
                 // onPlaceChange={console.log}
                 onPlaceChange={onFormChange(index, 'deliveryLocation')}
               />
@@ -120,13 +114,7 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
         </Text>
         <TextInput mt="10px" w="full" placeholder="Recipient’s Name" value={body.rName} onChange={onFormChange(index, 'rName')} />
         <PhoneInput value={body.rPhone} onChange={onFormChange(index, 'rPhone')} />
-        <TextInput
-          w="full"
-          placeholder="Recipient’s Email"
-          keyboardType="email-address"
-          value={body.rEmail}
-          onChange={onFormChange(index, 'rEmail')}
-        />
+        <TextInput w="full" placeholder="Recipient’s Email" keyboardType="email-address" value={body.rEmail} onChange={onFormChange(index, 'rEmail')} />
       </View>
     </>
   ) : (

@@ -4,20 +4,15 @@ import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Button, MultiSelectInput, ScreenWrapper} from '@components';
 import FormInput from './components/FormInput';
-import {IDeliveryRequestBody} from '@models/delivery';
+import {IDeliveryRequestBody, LocationValue} from '@models/delivery';
 
 export type IRequestDeliveryProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'request_delivery'>;
 };
 
-export type LocationValue = {
-  desc: string;
-  location: {lat: number; lng: number};
-};
-
 const initialValues: IDeliveryRequestBody = {
-  pickupLocation: {desc: '', location: {lat: 0, lng: 0}},
-  deliveryLocation: {desc: '', location: {lat: 0, lng: 0}},
+  pickupLocation: {lat: '0', long: '0', address: ''},
+  deliveryLocation: {lat: '0', long: '0', address: ''},
   packageName: '',
   packageTypes: [],
   weight: '',

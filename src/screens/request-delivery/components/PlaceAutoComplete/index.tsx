@@ -1,19 +1,16 @@
 import React, {useCallback, useState} from 'react';
-import {PressableInput, TextInput} from '@components';
+import {PressableInput} from '@components';
 import {TextInputProps} from '@components/TextInput';
 import {hp, wp} from '@utils/responsive';
 import {View, Pressable, Text, useDisclose, Input, useTheme} from 'native-base';
 import {Modal, Platform} from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, {useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated';
 import LocationIcon from '@components/icons/location';
 import HistoryIcon from '@components/icons/history';
 import LocationPinIcon from '@components/icons/location-pin';
 import placeAPI from './placeApi';
 import {useDebounce} from '@hooks/useDebounce';
+import {LocationValue} from '@models/delivery';
 
 export type PlacePredictionType = {
   description: string;
@@ -31,13 +28,7 @@ export type PlacePredictionType = {
 
 export interface IPlaceAutoCompleteProps extends TextInputProps {
   value: string;
-  onPlaceChange: ({
-    desc,
-    location,
-  }: {
-    desc: string;
-    location: {lat: number; lng: number};
-  }) => void;
+  onPlaceChange: (location: LocationValue) => void;
 }
 
 export type LocationItemProps = {
@@ -77,12 +68,7 @@ const LocationItem = ({onPress, predictions, isHistory}: LocationItemProps) => {
   );
 };
 
-const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
-  placeholder,
-  boxProps,
-  onPlaceChange,
-  value,
-}) => {
+const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxProps, onPlaceChange, value}) => {
   const {isOpen, onClose, onOpen} = useDisclose();
   const SCREEN_HEIGHT = hp(100);
   const translateY = useSharedValue(0);
@@ -134,20 +120,15 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
    * @param isHistory
    * @returns
    */
-  const _renderPlacesPrediction = (
-    placePredictions: PlacePredictionType[] | Array<any>,
-    isHistory: boolean,
-  ) => {
+  const _renderPlacesPrediction = (placePredictions: PlacePredictionType[] | Array<any>, isHistory: boolean) => {
     /**
      * get place lat and longitude on press
      * @param placeId
      */
     const handlePressLocation = async (placeId: string, desc: string) => {
       try {
-        const res: {lat: number; lng: number} = await placeAPI.getPlaceID(
-          placeId,
-        );
-        onPlaceChange({desc, location: res});
+        const res: {lat: number; lng: number} = await placeAPI.getPlaceID(placeId);
+        onPlaceChange({address: desc, lat: res.lat.toString(), long: res.lng.toString()});
         closeSearchModal();
       } catch (error) {
         console.log(error);
@@ -157,12 +138,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
     return (
       <>
         {placePredictions?.map((item, key) => (
-          <LocationItem
-            isHistory={isHistory}
-            predictions={item}
-            key={key}
-            onPress={handlePressLocation}
-          />
+          <LocationItem isHistory={isHistory} predictions={item} key={key} onPress={handlePressLocation} />
         ))}
       </>
     );
@@ -170,11 +146,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
 
   return (
     <>
-      <PressableInput
-        value={value}
-        placeholder={placeholder}
-        onPress={() => openSearchModal()}
-      />
+      <PressableInput value={value} placeholder={placeholder} onPress={() => openSearchModal()} />
       <Modal visible={isOpen} transparent onRequestClose={closeSearchModal}>
         <Animated.View
           style={[
@@ -207,16 +179,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
             </View>
             <View bg="bg" w="full" h="full" px="10px">
               {/* current location pin */}
-              <Pressable
-                px="15px"
-                flexDirection="row"
-                mt="5px"
-                pb="5px"
-                borderBottomWidth={1}
-                borderBottomColor="gray.300"
-                alignItems="center"
-                w="full"
-                h="45px">
+              <Pressable px="15px" flexDirection="row" mt="5px" pb="5px" borderBottomWidth={1} borderBottomColor="gray.300" alignItems="center" w="full" h="45px">
                 <LocationIcon bg={colors.main} />
                 <Text ml="10px">My Location</Text>
               </Pressable>
@@ -225,15 +188,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({
               {showSuggestions && _renderPlacesPrediction(suggestions, false)}
             </View>
             {Platform.OS === 'ios' && (
-              <Text
-                color="main"
-                textAlign="center"
-                left="45%"
-                right="45%"
-                bottom="3%"
-                fontSize="12px"
-                position="absolute"
-                onPress={closeSearchModal}>
+              <Text color="main" textAlign="center" left="45%" right="45%" bottom="3%" fontSize="12px" position="absolute" onPress={closeSearchModal}>
                 Close
               </Text>
             )}
