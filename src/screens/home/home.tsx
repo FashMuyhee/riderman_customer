@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'native-base';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ScreenWrapper, TransparentNavbar, TextInput, Button, PressableInput} from '@components';
+import {ScreenWrapper, TransparentNavbar, Button, PressableInput} from '@components';
 import {hp} from '@utils/responsive';
 import MapSection from './components/MapSection';
 import {AuthContext} from '@contexts/AuthContext';
@@ -12,7 +12,7 @@ export type IHomeProps = {
 };
 
 const Home: React.FC<IHomeProps> = ({navigation}) => {
-  const {user,} = React.useContext(AuthContext);
+  const {user} = React.useContext(AuthContext);
   return (
     <ScreenWrapper translucentBar barStyle="dark-content">
       <TransparentNavbar isHome />
