@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {PressableInput} from '@components';
 import {TextInputProps} from '@components/TextInput';
 import {hp, wp} from '@utils/responsive';
-import {View, Pressable, Text, useDisclose, Input, useTheme} from 'native-base';
+import {View, Pressable, Text, useDisclose, Input, useTheme, Skeleton, HStack} from 'native-base';
 import {Modal, Platform} from 'react-native';
 import Animated, {useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated';
 import LocationIcon from '@components/icons/location';
@@ -76,6 +76,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<PlacePredictionType[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -85,7 +86,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
 
   const scrollTo = useCallback((destination: number) => {
     'worklet';
-    translateY.value = withSpring(destination, {damping: 50});
+    translateY.value = withSpring(destination, {damping: 50, stiffness: 250});
   }, []);
 
   const openSearchModal = () => {
@@ -103,12 +104,13 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   const handleOnQueryChange = async () => {
     if (searchQuery.trim() === '') return;
     try {
+      setIsLoadingSuggestions(true);
       const res = await placeAPI.getPlaceSuggestions(searchQuery);
       setShowSuggestions(true);
       setSuggestions(res);
-      // console.log(JSON.stringify(res));
+      setIsLoadingSuggestions(false);
     } catch (error) {
-      console.log(error);
+      setIsLoadingSuggestions(false);
     }
   };
 
@@ -143,6 +145,15 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
       </>
     );
   };
+
+  const _renderLoader = () => (
+    <HStack alignItems="center" mt="10px">
+      <View width="15%" justifyContent="center" alignItems="center">
+        <Skeleton size="25px" rounded="full" endColor="coolGray.300" startColor="coolGray.100" />
+      </View>
+      <Skeleton w="85%" endColor="coolGray.300" startColor="coolGray.100" />
+    </HStack>
+  );
 
   return (
     <>
@@ -183,6 +194,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
                 <LocationIcon bg={colors.main} />
                 <Text ml="10px">My Location</Text>
               </Pressable>
+              {isLoadingSuggestions && _renderLoader()}
               {/* history */}
               {/* search result */}
               {showSuggestions && _renderPlacesPrediction(suggestions, false)}

@@ -31,7 +31,6 @@ class PlaceAPI {
    * @param  {string} placeId
    */
   async getPlaceID(placeId: string) {
-    console.log('pressed')
     try {
       const { data } = await axios.request({
         method: 'post',
@@ -39,7 +38,6 @@ class PlaceAPI {
       })
       if (data) {
         const { result: { geometry: { location } } } = data
-        console.log(location)
         return location
       }
     } catch (e) {
