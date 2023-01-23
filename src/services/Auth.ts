@@ -1,20 +1,19 @@
-import httpHandler, { configureAxiosHeaders } from '../utils/http';
-import { ILoginForm, IRegisterForm, ILoginRegisterResponse, IRsetPasswordForm, IVerifyTokenForm, IGeneralResponse, Channel } from '@models/auth';
+import httpHandler, {configureAxiosHeaders} from '../utils/http';
+import {ILoginForm, IRegisterForm, ILoginRegisterResponse, IRsetPasswordForm, IVerifyTokenForm, IGeneralResponse} from '@models/auth';
 import tokenManagerService from './TokenManager';
 
 class AuthService {
-
   /**
-   * login 
+   * login
    * @param  {} {email
    * @param  {ILoginForm} password}
    */
-  async login({ email, password }: ILoginForm) {
+  async login({email, password}: ILoginForm) {
     try {
       const result = await httpHandler({
         method: 'post',
-        url: '/login',
-        data: { email, password },
+        url: '/customer/login',
+        data: {email, password},
       });
       const data: ILoginRegisterResponse = result.data;
       if (data.statusCode === 200) {
@@ -22,14 +21,14 @@ class AuthService {
         configureAxiosHeaders(data?.token);
         tokenManagerService.storeUserSession({
           token: data?.token as string,
-          expireTime: 111
+          expireTime: 111,
         });
         tokenManagerService.storeUserCredentials({
           email,
           password,
           uid: data?.data?.id as number,
         });
-        return data
+        return data;
       }
     } catch (error) {
       const message: ILoginRegisterResponse = {
@@ -37,16 +36,16 @@ class AuthService {
         message: error?.response.data.message,
         success: false,
         //@ts-ignore
-        statusCode: error?.response?.data?.statusCode
+        statusCode: error?.response?.data?.statusCode,
       };
-      return message
+      return message;
     }
   }
 
   /**
-  * register normal user
-  * @param  {RegisterBody} body
-  */
+   * register normal user
+   * @param  {RegisterBody} body
+   */
   async register(body: IRegisterForm) {
     try {
       const result = await httpHandler({
@@ -56,7 +55,7 @@ class AuthService {
       });
       const data: ILoginRegisterResponse = result.data;
       if (data.success) {
-        tokenManagerService.storeUserCredentials({ email: body.email, password: body.password, uid: data?.data?.id as number })
+        tokenManagerService.storeUserCredentials({email: body.email, password: body.password, uid: data?.data?.id as number});
         // @ts-ignore set token
         configureAxiosHeaders(data?.token);
         return data;
@@ -69,7 +68,7 @@ class AuthService {
         //@ts-ignore
         statusCode: error?.response?.data?.statusCode,
         //@ts-ignore
-        errors: error?.response.data?.errors
+        errors: error?.response.data?.errors,
       };
       return message;
     }
@@ -107,7 +106,7 @@ class AuthService {
       const result = await httpHandler({
         method: 'post',
         url: `/verify-user`,
-        data: { token }
+        data: {token},
       });
       const data: IGeneralResponse = result.data;
       if (data.success) {
@@ -128,12 +127,12 @@ class AuthService {
    * send token for forget password
    * @param  {{email:string}} {email}
    */
-  async sendForgotPasswordToken(body: { phone: string }) {
+  async sendForgotPasswordToken(body: {phone: string}) {
     try {
       const result = await httpHandler({
         method: 'post',
         url: `/forgot-password/send-token`,
-        data: body
+        data: body,
       });
       const data: IGeneralResponse = result.data;
 
@@ -145,7 +144,7 @@ class AuthService {
         //@ts-ignore
         message: error?.response.data.message,
         success: false,
-        statusCode: 400
+        statusCode: 400,
       };
       return message;
     }
@@ -172,12 +171,11 @@ class AuthService {
         //@ts-ignore
         message: error?.response.data.message,
         success: false,
-        statusCode: 400
+        statusCode: 400,
       };
       return message;
     }
   }
-
 
   async resetPassword(body: IRsetPasswordForm) {
     try {
@@ -196,12 +194,11 @@ class AuthService {
         //@ts-ignore
         message: error?.response.data.message,
         statusCode: 400,
-        success: false
+        success: false,
       };
       return message;
     }
   }
-
 }
 
 const authService = new AuthService();
