@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, View, ScrollView} from 'native-base';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Button, MultiSelectInput, ScreenWrapper} from '@components';
+import {Button, ScreenWrapper} from '@components';
 import FormInput from './components/FormInput';
 import {IDeliveryRequestBody, LocationValue} from '@models/delivery';
 
@@ -32,7 +32,7 @@ const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
   };
 
   const handleAddNewForm = () => {
-    setRequestValues(prev => [...prev, initialValues]);
+    setRequestValues(prev => [...prev, {...initialValues, pickupLocation: prev[0].pickupLocation}]);
   };
 
   const handleRemoveRequest = (index: number) => {
