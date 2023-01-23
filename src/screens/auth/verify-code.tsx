@@ -20,9 +20,9 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
     setIsLoading(true);
     const res = await authService.verifyAccount(body);
     if (res?.success) {
+      RenderSnackbar({text: 'Verification Successful'});
       navigation.replace('login');
       setIsLoading(false);
-      RenderSnackbar({text: 'Verification Successful'});
       return;
     }
     RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
