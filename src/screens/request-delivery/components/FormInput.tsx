@@ -48,8 +48,12 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
                 <LocationPinIcon />
               </VStack>
               <VStack w="93%" space="2">
-                <Text fontSize="11px">26, Obafemi Awolowo Road, Ikorodu, Lagos</Text>
-                <Text fontSize="11px">Murtala Mohammed Internationational Airport, Ikeja, Lagos</Text>
+                <Text fontSize="11px" isTruncated>
+                  {body.pickupLocation.address}
+                </Text>
+                <Text fontSize="11px" isTruncated>
+                  {body.deliveryLocation.address}
+                </Text>
               </VStack>
             </HStack>
           </View>
@@ -87,12 +91,7 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
                 <PlaceAutoComplete placeholder="Delivery:" value={body.deliveryLocation.address} onPlaceChange={onFormChange(index, 'deliveryLocation')} />
               </>
             ) : (
-              <PlaceAutoComplete
-                placeholder="Delivery:"
-                value={body.deliveryLocation.address}
-                // onPlaceChange={console.log}
-                onPlaceChange={onFormChange(index, 'deliveryLocation')}
-              />
+              <PlaceAutoComplete placeholder="Delivery:" value={body.deliveryLocation.address} onPlaceChange={onFormChange(index, 'deliveryLocation')} />
             )}
           </VStack>
         </HStack>
