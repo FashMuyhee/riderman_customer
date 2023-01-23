@@ -3,9 +3,12 @@ import {HStack, Badge, View, Text} from 'native-base';
 import ArrowGradient from '@components/icons/arrow-gradient';
 import NotesIcon from '@components/icons/notes';
 import {hp} from '@utils/responsive';
+import {IDeliveryRequestBody} from '@models/delivery';
+import deliveryService from '@services/Delivery';
 
 export type ISummaryItemProps = {
   isLast: boolean;
+  request: IDeliveryRequestBody;
 };
 
 export const PackageNote = ({note, rounded = false, bRadius = false}: {note: string; rounded?: boolean; bRadius?: boolean}) => (
@@ -23,12 +26,12 @@ export const PackageType = ({type}: {type: string}) => (
   </Badge>
 );
 
-const SummaryItem: React.FC<ISummaryItemProps> = ({isLast}) => {
+const SummaryItem: React.FC<ISummaryItemProps> = ({isLast, request}) => {
+  const distance = deliveryService.calcDistance({x: request.pickupLocation, y: request.deliveryLocation});
   return (
-    <View mb={isLast ? hp(22) : 0} rounded="xl" h={hp(30)} mt="20px" w="full" bg="white">
+    <View mb={isLast ? hp(22) : 0} rounded="xl" minH={hp(20)} mt="20px" w="full" bg="white">
       <HStack px="20px" mt="10px" alignItems="center" justifyContent="flex-start" space="2">
-        <PackageType type="Cloth" />
-        <PackageType type="Food" />
+        {!!request.packageTypes && request.packageTypes.map((type, i) => <PackageType key={i} type={type} />)}
       </HStack>
       <View borderWidth={0.6} borderRadius="1px" borderStyle={'dashed'} borderColor="#eeeeee" mt="10px" mx="20px" />
       <HStack alignItems="center" mt="10px" px="20px" justifyContent="space-between">
@@ -42,12 +45,12 @@ const SummaryItem: React.FC<ISummaryItemProps> = ({isLast}) => {
       </HStack>
       <HStack alignItems="flex-start" mt="10px" px="20px" justifyContent="space-between">
         <View w="40%">
-          <Text fontSize="10px">2 Packages</Text>
-          <Text fontSize="11px">26, Obafemi Awolowo Road</Text>
+          <Text fontSize="10px">{request.packageNo} Packages</Text>
+          <Text fontSize="11px">{request.pickupLocation.address}</Text>
         </View>
         <View w="40%">
-          <Text fontSize="11px">Jonathan Jude</Text>
-          <Text fontSize="11px">Murtala Mohammed Internationational Airport, Ikeja</Text>
+          <Text fontSize="11px">{request.rName}</Text>
+          <Text fontSize="11px">{request.deliveryLocation.address}</Text>
         </View>
       </HStack>
       <View borderWidth={0.6} borderRadius="1px" borderStyle={'dashed'} borderColor="#eeeeee" mt="20px" mx="20px" />
@@ -60,12 +63,13 @@ const SummaryItem: React.FC<ISummaryItemProps> = ({isLast}) => {
         </Text>
       </HStack>
       <HStack alignItems="flex-start" mt="5px" px="20px" justifyContent="space-between">
-        <Text fontSize="11px">080 234 678 89</Text>
-        <Text fontSize="11px">5.3km</Text>
+        <Text fontSize="11px">{request.rPhone}</Text>
+        <Text fontSize="11px">{Math.round(distance)}km</Text>
       </HStack>
       <PackageNote bRadius note="Items are delicate" />
     </View>
   );
 };
 
-export default SummaryItem;
+const Memoized = React.memo(SummaryItem);
+export default Memoized;
