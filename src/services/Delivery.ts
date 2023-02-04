@@ -1,7 +1,19 @@
 import {IGeneralResponse} from '@models/auth';
-import {LocationValue, PickupFormBody, RiderResponse} from '@models/delivery';
+import {IRiderCloseByResponse, LocationValue, PickupFormBody, RiderResponse} from '@models/delivery';
+import axios from 'axios';
 import httpHandler from '../utils/http';
+// @ts-ignore
+import {G_MAP_KEY} from '@env';
 
+type Value = {
+  text: string;
+  value: number;
+};
+type DistanceMatrix = {
+  distance: Value;
+  duration: Value;
+  status: string;
+};
 class DeliveryService {
   /**
    * get online riders
@@ -45,6 +57,28 @@ class DeliveryService {
     }
   }
 
+  async getCloseByRiderByPickupLocation(pickupRequestId: string) {
+    try {
+      const result = await httpHandler({method: 'get', url: `/customer/pickup-requests/${pickupRequestId}/get-riders?radius=2.5`});
+      const data: IRiderCloseByResponse = result.data;
+      if (data.success) {
+        return data;
+      }
+    } catch (error) {
+      //@ts-ignore
+      const message: IRiderCloseByResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+        data: {
+          pickupRequestId,
+          riders: [],
+        },
+      };
+      return message;
+    }
+  }
+
   /**
    * calculate distance between locations
    * @param  {} {x
@@ -66,6 +100,30 @@ class DeliveryService {
     let r = 3956;
     // calculate the result
     return c * r;
+  }
+
+  /**
+   * calculate distance between locations with google distance matrix
+   * @param  {} {x
+   * @param  {{x:LocationValue;y:LocationValue}} y}
+   */
+  async calcDistanceMatrix({x, y}: {x: LocationValue; y: LocationValue}) {
+    const errResult: DistanceMatrix = {
+      distance: {text: '0 km', value: 0},
+      duration: {text: '0 mins', value: 0},
+      status: 'falied',
+    };
+    try {
+      const {data} = await axios({method: 'get', url: `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${y.lat},${y.long}&origins=${x.lat},${x.long}&key=${G_MAP_KEY}`});
+      if (data?.status === 'OK') {
+        const result: DistanceMatrix = data?.rows[0].elements[0];
+        console.log("🚀 ~ file: Delivery.ts:120 ~ DeliveryService ~ calcDistanceMatrix ~ result", result)
+        return result;
+      }
+      return errResult;
+    } catch (error) {
+      return errResult;
+    }
   }
 }
 
