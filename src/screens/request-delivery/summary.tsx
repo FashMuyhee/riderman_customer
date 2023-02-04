@@ -1,6 +1,6 @@
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, HStack} from 'native-base';
 import {ScreenWrapper, Button, FlatList, RenderSnackbar} from '@components';
 import {hp} from '@utils/responsive';
@@ -20,32 +20,40 @@ export type IDeliverySummaryProps = {
 const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) => {
   const {item: requestData} = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const totalDistance = React.useMemo(() => {
-    return requestData.reduce((p, c) => {
-      const distance = deliveryService.calcDistance({x: c.pickupLocation, y: c.deliveryLocation}) + p;
-      return distance;
-    }, 0);
-  }, [requestData]);
+  const [totalDistance, setTotalDistance] = useState(0);
+
+  const calcTotalDistance = async () => {
+    const total = await requestData.reduce(async (p, c) => {
+      const prevValue = await p;
+      const {distance} = await deliveryService.calcDistanceMatrix({x: c.pickupLocation, y: c.deliveryLocation});
+      const distanceInKm = distance.value / 1000 + prevValue;
+      return distanceInKm;
+    }, Promise.resolve(0));
+    setTotalDistance(total);
+  };
 
   const handleSubmit = async () => {
     setIsLoading(true);
     const deliveryLocations = requestData.map(item => {
       return item.deliveryLocation;
     });
-    const deliveryPackages: DeliveryPackage[] = requestData.map(item => {
-      return {
-        deliveryInstructions: item.packageName,
-        numberOfPackages: item.packageNo,
-        weight: item.weight,
-        recipient: {
-          name: item.rName,
-          phone: item.rPhone,
-          email: item.rEmail,
-        },
-        distanceFromPickup: deliveryService.calcDistance({x: item.pickupLocation, y: item.deliveryLocation}).toString(),
-        packageCategories: item.packageTypes,
-      };
-    });
+    const deliveryPackages: DeliveryPackage[] = await Promise.all(
+      requestData.map(async item => {
+        const {distance} = await deliveryService.calcDistanceMatrix({x: item.pickupLocation, y: item.deliveryLocation});
+        return {
+          deliveryInstructions: item.instruction,
+          numberOfPackages: item.packageNo,
+          weight: item.weight,
+          recipient: {
+            name: item.rName,
+            phone: item.rPhone,
+            email: item.rEmail,
+          },
+          distanceFromPickup: `${distance.value / 1000}`,
+          packageCategories: item.packageTypes,
+        };
+      }),
+    );
     try {
       const res = await deliveryService.requestPickup({
         totalDistance: totalDistance.toString(),
@@ -62,7 +70,11 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       setIsLoading(false);
       console.log(error);
     }
-  };
+  };  
+
+  useEffect(() => {
+    calcTotalDistance();
+  }, []);
 
   return (
     <ScreenWrapper pad={false} bgColor="#fafafa">

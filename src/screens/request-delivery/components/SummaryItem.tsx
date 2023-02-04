@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {HStack, Badge, View, Text} from 'native-base';
 import ArrowGradient from '@components/icons/arrow-gradient';
 import NotesIcon from '@components/icons/notes';
@@ -27,7 +27,18 @@ export const PackageType = ({type}: {type: string}) => (
 );
 
 const SummaryItem: React.FC<ISummaryItemProps> = ({isLast, request}) => {
-  const distance = deliveryService.calcDistance({x: request.pickupLocation, y: request.deliveryLocation});
+  const [distance, setDistance] = useState(0);
+
+  const calcDistance = async () => {
+    const {distance} = await deliveryService.calcDistanceMatrix({x: request.pickupLocation, y: request.deliveryLocation});
+    const distanceInKm = distance.value / 1000;
+    setDistance(distanceInKm);
+  };
+
+  useEffect(() => {
+    calcDistance();
+  }, []);
+
   return (
     <View mb={isLast ? hp(22) : 0} rounded="xl" minH={hp(20)} mt="20px" w="full" bg="white">
       <HStack px="20px" mt="10px" alignItems="center" justifyContent="flex-start" space="2">
@@ -66,7 +77,7 @@ const SummaryItem: React.FC<ISummaryItemProps> = ({isLast, request}) => {
         <Text fontSize="11px">{request.rPhone}</Text>
         <Text fontSize="11px">{Math.round(distance)}km</Text>
       </HStack>
-      <PackageNote bRadius note="Items are delicate" />
+      <PackageNote bRadius note={request.instruction} />
     </View>
   );
 };
