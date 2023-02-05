@@ -56,6 +56,8 @@ class AuthService {
       const data: ILoginRegisterResponse = result.data;
       if (data.success) {
         tokenManagerService.storeUserCredentials({email: body.email, password: body.password, uid: data?.data?.id as number});
+        tokenManagerService.storeUserSession({ token: data?.token as string, expireTime: 0 })
+
         // @ts-ignore set token
         configureAxiosHeaders(data?.token);
         return data;
@@ -113,6 +115,7 @@ class AuthService {
         return data;
       }
     } catch (error) {
+      console.log("🚀 ~ file: Auth.ts:116 ~ AuthService ~ verifyAccount ~ error", error)
       //@ts-ignore
       const message: IGeneralResponse = {
         //@ts-ignore

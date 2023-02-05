@@ -107,6 +107,7 @@ const Register: React.FC<Props> = ({navigation}) => {
             hintMessage={errors.password}
             onChange={handleChange('password')}
             value={values.password}
+            onSubmit={handleSubmit}
           />
 
           <Button title="Register" mt="20px" onPress={handleSubmit} isLoading={isSubmitting} isDisabled={!isValid} />

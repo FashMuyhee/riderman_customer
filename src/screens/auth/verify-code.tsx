@@ -20,18 +20,23 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
     setIsLoading(true);
     try {
       const res = await authService.verifyAccount(body);
+      console.log('🚀 ~ file: verify-code.tsx:23 ~ handleSubmit ~ res', res);
       if (res?.success) {
         RenderSnackbar({text: 'Verification Successful'});
         navigation.replace('login');
         setIsLoading(false);
         return;
       }
+      setTimeout(() => {
+        RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
+      }, 300);
       setIsLoading(false);
-      RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
     } catch (error) {
-      console.log("🚀 ~ file: verify-code.tsx:32 ~ handleSubmit ~ error", error)
+      console.log('🚀 ~ file: verify-code.tsx:32 ~ handleSubmit ~ error', error);
       setIsLoading(false);
-      RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
+      setTimeout(() => {
+        RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
+      }, 300);
     }
     // TODO:success
   };
