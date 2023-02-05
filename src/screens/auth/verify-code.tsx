@@ -18,31 +18,45 @@ const VerifyCode: React.FC<Props> = ({navigation}) => {
 
   const handleSubmit = async (body: string) => {
     setIsLoading(true);
-    const res = await authService.verifyAccount(body);
-    if (res?.success) {
-      RenderSnackbar({text: 'Verification Successful'});
-      navigation.replace('login');
+    try {
+      const res = await authService.verifyAccount(body);
+      if (res?.success) {
+        RenderSnackbar({text: 'Verification Successful'});
+        navigation.replace('login');
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(false);
-      return;
+      RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
+    } catch (error) {
+      console.log("🚀 ~ file: verify-code.tsx:32 ~ handleSubmit ~ error", error)
+      setIsLoading(false);
+      RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
     }
-    RenderSnackbar({text: `Couldn't Complete Verification , Try Again`});
     // TODO:success
   };
 
   const handleResendToken = async () => {
-    setIsLoading(true);
-    const res = await authService.resendAccountVerify();
-    if (res?.success) {
+    try {
+      setIsLoading(true);
+      const res = await authService.resendAccountVerify();
+      if (res?.success) {
+        setTimeout(() => {
+          RenderSnackbar({text: 'Verification code sent to your email of phone number'});
+        }, 300);
+        setIsLoading(false);
+        return;
+      }
       setTimeout(() => {
-        RenderSnackbar({text: 'Verification code sent to your email of phone number'});
+        RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
       }, 300);
       setIsLoading(false);
-      return;
+    } catch (error) {
+      setTimeout(() => {
+        RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
+      }, 300);
+      setIsLoading(false);
     }
-    setTimeout(() => {
-      RenderSnackbar({text: `Couldn't Verification Code, Try Again`});
-    }, 300);
-    setIsLoading(false);
     // TODO:success
   };
 
