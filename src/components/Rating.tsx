@@ -1,11 +1,11 @@
 import {hp} from '@utils/responsive';
 import {Text, HStack, IFlexProps} from 'native-base';
-import { IHStackProps } from 'native-base/lib/typescript/components/primitives/Stack/HStack';
+import {IHStackProps} from 'native-base/lib/typescript/components/primitives/Stack/HStack';
 import React from 'react';
 import StarIcon from './icons/star';
 
 interface RatingProp extends IHStackProps {
-  number: number;
+  number: string;
   props?: IFlexProps;
 }
 
