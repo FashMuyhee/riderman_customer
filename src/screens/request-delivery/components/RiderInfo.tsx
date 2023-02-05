@@ -8,7 +8,7 @@ type IProps = {
   image: ImageSourcePropType;
   plateNo: string;
   fullname: string;
-  rating: number;
+  rating: string;
 };
 
 const RiderInfo = (props: IProps) => {
