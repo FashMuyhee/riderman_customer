@@ -10,6 +10,7 @@ import SummaryItem from './components/SummaryItem';
 import {RouteProp} from '@react-navigation/native';
 import deliveryService from '@services/Delivery';
 import {DeliveryPackage} from '@models/delivery';
+import {storage} from '@services/TokenManager';
 dayjs.extend(advancedFormat);
 
 export type IDeliverySummaryProps = {
@@ -63,6 +64,7 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       });
       setIsLoading(false);
       if (res?.success) {
+        storage.set('_pickupInfo', JSON.stringify(res.data));
         navigation.navigate('select_rider');
         RenderSnackbar({text: 'Request Created'});
       }
@@ -70,7 +72,7 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       setIsLoading(false);
       console.log(error);
     }
-  };  
+  };
 
   useEffect(() => {
     calcTotalDistance();
