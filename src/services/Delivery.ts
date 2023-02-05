@@ -1,5 +1,5 @@
 import {IGeneralResponse} from '@models/auth';
-import {IRiderCloseByResponse, LocationValue, PickupFormBody, RiderResponse} from '@models/delivery';
+import {ConfirmPickupFormBody, CreatePickupRequestResponse, IRiderCloseByResponse, LocationValue, PickupFormBody, PickupRequestInfo, RiderResponse} from '@models/delivery';
 import axios from 'axios';
 import httpHandler from '../utils/http';
 // @ts-ignore
@@ -42,16 +42,17 @@ class DeliveryService {
   async requestPickup(body: PickupFormBody) {
     try {
       const result = await httpHandler({method: 'post', url: '/customer/pickup-requests/create', data: body});
-      const data: IGeneralResponse = result.data;
+      const data: CreatePickupRequestResponse = result.data;
       if (data.success) {
         return data;
       }
     } catch (error) {
       //@ts-ignore
-      const message: IGeneralResponse = {
+      const message: CreatePickupRequestResponse = {
         //@ts-ignore
         message: error?.response.data.message,
         success: false,
+        data: {} as PickupRequestInfo,
       };
       return message;
     }
@@ -59,7 +60,7 @@ class DeliveryService {
 
   async getCloseByRiderByPickupLocation(pickupRequestId: string) {
     try {
-      const result = await httpHandler({method: 'get', url: `/customer/pickup-requests/${pickupRequestId}/get-riders?radius=2.5`});
+      const result = await httpHandler({method: 'get', url: `/customer/pickup-requests/${pickupRequestId}/get-riders?radius=20`});
       const data: IRiderCloseByResponse = result.data;
       if (data.success) {
         return data;
@@ -117,12 +118,64 @@ class DeliveryService {
       const {data} = await axios({method: 'get', url: `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${y.lat},${y.long}&origins=${x.lat},${x.long}&key=${G_MAP_KEY}`});
       if (data?.status === 'OK') {
         const result: DistanceMatrix = data?.rows[0].elements[0];
-        console.log("🚀 ~ file: Delivery.ts:120 ~ DeliveryService ~ calcDistanceMatrix ~ result", result)
         return result;
       }
       return errResult;
     } catch (error) {
       return errResult;
+    }
+  }
+
+  /*
+   * confirm pickup request with rider selected
+   * @param  body ConfirmPickupFormBody
+   *
+   */
+  async confirmPickupRequest(body: ConfirmPickupFormBody) {
+    try {
+      const result = await httpHandler({
+        method: 'patch',
+        url: `/customer/pickup-requests/${body.pickupRequestId}/send/${body.riderId}`,
+        data: {
+          paymentChannel: body.paymentChannel.toLocaleLowerCase(),
+          totalAmount: body.totalAmount.toString(),
+        },
+      });
+      const data: CreatePickupRequestResponse = result.data;
+      if (data.success) {
+        return data;
+      }
+    } catch (error) {
+      //@ts-ignore
+      const message: CreatePickupRequestResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+        data: {} as PickupRequestInfo,
+      };
+      return message;
+    }
+  }
+
+  /*
+   * cancel pickup request with rider selected
+   * @param pickupRequestId string
+   */
+  async cancelPickupRequest(pickupRequestId: string) {
+    try {
+      const result = await httpHandler({method: 'patch', url: `/customer/pickup-requests/cancel/${pickupRequestId}`});
+      const data: IGeneralResponse = result.data;
+      if (data.success) {
+        return data;
+      }
+    } catch (error) {
+      //@ts-ignore
+      const message: IGeneralResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+      };
+      return message;
     }
   }
 }
