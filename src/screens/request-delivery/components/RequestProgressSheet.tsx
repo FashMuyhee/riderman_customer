@@ -14,14 +14,18 @@ import warning from '@images/illustrations/warning.png';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {GuardStackParamList} from '@navigations/param-list';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
+import {LocationValue} from '@models/delivery';
 
 export type RequestProgressStatus = 'decline' | 'progress' | 'accepted' | 'too-long';
 interface IProps extends CancelRequestSheetProps {
   progressStatus: RequestProgressStatus;
   onKeepWaiting: () => void;
+  deliveryLocations: LocationValue[];
+  pickupLocation: LocationValue;
 }
 
-const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKeepWaiting}: IProps) => {
+const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKeepWaiting, pickupLocation, deliveryLocations}: IProps) => {
+  console.log("🚀 ~ file: RequestProgressSheet.tsx:28 ~ RequestProgressSheet ~ pickupLocation, deliveryLocations", pickupLocation, deliveryLocations)
   const handleShowCancel = () => {
     onClose();
     onCancel();
@@ -98,7 +102,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
   return (
     <Modal visible={visible} statusBarTranslucent transparent>
       <View h={wrapperHeight} bg="white">
-        <MapSection height={MAP_HEIGHT} />
+        <MapSection
+          height={MAP_HEIGHT}
+          coordinates={[
+            {latitude: parseFloat(pickupLocation.lat), longitude: parseFloat(pickupLocation.long)},
+            {latitude: parseFloat(deliveryLocations[0].lat), longitude: parseFloat(deliveryLocations[0].long)},
+          ]}
+        />
         <View w="full" borderTopRadius="3xl" position="absolute" bg="white" bottom="1" h={ACTION_HEIGHT}>
           <Center mt="5%" px="10px">
             <Image source={renderImage()} style={{marginBottom: 10}} />

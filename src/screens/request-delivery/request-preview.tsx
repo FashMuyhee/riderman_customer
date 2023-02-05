@@ -1,8 +1,8 @@
-import {MoneyText, ScreenWrapper, Button} from '@components';
+import {MoneyText, ScreenWrapper, Button, RenderSnackbar} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, Text, Image, Center, ScrollView, Box, HStack, useDisclose} from 'native-base';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -17,7 +17,10 @@ import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
 import RequestProgressSheet, {RequestProgressStatus} from './components/RequestProgressSheet';
 import CancelRequestSheet from './components/CancelRequestSheet';
-import {RequestContext} from '@contexts/RequestContext';
+import {storage} from '@services/TokenManager';
+import {PickupRequestInfo} from '@models/delivery';
+import {Linking} from 'react-native';
+import deliveryService from '@services/Delivery';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -56,34 +59,47 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index}: P
 };
 
 const RequestPreview = ({navigation}: RequestPreview) => {
-  const packageBrief = [
-    {
-      contactPhone: '0801 234 5678',
-      contactName: 'Jonathan Jude',
-      packageType: ['Cloth', 'Food'],
-    },
-    {
-      contactPhone: '0801 234 5678',
-      contactName: 'Nancy Wheeler',
-      packageType: ['Bag', 'Shoe'],
-    },
-  ];
-
-  const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
+  const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
   const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
-  const {amount, paymentMethod} = useContext(RequestContext);
+  const pickupInfo = storage.getString('_pickupInfo');
+  const {riderId, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(pickupInfo as string) as PickupRequestInfo;
+  const [duration, setDuration] = useState('');
 
-  const handleCloseCancelModal = () => {
+  const deliveryLocations = useMemo(() => {
+    return delivery_locations.map(location => {
+      return location.address;
+    });
+  }, []);
+
+  const handleOnCloseCancelModal = () => {
     toggleCancel();
     toggleProgress();
   };
 
-  useEffect(() => {
-    //simulate progress sheet opening
+  const getTimeAway = async () => {
+    const {duration} = await deliveryService.calcDistanceMatrix({x: riderId.location, y: pickupLocation});
+    setDuration(duration.text);
     setTimeout(() => {
       toggleProgress();
-    }, 3000);
+    }, 10000);
+  };
+
+  const handleCancelPickup = async () => {
+    try {
+      const res = await deliveryService.cancelPickupRequest(pickupRequestId.toString());
+      if (res?.success) {
+        toggleCancel();
+        RenderSnackbar({text: 'Select another rider'});
+        navigation.goBack();
+      }
+    } catch (error) {
+      RenderSnackbar({text: `We couldn't process your request, Please try again`});
+    }
+  };
+
+  useEffect(() => {
+    getTimeAway();
   }, []);
 
   return (
@@ -95,43 +111,60 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             Request has been sent to rider successfully!
           </Text>
         </Center>
-        <Box mt="4%">
+        <Box mt="4%" minH={hp(65)}>
           {/* comoany info */}
           <HStack borderTopRadius="2xl" bg="accent" h="80px" alignItems="center" justifyContent="space-between" px="10px">
+            {/* TODO: add compnay logo */}
             <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
             <View w="60%">
               <Text fontSize={hp(1.3)} fontWeight="600">
-                Rush Delivery Limited
+                {riderId.company.name}
               </Text>
               <HStack mt="10px" alignItems="center" space="2">
                 <TimeSolid />
-                <Text fontSize="12px">3 min away</Text>
+                <Text fontSize="12px">{duration} away</Text>
               </HStack>
             </View>
             <View justifyContent="center" alignItems="center" w="20%">
               <HStack alignItems="center" space="1">
-                <PaymentMethodIcon method={paymentMethod} selected={false} />
-                <Text>{paymentMethod}</Text>
+                <PaymentMethodIcon method={paymentChannel} selected={false} />
+                <Text>{paymentChannel}</Text>
               </HStack>
-              <MoneyText bold moneyValue={amount} />
+              <MoneyText bold moneyValue={totalAmount} />
             </View>
           </HStack>
           {/* rider info */}
-          <RiderInfo image={rider} fullname="Adeola Adebimpe" plateNo="GTY67809" rating={3} />
-          <RequestLocations pickUp="26, Obafemi Awolowo Road" deliveryLocations={['Murtala Mohammed Internationational Airport Lagos', 'Bayeku Igbogbo Ikorodu, Ikorodu, Lagos']} />
+          {/* TODO: rider image */}
+          <RiderInfo image={rider} fullname={`${riderId.user?.firstName} ${riderId.user?.lastName}`} plateNo={riderId.bikeDetails.licenseNumber} rating={riderId.rating} />
+          <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
-          {packageBrief.map((item, key) => (
-            <PackageDetail key={key} {...item} index={key + 1} />
+          {delivery_packages.map((item, key) => (
+            <PackageDetail key={key} contactName={item.recipient.name} contactPhone={item.recipient.phone} packageType={item.packageCategories} index={key + 1} />
           ))}
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
         </Box>
-        <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
-          <Button bg="black" title="Go To Home" w="48%" onPress={() => navigation.navigate('home')} />
-          <Button title="Call Rider" w="48%" leftIcon={<CallIcon />} onPress={() => navigation.navigate('payment_screen')} />
+        <HStack alignItems="center" position="absolute" bottom="0" justifyContent="space-between" mt="5%" px="10px">
+          <Button
+            title="Call Rider"
+            w="full"
+            leftIcon={<CallIcon />}
+            onPress={() => {
+              Linking.openURL(`tel:+${riderId.user.phone}`);
+            }}
+          />
         </HStack>
       </ScrollView>
-      <RequestProgressSheet onKeepWaiting={() => setProgressStatus('progress')} progressStatus={progressStatus} visible={visibleProgress} onClose={toggleProgress} onCancel={toggleCancel} />
-      <CancelRequestSheet visible={visibleCancel} onCancel={toggleCancel} onClose={handleCloseCancelModal} />
+      {/* TODo pusher event for waiting and rec */}
+      <RequestProgressSheet
+        onKeepWaiting={() => setProgressStatus('progress')}
+        progressStatus={progressStatus}
+        visible={visibleProgress}
+        onClose={toggleProgress}
+        onCancel={toggleCancel}
+        deliveryLocations={delivery_locations}
+        {...{pickupLocation}}
+      />
+      <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
     </ScreenWrapper>
   );
 };
