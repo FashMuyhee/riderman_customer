@@ -12,7 +12,7 @@ class PlaceAPI {
     try {
       const { data } = await axios.request({
         method: 'post',
-        url: `${GOOGLE_PACES_API_BASE_URL}/autocomplete/json?key=${G_MAP_KEY}&input=${searchQuery}`
+        url: `${GOOGLE_PACES_API_BASE_URL}/autocomplete/json?key=${G_MAP_KEY}&input=${searchQuery}&components=country:ng`
       })
       if (data) {
         const { predictions
