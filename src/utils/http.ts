@@ -57,4 +57,22 @@ httpHandler.interceptors.request.use(
   },
 );
 
+// httpHandler.interceptors.response.use(
+//   response => {
+//     return response;
+//   },
+//   async function (error) {
+//     let originalRequest = error.config;
+
+//     // const serverMsg = error.response.data.message;
+//     // console.log('🚀 ~ file: http.ts ~ line 74 ~ serverMsg', serverMsg);
+
+//     // delayed token recognition from backend
+//     // if (serverMsg.includes('Cannot handle token prior to')) {
+//     //   return httpHandler(originalRequest);
+//     // }
+//     return Promise.reject(error);
+//   },
+// );
+
 export default httpHandler;
