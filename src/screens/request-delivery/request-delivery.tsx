@@ -13,7 +13,7 @@ export type IRequestDeliveryProps = {
 const initialValues: IDeliveryRequestBody = {
   pickupLocation: {lat: '0', long: '0', address: ''},
   deliveryLocation: {lat: '0', long: '0', address: ''},
-  packageName: '',
+  instruction: '',
   packageTypes: [],
   weight: '',
   packageNo: '',

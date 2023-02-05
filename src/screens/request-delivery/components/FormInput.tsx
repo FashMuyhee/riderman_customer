@@ -105,7 +105,7 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
           <TextInput w="48%" placeholder="Weight in kg" keyboardType="numeric" value={body.weight} onChange={onFormChange(index, 'weight')} />
           <TextInput w="48%" placeholder="No. of Package" keyboardType="numeric" value={body.packageNo} onChange={onFormChange(index, 'packageNo')} />
         </HStack>
-        <TextInput w="full" placeholder="Delivery Instructions (Optional)" value={body.packageName} onChange={onFormChange(index, 'packageName')} />
+        <TextInput w="full" placeholder="Delivery Instructions (Optional)" value={body.instruction} onChange={onFormChange(index, 'instruction')} />
       </View>
       <View w="full" mt="15px">
         <Text fontSize="11px" color="grey.200">
