@@ -1164,6 +1164,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@pusher/pusher-websocket-react-native@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@pusher/pusher-websocket-react-native/-/pusher-websocket-react-native-1.2.1.tgz#0010120f7c0384fbad70811d90e5c47a6fbcab69"
+  integrity sha512-twnoyqnwUKX2qBQKzx1hNlrYCzS57lR9SBe3n3n+oOfsYaJSIGUyy11CilKn0s9fjPRV6D9g+2PJNTzhtRc3nA==
+
 "@react-aria/checkbox@^3.2.1":
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/@react-aria/checkbox/-/checkbox-3.3.4.tgz#f59a65bdc41894d47717ede7b31f49a29f539ba7"
