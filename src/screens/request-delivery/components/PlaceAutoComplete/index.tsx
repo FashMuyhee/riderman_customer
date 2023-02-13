@@ -152,7 +152,11 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   const handleGetAddressFromLocation = async () => {
     try {
       const res = await placeAPI.getCurrentLocationAddress({address: '', lat: location?.coords.latitude.toString() as string, long: location?.coords.longitude.toString() as string});
-    } catch (error) {}
+      onPlaceChange(res as LocationValue);
+      closeSearchModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const _renderLoader = () => (

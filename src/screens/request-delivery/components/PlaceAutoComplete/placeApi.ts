@@ -1,5 +1,5 @@
 // @ts-ignore
-import {G_MAP_KEY, GOOGLE_PACES_API_BASE_URL} from '@env';
+import {G_MAP_KEY, GOOGLE_API_BASE_URL} from '@env';
 import {LocationValue} from '@models/delivery';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ class PlaceAPI {
     try {
       const {data} = await axios.request({
         method: 'post',
-        url: `${GOOGLE_PACES_API_BASE_URL}/place/autocomplete/json?key=${G_MAP_KEY}&input=${searchQuery}&components=country:ng`,
+        url: `${GOOGLE_API_BASE_URL}/place/autocomplete/json?key=${G_MAP_KEY}&input=${searchQuery}&components=country:ng`,
       });
       if (data) {
         const {predictions} = data;
@@ -32,7 +32,7 @@ class PlaceAPI {
     try {
       const {data} = await axios.request({
         method: 'post',
-        url: `${GOOGLE_PACES_API_BASE_URL}/place/details/json?key=${G_MAP_KEY}&place_id=${placeId}`,
+        url: `${GOOGLE_API_BASE_URL}/place/details/json?key=${G_MAP_KEY}&place_id=${placeId}`,
       });
       if (data) {
         const {
@@ -55,14 +55,15 @@ class PlaceAPI {
     try {
       const {data} = await axios.request({
         method: 'get',
-        url: `${GOOGLE_PACES_API_BASE_URL}/geocode/json?key=${G_MAP_KEY}&latlng=${location.lat},${location.lat}`,
+        url: `${GOOGLE_API_BASE_URL}/geocode/json?key=${G_MAP_KEY}&latlng=${location.lat},${location.long}`,
       });
       if (data) {
-        console.log("🚀 ~ file: placeApi.ts:61 ~ PlaceAPI ~ getCurrentLocationAddress ~ data", data)
-        // const {} = data;
+        const address = data.results[0]?.formatted_address;
+
+        return {...location, address: address as string} as LocationValue;
       }
     } catch (e) {
-      console.log(e);
+      return {...location, address: ''} as LocationValue;
     }
   }
 }
