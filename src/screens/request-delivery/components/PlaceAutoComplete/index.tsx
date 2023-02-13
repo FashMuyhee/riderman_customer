@@ -11,6 +11,7 @@ import LocationPinIcon from '@components/icons/location-pin';
 import placeAPI from './placeApi';
 import {useDebounce} from '@hooks/useDebounce';
 import {LocationValue} from '@models/delivery';
+import useGetLocation from '@hooks/useGetLocation';
 
 export type PlacePredictionType = {
   description: string;
@@ -77,6 +78,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   const [suggestions, setSuggestions] = useState<PlacePredictionType[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const {location} = useGetLocation();
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -146,6 +148,13 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
     );
   };
 
+  // get current location
+  const handleGetAddressFromLocation = async () => {
+    try {
+      const res = await placeAPI.getCurrentLocationAddress({address: '', lat: location?.coords.latitude.toString() as string, long: location?.coords.longitude.toString() as string});
+    } catch (error) {}
+  };
+
   const _renderLoader = () => (
     <HStack alignItems="center" mt="10px">
       <View width="15%" justifyContent="center" alignItems="center">
@@ -190,7 +199,17 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
             </View>
             <View bg="bg" w="full" h="full" px="10px">
               {/* current location pin */}
-              <Pressable px="15px" flexDirection="row" mt="5px" pb="5px" borderBottomWidth={1} borderBottomColor="gray.300" alignItems="center" w="full" h="45px">
+              <Pressable
+                onPress={handleGetAddressFromLocation}
+                px="15px"
+                flexDirection="row"
+                mt="5px"
+                pb="5px"
+                borderBottomWidth={1}
+                borderBottomColor="gray.300"
+                alignItems="center"
+                w="full"
+                h="45px">
                 <LocationIcon bg={colors.main} />
                 <Text ml="10px">My Location</Text>
               </Pressable>
