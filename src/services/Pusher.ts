@@ -2,7 +2,7 @@
  * pusher event service
  */
 // @ts-ignore
-import {PUSHER_API_KEY, PUSHER_CLUSTER_ID} from '@env';
+import {PUSHER_APP_KEY, PUSHER_APP_CLUSTER} from '@env';
 import {Pusher} from '@pusher/pusher-websocket-react-native';
 
 class PusherEvent {
@@ -14,8 +14,8 @@ class PusherEvent {
   async connect() {
     try {
       await this.pusher.init({
-        apiKey: PUSHER_API_KEY,
-        cluster: PUSHER_CLUSTER_ID,
+        apiKey: PUSHER_APP_KEY,
+        cluster: PUSHER_APP_CLUSTER,
       });
       await this.pusher.connect();
     } catch (error) {}
