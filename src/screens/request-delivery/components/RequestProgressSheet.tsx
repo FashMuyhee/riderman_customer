@@ -20,17 +20,18 @@ export type RequestProgressStatus = 'decline' | 'progress' | 'accepted' | 'too-l
 interface IProps extends CancelRequestSheetProps {
   progressStatus: RequestProgressStatus;
   onKeepWaiting: () => void;
+  onSelectNewRider: () => void;
+  onCallRider: () => void;
   deliveryLocations: LocationValue[];
   pickupLocation: LocationValue;
 }
 
-const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKeepWaiting, pickupLocation, deliveryLocations}: IProps) => {
-  console.log("🚀 ~ file: RequestProgressSheet.tsx:28 ~ RequestProgressSheet ~ pickupLocation, deliveryLocations", pickupLocation, deliveryLocations)
+const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKeepWaiting, pickupLocation, deliveryLocations, onSelectNewRider, onCallRider}: IProps) => {
+  console.log('🚀 ~ file: RequestProgressSheet.tsx:28 ~ RequestProgressSheet ~ pickupLocation, deliveryLocations', pickupLocation, deliveryLocations);
   const handleShowCancel = () => {
     onClose();
     onCancel();
   };
-  const navigation = useNavigation<NavigationProp<GuardStackParamList>>();
 
   const renderImage = () => {
     let image;
@@ -83,7 +84,7 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
         title = 'We are so sorry, but for some reason, Adeola Adebimpe of Rush Delivery has declined your delivery request.';
         break;
       case 'too-long':
-        title = 'We have notificed that you’ve been patient for the rider to accept your request, what would you like to do next?';
+        title = 'We have notified that you’ve been patient for the rider to accept your request, what would you like to do next?';
         break;
     }
     return title;
@@ -96,7 +97,7 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
 
   const handleSelectNewRider = () => {
     onClose();
-    navigation.navigate('select_rider');
+    onSelectNewRider();
   };
 
   return (
@@ -128,15 +129,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
                 <Button title="Keep waiting" w="47%" onPress={onKeepWaiting} />
               </HStack>
             )}
-            {/* todo go to dailer screen */}
             {(progressStatus === 'accepted' || progressStatus === 'progress') && (
               <Button
                 w="90%"
                 mt="7%"
                 title="Call Rider"
                 onPress={() => {
-                  onClose();
-                  navigation.navigate('payment_screen');
+                  onCallRider();
                 }}
                 leftIcon={<CallIcon />}
               />

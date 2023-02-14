@@ -98,8 +98,12 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     }
   };
 
+  // PUSHER EVENT
+  const onEventChange = () => {};
+
   useEffect(() => {
     getTimeAway();
+    onEventChange();
   }, []);
 
   return (
@@ -162,6 +166,8 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         onClose={toggleProgress}
         onCancel={toggleCancel}
         deliveryLocations={delivery_locations}
+        onSelectNewRider={handleCancelPickup}
+        onCallRider={() => Linking.openURL(`tel:+${riderId.user.phone}`)}
         {...{pickupLocation}}
       />
       <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
