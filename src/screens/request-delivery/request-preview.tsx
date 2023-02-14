@@ -6,7 +6,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
-import rider from '@images/rider.png';
+import riderImage from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from './components/SelectPaymentMethod';
 import RiderInfo from './components/RiderInfo';
@@ -63,7 +63,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
   const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
   const pickupInfo = storage.getString('_pickupInfo');
-  const {riderId, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(pickupInfo as string) as PickupRequestInfo;
+  const {rider, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(pickupInfo as string) as PickupRequestInfo;
   const [duration, setDuration] = useState('');
 
   const deliveryLocations = useMemo(() => {
@@ -78,7 +78,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   };
 
   const getTimeAway = async () => {
-    const {duration} = await deliveryService.calcDistanceMatrix({x: riderId.location, y: pickupLocation});
+    const {duration} = await deliveryService.calcDistanceMatrix({x: rider.location, y: pickupLocation});
     setDuration(duration.text);
     setTimeout(() => {
       toggleProgress();
@@ -116,13 +116,13 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           </Text>
         </Center>
         <Box mt="4%" minH={hp(65)}>
-          {/* comoany info */}
+          {/* company info */}
           <HStack borderTopRadius="2xl" bg="accent" h="80px" alignItems="center" justifyContent="space-between" px="10px">
             {/* TODO: add compnay logo */}
             <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
             <View w="60%">
               <Text fontSize={hp(1.3)} fontWeight="600">
-                {riderId.company.name}
+                {rider?.company?.name}
               </Text>
               <HStack mt="10px" alignItems="center" space="2">
                 <TimeSolid />
@@ -139,10 +139,10 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           </HStack>
           {/* rider info */}
           {/* TODO: rider image */}
-          <RiderInfo image={rider} fullname={`${riderId.user?.firstName} ${riderId.user?.lastName}`} plateNo={riderId.bikeDetails.licenseNumber} rating={riderId.rating} />
+          <RiderInfo image={riderImage} fullname={`${rider?.user?.firstName} ${rider?.user?.lastName}`} plateNo={rider?.bikeDetails.licenseNumber} rating={rider?.rating} />
           <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
-          {delivery_packages.map((item, key) => (
+          {delivery_packages?.map((item, key) => (
             <PackageDetail key={key} contactName={item.recipient.name} contactPhone={item.recipient.phone} packageType={item.packageCategories} index={key + 1} />
           ))}
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
@@ -153,7 +153,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             w="full"
             leftIcon={<CallIcon />}
             onPress={() => {
-              Linking.openURL(`tel:+${riderId.user.phone}`);
+              Linking.openURL(`tel:+${rider?.user.phone}`);
             }}
           />
         </HStack>
@@ -167,7 +167,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         onCancel={toggleCancel}
         deliveryLocations={delivery_locations}
         onSelectNewRider={handleCancelPickup}
-        onCallRider={() => Linking.openURL(`tel:+${riderId.user.phone}`)}
+        onCallRider={() => Linking.openURL(`tel:+${rider?.user.phone}`)}
         {...{pickupLocation}}
       />
       <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
