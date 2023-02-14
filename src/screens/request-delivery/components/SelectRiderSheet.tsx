@@ -76,13 +76,15 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
         }}
         borderWidth={selected ? 1 : 0}
         borderBottomWidth={1}
+        rounded={selected ? 'xs' : 'none'}
         flexDir="row"
         alignItems="center"
+        px={selected ? '5px' : 0}
         justifyContent="space-between"
-        borderBottomColor="grey.500"
+        borderBottomColor={selected ? 'none' : 'grey.500'}
         borderColor="main"
         h={hp(8)}>
-        {/* @ts-ignore */}
+        {/* @ts-ignore TODO delivery count */}
         <RidermanAvatar image={{uri: riderInfo.image}} deliveryCount={300} />
         <View w="60%" h="full">
           <HStack mt="2%" alignItems="center" justifyContent="flex-start" space="2">
@@ -107,9 +109,12 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
     );
   };
 
-  const renderItem = useCallback(({item, index}: {item: RiderCloseBy; index: number}) => {
-    return <RiderItem {...{item}} selected={item.riderId === rider.riderId} />;
-  }, []);
+  const renderItem = useCallback(
+    ({item, index}: {item: RiderCloseBy; index: number}) => {
+      return <RiderItem {...{item}} selected={item.riderId === rider.riderId} />;
+    },
+    [rider],
+  );
 
   return (
     <BottomSheetWrapperSnappy dragClose={false} index={0} ref={ref} snapPoints={snapPoints}>
