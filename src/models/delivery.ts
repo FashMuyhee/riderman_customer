@@ -82,7 +82,7 @@ export type RiderCloseBy = {
 
 export type PickupRequestInfo = {
   pickupRequestId: number;
-  riderId: RiderCloseBy;
+  rider: RiderCloseBy;
   pickupLocation: LocationValue;
   delivery_locations: LocationValue[];
   delivery_packages: DeliveryPackage[];
@@ -92,6 +92,7 @@ export type PickupRequestInfo = {
   status: DeliveryStatus;
   createdAt: Date;
   updatedAt: Date;
+  paid: boolean;
 };
 
 export type PickupFormBody = {
