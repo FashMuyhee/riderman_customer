@@ -1,7 +1,9 @@
 import {IUser, StatusCode} from './auth';
 
-export type PaymentMethod = 'Cash' | 'Card' | 'Wallet';
+export type PaymentMethod = 'cash' | 'card' | 'wallet';
 export type DeliveryStatus = 'Processing' | 'Confirmed' | 'Completed' | 'Active';
+export type PickupRequestProgressStatus = 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'picked' | 'too-long';
+
 type BikeDetails = {
   licenseNumber: string;
   bikeBrand: string;
@@ -89,7 +91,7 @@ export type PickupRequestInfo = {
   paymentChannel: PaymentMethod;
   totalDistance: string;
   totalAmount: number;
-  status: DeliveryStatus;
+  status: PickupRequestProgressStatus;
   createdAt: Date;
   updatedAt: Date;
   paid: boolean;
