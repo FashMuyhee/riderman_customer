@@ -18,7 +18,7 @@ export interface SelectRiderProps {
 const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handleCompanyInfo}, ref) => {
   const snapPoints = useMemo(() => ['60%', '80%'], []);
   const {navigate} = useNavigation<NavigationProp<GuardStackParamList>>();
-  const [paymentChannel, setPaymentChannel] = useState<PaymentMethod>('Cash');
+  const [paymentChannel, setPaymentChannel] = useState<PaymentMethod>('cash');
   const [riders, setRiders] = useState<RiderCloseBy[]>([]);
   const pickpInfo = storage.getString('_pickupInfo');
   const parsedPickupInfo = JSON.parse(pickpInfo as string) as PickupRequestInfo;
@@ -41,7 +41,6 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
       setIsLoading(true);
       const res = await deliveryService.confirmPickupRequest({...rider, paymentChannel, pickupRequestId: parsedPickupInfo.pickupRequestId.toString()});
       if (res?.success) {
-        RenderSnackbar({text: 'Request Sent'});
         setIsLoading(false);
         storage.set('_pickupInfo', JSON.stringify(res.data));
         navigate('request_preview');
