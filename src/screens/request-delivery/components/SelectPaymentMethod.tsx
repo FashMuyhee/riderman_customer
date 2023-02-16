@@ -13,20 +13,20 @@ export type ISelectPaymentMethodProps = {
 };
 
 export const PaymentMethodIcon = ({selected, method}: {selected: boolean; method: PaymentMethod}) => {
-  if (method === 'Card') {
+  if (method === 'card') {
     return <CreditCardIcon selected={selected} />;
   }
-  if (method === 'Cash') {
+  if (method === 'cash') {
     return <MoneyIcon selected={selected} />;
   }
-  if (method === 'Wallet') {
+  if (method === 'wallet') {
     return <WalletIcon selected={selected} />;
   }
   return null;
 };
 
 const SelectPaymentMethod: React.FC<ISelectPaymentMethodProps> = ({method, onChange}) => {
-  const methods: PaymentMethod[] = ['Cash', 'Card', 'Wallet'];
+  const methods: PaymentMethod[] = ['cash', 'card', 'wallet'];
 
   const PaymentMethod = ({title, selected}: {title: PaymentMethod; selected: boolean}) => {
     return (
