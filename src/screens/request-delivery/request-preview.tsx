@@ -15,12 +15,14 @@ import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
 import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
-import RequestProgressSheet, {RequestProgressStatus} from './components/RequestProgressSheet';
+import RequestProgressSheet from './components/RequestProgressSheet';
 import CancelRequestSheet from './components/CancelRequestSheet';
 import {storage} from '@services/TokenManager';
-import {PickupRequestInfo} from '@models/delivery';
-import {Linking} from 'react-native';
+import {PickupRequestInfo, PickupRequestProgressStatus} from '@models/delivery';
 import deliveryService from '@services/Delivery';
+import openDialer from '@utils/open-dialer';
+import pusherEventService from '@services/Pusher';
+import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -30,9 +32,10 @@ type PackageInfoProps = {
   contactName: string;
   contactPhone: string;
   packageType: string[];
+  instruction: string;
   index: number;
 };
-export const PackageDetail = ({contactName, contactPhone, packageType, index}: PackageInfoProps) => {
+export const PackageDetail = ({contactName, contactPhone, packageType, index, instruction}: PackageInfoProps) => {
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
@@ -53,7 +56,7 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index}: P
           <Text fontSize="12px">{contactPhone}</Text>
         </HStack>
       </HStack>
-      <PackageNote rounded note="No break am " />
+      <PackageNote rounded note={instruction} />
     </View>
   );
 };
@@ -61,10 +64,13 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index}: P
 const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
-  const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
+  const [progressStatus, setProgressStatus] = useState<PickupRequestProgressStatus>('pending');
   const pickupInfo = storage.getString('_pickupInfo');
-  const {rider, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(pickupInfo as string) as PickupRequestInfo;
+  const {rider, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(
+    pickupInfo as string,
+  ) as PickupRequestInfo;
   const [duration, setDuration] = useState('');
+  const pusher = pusherEventService.pusher;
 
   const deliveryLocations = useMemo(() => {
     return delivery_locations.map(location => {
@@ -90,20 +96,50 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       const res = await deliveryService.cancelPickupRequest(pickupRequestId.toString());
       if (res?.success) {
         toggleCancel();
-        RenderSnackbar({text: 'Select another rider'});
-        navigation.goBack();
+        handleSelectNewRider();
       }
     } catch (error) {
       RenderSnackbar({text: `We couldn't process your request, Please try again`});
     }
   };
 
+  const handleSelectNewRider = () => {
+    RenderSnackbar({text: 'Select another rider'});
+    navigation.navigate('select_rider');
+  };
+
   // PUSHER EVENT
-  const onEventChange = () => {};
+  const onEventChange = async () => {
+    const channel = await pusher.subscribe({
+      channelName: `pickupRequests.${pickupRequestId}`,
+      onEvent: ({eventName, data}: PusherEvent) => {
+        // rejected
+        if (eventName === 'PickupRequestRejected') {
+          setProgressStatus('rejected');
+          // navigation.goBack();
+          RenderSnackbar({text: `Rider rejected request`, duration: 'LONG'});
+        }
+        // arrived
+        if (eventName === 'RiderArrived') {
+          RenderSnackbar({text: `Rider has arrived`, duration: 'LONG'});
+          // @ts-ignore
+          navigation.replace('payment_screen', JSON.parse(pickupInfo as string));
+        }
+        // accepted
+        if (eventName === 'PickupRequestAccepted') {
+          setProgressStatus('accepted');
+        }
+      },
+    });
+  };
 
   useEffect(() => {
     getTimeAway();
     onEventChange();
+
+    return () => {
+      pusher.unsubscribe({channelName: `pickupRequests.${pickupRequestId}`});
+    };
   }, []);
 
   return (
@@ -139,11 +175,23 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           </HStack>
           {/* rider info */}
           {/* TODO: rider image */}
-          <RiderInfo image={riderImage} fullname={`${rider?.user?.firstName} ${rider?.user?.lastName}`} plateNo={rider?.bikeDetails.licenseNumber} rating={rider?.rating} />
+          <RiderInfo
+            image={riderImage}
+            fullname={`${rider?.user?.firstName} ${rider?.user?.lastName}`}
+            plateNo={rider?.bikeDetails.licenseNumber}
+            rating={rider?.rating}
+          />
           <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
           {delivery_packages?.map((item, key) => (
-            <PackageDetail key={key} contactName={item.recipient.name} contactPhone={item.recipient.phone} packageType={item.packageCategories} index={key + 1} />
+            <PackageDetail
+              key={key}
+              contactName={item.recipient.name}
+              contactPhone={item.recipient.phone}
+              packageType={item.packageCategories}
+              index={key + 1}
+              instruction={item.deliveryInstructions}
+            />
           ))}
           <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
         </Box>
@@ -153,21 +201,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             w="full"
             leftIcon={<CallIcon />}
             onPress={() => {
-              Linking.openURL(`tel:+${rider?.user.phone}`);
+              openDialer(rider?.user.phone);
             }}
           />
         </HStack>
       </ScrollView>
       {/* TODo pusher event for waiting and rec */}
       <RequestProgressSheet
-        onKeepWaiting={() => setProgressStatus('progress')}
+        onKeepWaiting={() => setProgressStatus('pending')}
         progressStatus={progressStatus}
         visible={visibleProgress}
         onClose={toggleProgress}
         onCancel={toggleCancel}
         deliveryLocations={delivery_locations}
-        onSelectNewRider={handleCancelPickup}
-        onCallRider={() => Linking.openURL(`tel:+${rider?.user.phone}`)}
+        onSelectNewRider={handleSelectNewRider}
+        onCallRider={() => openDialer(rider?.user.phone)}
         {...{pickupLocation}}
       />
       <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
