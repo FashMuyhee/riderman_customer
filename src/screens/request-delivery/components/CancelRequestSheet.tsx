@@ -9,8 +9,9 @@ export type CancelRequestSheetProps = {
   onClose: () => void;
   onCancel: () => void;
   visible: boolean;
+  isCancelling: boolean;
 };
-const CancelRequestSheet = ({onClose, visible, onCancel}: CancelRequestSheetProps) => {
+const CancelRequestSheet = ({onClose, visible, onCancel, isCancelling}: CancelRequestSheetProps) => {
   return (
     <Modal visible={visible} transparent statusBarTranslucent>
       <View w="full" h="full" bg="rgba(38, 50, 56, 0.69)" alignItems="center" justifyContent="flex-end">
@@ -21,7 +22,7 @@ const CancelRequestSheet = ({onClose, visible, onCancel}: CancelRequestSheetProp
           </Text>
           <Divider mt="5%" />
           <Text color="red.600" onPress={onCancel} mt="5%" fontSize={hp(1.4)}>
-            Cancel Pickup
+            {isCancelling ? 'Canceling....' : '  Cancel Pickup'}
           </Text>
         </View>
         <Button title="Close" onPress={onClose} color="main" bg="white" w="85%" mb="15%" />
