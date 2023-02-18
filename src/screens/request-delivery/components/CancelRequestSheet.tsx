@@ -21,7 +21,14 @@ const CancelRequestSheet = ({onClose, visible, onCancel, isCancelling}: CancelRe
             Do you really want to cancel this request? This process cannot be undone.{' '}
           </Text>
           <Divider mt="5%" />
-          <Text color="red.600" onPress={onCancel} mt="5%" fontSize={hp(1.4)}>
+          <Text
+            color="red.600"
+            w="full"
+            h="40px"
+            textAlign="center"
+            onPress={onCancel}
+            mt="5%"
+            fontSize={hp(1.4)}>
             {isCancelling ? 'Canceling....' : '  Cancel Pickup'}
           </Text>
         </View>
