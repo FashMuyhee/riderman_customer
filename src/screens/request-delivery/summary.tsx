@@ -66,7 +66,6 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       if (res?.success) {
         storage.set('_pickupInfo', JSON.stringify(res.data));
         navigation.navigate('select_rider');
-        RenderSnackbar({text: 'Request Created'});
       }
     } catch (error) {
       setIsLoading(false);
