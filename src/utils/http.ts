@@ -2,7 +2,7 @@ import tokenManagerService from '@services/TokenManager';
 import axios, {AxiosInstance} from 'axios';
 import axiosRetry from 'axios-retry';
 
-export const BASE_URL = 'https://riderman-dev.herokuapp.com/api/v1';
+export const BASE_URL = 'https://riderman-dev.herokuapp.com';
 
 /**
  * axios instance
@@ -12,7 +12,7 @@ export const BASE_URL = 'https://riderman-dev.herokuapp.com/api/v1';
  * @param  {} }
  */
 const httpHandler: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: `${BASE_URL}/api/v1`,
   headers: {
     'content-type': 'application/json',
   },
