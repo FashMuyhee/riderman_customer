@@ -23,6 +23,7 @@ import deliveryService from '@services/Delivery';
 import openDialer from '@utils/open-dialer';
 import pusherEventService from '@services/Pusher';
 import {PusherEvent} from '@pusher/pusher-websocket-react-native';
+import useCountDown from 'react-countdown-hook';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -71,6 +72,8 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   ) as PickupRequestInfo;
   const [duration, setDuration] = useState('');
   const pusher = pusherEventService.pusher;
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [timeLeft, {start, reset}] = useCountDown(600000, 1000);
 
   const deliveryLocations = useMemo(() => {
     return delivery_locations.map(location => {
@@ -88,18 +91,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     setDuration(duration.text);
     setTimeout(() => {
       toggleProgress();
-    }, 10000);
+    }, 500);
   };
 
   const handleCancelPickup = async () => {
     try {
+      setIsCancelling(true);
       const res = await deliveryService.cancelPickupRequest(pickupRequestId.toString());
       if (res?.success) {
         toggleCancel();
         handleSelectNewRider();
+        setIsCancelling(false);
       }
     } catch (error) {
       RenderSnackbar({text: `We couldn't process your request, Please try again`});
+      setIsCancelling(false);
     }
   };
 
@@ -108,16 +114,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     navigation.navigate('select_rider');
   };
 
+  const onKeepWaiting = () => {
+    setProgressStatus('pending');
+    start();
+  };
+
   // PUSHER EVENT
   const onEventChange = async () => {
-    const channel = await pusher.subscribe({
-      channelName: `pickupRequests.${pickupRequestId}`,
+    await pusher.connect();
+
+    await pusher.subscribe({
+      channelName: `private-pickupRequests.${pickupRequestId}`,
       onEvent: ({eventName, data}: PusherEvent) => {
         // rejected
         if (eventName === 'PickupRequestRejected') {
           setProgressStatus('rejected');
-          // navigation.goBack();
-          RenderSnackbar({text: `Rider rejected request`, duration: 'LONG'});
         }
         // arrived
         if (eventName === 'RiderArrived') {
@@ -134,11 +145,19 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   };
 
   useEffect(() => {
+    if (timeLeft / 1000 === 1) {
+      setProgressStatus('too-long');
+      reset();
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
     getTimeAway();
     onEventChange();
-
+    start();
     return () => {
-      pusher.unsubscribe({channelName: `pickupRequests.${pickupRequestId}`});
+      pusher.unsubscribe({channelName: `private-pickupRequests.${pickupRequestId}`});
+      pusher.disconnect();
     };
   }, []);
 
@@ -208,7 +227,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       </ScrollView>
       {/* TODo pusher event for waiting and rec */}
       <RequestProgressSheet
-        onKeepWaiting={() => setProgressStatus('pending')}
+        {...{onKeepWaiting}}
         progressStatus={progressStatus}
         visible={visibleProgress}
         onClose={toggleProgress}
@@ -218,7 +237,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         onCallRider={() => openDialer(rider?.user.phone)}
         {...{pickupLocation}}
       />
-      <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
+      <CancelRequestSheet {...{isCancelling}} visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
     </ScreenWrapper>
   );
 };
