@@ -45,7 +45,7 @@ const SelectPaymentMethod: React.FC<ISelectPaymentMethodProps> = ({method, onCha
   return (
     <HStack alignItems="center" justifyContent="space-between" h="50px" mt="2%">
       {methods.map(item => (
-        <PaymentMethod title={item} selected={method === item} />
+        <PaymentMethod key={`method_${item}`} title={item} selected={method === item} />
       ))}
     </HStack>
   );
