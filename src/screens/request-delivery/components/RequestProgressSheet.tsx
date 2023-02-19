@@ -13,7 +13,7 @@ import warning from '@images/illustrations/warning.png';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
 import {LocationValue, PickupRequestProgressStatus} from '@models/delivery';
 
-interface IProps extends CancelRequestSheetProps {
+interface IProps extends Omit<CancelRequestSheetProps, 'isCancelling'> {
   progressStatus: PickupRequestProgressStatus;
   onKeepWaiting: () => void;
   onSelectNewRider: () => void;
@@ -140,7 +140,7 @@ const RequestProgressSheet = ({
                 leftIcon={<CallIcon />}
               />
             )}
-            {progressStatus != 'rejected' && <Button bg="red.600" title="Cancel request" w="90%" onPress={handleShowCancel} />}
+            {progressStatus != 'rejected' && <Button mt="5%" bg="red.600" title="Cancel request" w="90%" onPress={handleShowCancel} />}
           </Center>
         </View>
       </View>
