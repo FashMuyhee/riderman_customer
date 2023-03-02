@@ -1,5 +1,13 @@
 import {IGeneralResponse} from '@models/auth';
-import {ConfirmPickupFormBody, CreatePickupRequestResponse, IRiderCloseByResponse, LocationValue, PickupFormBody, PickupRequestInfo, RiderResponse} from '@models/delivery';
+import {
+  ConfirmPickupFormBody,
+  CreatePickupRequestResponse,
+  IRiderCloseByResponse,
+  LocationValue,
+  PickupFormBody,
+  PickupRequestInfo,
+  RiderResponse,
+} from '@models/delivery';
 import axios from 'axios';
 import httpHandler from '../utils/http';
 // @ts-ignore
@@ -115,7 +123,10 @@ class DeliveryService {
       status: 'falied',
     };
     try {
-      const {data} = await axios({method: 'get', url: `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${y.lat},${y.long}&origins=${x.lat},${x.long}&key=${G_MAP_KEY}`});
+      const {data} = await axios({
+        method: 'get',
+        url: `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${y.lat},${y.long}&origins=${x.lat},${x.long}&key=${G_MAP_KEY}`,
+      });
       if (data?.status === 'OK') {
         const result: DistanceMatrix = data?.rows[0].elements[0];
         return result;
@@ -164,6 +175,28 @@ class DeliveryService {
   async cancelPickupRequest(pickupRequestId: string) {
     try {
       const result = await httpHandler({method: 'patch', url: `/customer/pickup-requests/cancel/${pickupRequestId}`});
+      const data: IGeneralResponse = result.data;
+      if (data.success) {
+        return data;
+      }
+    } catch (error) {
+      //@ts-ignore
+      const message: IGeneralResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+      };
+      return message;
+    }
+  }
+
+  /*
+   * send payment method for cash
+   * @param pickupRequestId string
+   */
+  async makeCashPayment(pickupRequestId: string) {
+    try {
+      const result = await httpHandler({method: 'patch', url: `/customer/pickup-requests/${pickupRequestId}/pay/cash`});
       const data: IGeneralResponse = result.data;
       if (data.success) {
         return data;
