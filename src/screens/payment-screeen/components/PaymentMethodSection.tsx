@@ -51,13 +51,13 @@ const PaymentMethodSection = ({method}: Props) => {
   };
 
   const renderMethodBanner = () => {
-    if (method == 'Card') {
+    if (method == 'card') {
       return <Card />;
     }
-    if (method == 'Cash') {
+    if (method == 'cash') {
       return <Cash />;
     }
-    if (method == 'Wallet') {
+    if (method == 'wallet') {
       return <Wallet />;
     }
   };
