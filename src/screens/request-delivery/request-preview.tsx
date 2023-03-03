@@ -24,6 +24,7 @@ import openDialer from '@utils/open-dialer';
 import pusherEventService from '@services/Pusher';
 import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 import useCountDown from 'react-countdown-hook';
+import PaymentScreen from '@screens/payment-screeen';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -73,6 +74,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const [duration, setDuration] = useState('');
   const pusher = pusherEventService.pusher;
   const [isCancelling, setIsCancelling] = useState(false);
+  const [showPaymentScreen, setShowPaymentScreen] = useState(false);
   const [timeLeft, {start, reset}] = useCountDown(600000, 1000);
 
   const deliveryLocations = useMemo(() => {
@@ -133,12 +135,15 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         // arrived
         if (eventName === 'RiderArrived') {
           RenderSnackbar({text: `Rider has arrived`, duration: 'LONG'});
-          // @ts-ignore
-          navigation.replace('payment_screen', JSON.parse(pickupInfo as string));
+          setShowPaymentScreen(true);
         }
         // accepted
         if (eventName === 'PickupRequestAccepted') {
           setProgressStatus('accepted');
+        }
+        //  PaymentConfirmed
+        if (eventName === 'PaymentConfirmed') {
+          navigation.navigate('package_status');
         }
       },
     });
@@ -225,7 +230,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           />
         </HStack>
       </ScrollView>
-      {/* TODo pusher event for waiting and rec */}
+      {/* MODALS AND SHEET */}
       <RequestProgressSheet
         {...{onKeepWaiting}}
         progressStatus={progressStatus}
@@ -238,6 +243,15 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         {...{pickupLocation}}
       />
       <CancelRequestSheet {...{isCancelling}} visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
+      <PaymentScreen
+        isVisible={showPaymentScreen}
+        onClose={() => setShowPaymentScreen(false)}
+        onCancelRequest={() => {
+          setShowPaymentScreen(true);
+          navigation.navigate('select_rider');
+        }}
+        pickupInfo={JSON.parse(pickupInfo as string) as PickupRequestInfo}
+      />
     </ScreenWrapper>
   );
 };
