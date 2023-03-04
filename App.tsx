@@ -4,12 +4,12 @@ import theme from './src/configs/theme';
 import RootNavigator from './src/navigations/RootNavigator';
 import {RequestContextProvider} from '@contexts/RequestContext';
 import {AuthContextProvider} from '@contexts/AuthContext';
-import {Provider} from 'react-redux';
-import {store} from '@store/index';
+import {ApiProvider} from '@reduxjs/toolkit/dist/query/react';
+import {deliveryApi} from '@services/rtk-queries/deliveries';
 
 const App = () => {
   return (
-    <Provider store={store}>
+    <ApiProvider api={deliveryApi}>
       <NativeBaseProvider theme={theme}>
         <AuthContextProvider>
           <RequestContextProvider>
@@ -17,7 +17,7 @@ const App = () => {
           </RequestContextProvider>
         </AuthContextProvider>
       </NativeBaseProvider>
-    </Provider>
+    </ApiProvider>
   );
 };
 
