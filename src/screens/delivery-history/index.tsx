@@ -1,4 +1,4 @@
-import {View, Text, useTheme} from 'native-base';
+import {useTheme} from 'native-base';
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {FONT} from '@utils/constant';
@@ -32,10 +32,10 @@ const DeliveryHistoryTab = (props: IProps) => {
         },
       }}
       transitionStyle="scroll">
-      <TopTabs.Screen name="Processing">{() => <HistoryList status="Processing" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Active">{() => <HistoryList status="Active" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Completed">{() => <HistoryList status="Completed" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Confirmed">{() => <HistoryList status="Confirmed" />}</TopTabs.Screen>
+      <TopTabs.Screen name="Processing">{() => <HistoryList status="processing" />}</TopTabs.Screen>
+      <TopTabs.Screen name="Active">{() => <HistoryList status="active" />}</TopTabs.Screen>
+      <TopTabs.Screen name="Completed">{() => <HistoryList status="completed" />}</TopTabs.Screen>
+      <TopTabs.Screen name="Confirmed">{() => <HistoryList status="confirmed" />}</TopTabs.Screen>
     </TopTabs.Navigator>
   );
 };

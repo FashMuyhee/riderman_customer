@@ -20,22 +20,24 @@ const RequestLocations = ({deliveryLocations, pickUp, bg, mt = '5%'}: RequestLoc
     <HStack bg={bg} alignItems="flex-start" space="2" justifyContent="flex-start" mt={mt} px="10px">
       <VStack justifyContent="center" alignItems="center">
         <LocationRadiusIcon />
-        {deliveryLocations.map((item, key) => (
-          <View key={key}>
-            <View bg="accent" alignSelf="center" h="15px" w="2px" />
-            <LocationPinIcon />
-          </View>
-        ))}
+        {!!deliveryLocations &&
+          deliveryLocations.map((item, key) => (
+            <View key={key}>
+              <View bg="accent" alignSelf="center" h="15px" w="2px" />
+              <LocationPinIcon />
+            </View>
+          ))}
       </VStack>
       <VStack>
         <Text isTruncated fontSize={hp(1.3)}>
           {pickUp}
         </Text>
-        {deliveryLocations.map((item, key) => (
-          <Text fontSize={hp(1.3)} mt="10px" key={key} isTruncated>
-            {item}
-          </Text>
-        ))}
+        {!!deliveryLocations &&
+          deliveryLocations.map((item, key) => (
+            <Text fontSize={hp(1.3)} mt="10px" key={key} isTruncated>
+              {item}
+            </Text>
+          ))}
       </VStack>
     </HStack>
   );
