@@ -10,7 +10,6 @@ import RequestLocations from '../request-delivery/components/RequestLocations';
 import {PackageDetail} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
-import AddNewCardSheet from '../wallet/component/AddNewCard';
 import BottomSheet from '@gorhom/bottom-sheet';
 import MapSection from '@screens/request-delivery/components/MapSection';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
@@ -87,7 +86,7 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
             </View>
             {/* selected payment method */}
             <PaymentMethodSection method={paymentChannel} />
-            {paymentChannel == 'card' && <AddCardBtn onPress={() => addNewRef.current?.snapToIndex(0)} />}
+            {paymentChannel == 'card' && <AddCardBtn />}
             <Box>
               {/* comoany info */}
               <DashedDivider /> {/* TODO: COMPANY INFO LOGO AND RIDER IMAGE */}
@@ -140,7 +139,6 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
               <Button title={payTitle} isLoading={isLoading} w="48%" onPress={handlePayment} />
             </HStack>
           </View>
-          <AddNewCardSheet ref={addNewRef} onClose={() => addNewRef.current?.close()} />
         </ScrollView>
       </ScreenWrapper>
     </Modal>
