@@ -1,13 +1,25 @@
-import {configureStore, combineReducers, ConfigureStoreOptions} from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  ConfigureStoreOptions,
+} from '@reduxjs/toolkit';
 import {deliveryApi} from '@services/rtk-queries/deliveries';
+import {paymentApi} from '@services/rtk-queries/payments';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
-export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
+export const createStore = (
+  options?: ConfigureStoreOptions['preloadedState'] | undefined,
+) =>
   configureStore({
     reducer: {
       [deliveryApi.reducerPath]: deliveryApi.reducer,
+      [paymentApi.reducerPath]: paymentApi.reducer,
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(deliveryApi.middleware),
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(
+        deliveryApi.middleware,
+        paymentApi.middleware,
+      ),
     ...options,
   });
 
