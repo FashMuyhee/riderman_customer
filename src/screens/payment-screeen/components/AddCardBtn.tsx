@@ -1,6 +1,6 @@
 import PaystackModal from '@screens/wallet/sheets/paystack-modal';
 import paymentService from '@services/Payment';
-import {useAddCardMutation} from '@services/rtk-queries/payements';
+import {useAddCardMutation} from '@services/rtk-queries/payments';
 import {Pressable, Text} from 'native-base';
 import React, {useCallback, useRef, useState} from 'react';
 // @ts-ignore
