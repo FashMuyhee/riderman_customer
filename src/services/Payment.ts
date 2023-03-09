@@ -6,14 +6,14 @@ import {PaymentMethod} from '@models/delivery';
 class PaymentService {
   /*
    *initialize card for saving
-   * @param pickupRequestId string
+   * @param amount string
    */
-  async initializeCard() {
+  async initializeCard(amount: string) {
     try {
       const result = await httpHandler({
         method: 'post',
         url: `/transactions/initialize`,
-        data: {amount: '10'},
+        data: {amount},
       });
       const data: IInitializeCardResponse = result.data;
       if (data.success) {
@@ -37,11 +37,16 @@ class PaymentService {
    * @param cardId string
    * @param method PaymentMethod
    */
-  async makePickupPayment(
-    pickupRequestId: string,
-    method: PaymentMethod,
-    cardId?: string,
-  ) {
+
+  async makePickupPayment({
+    pickupRequestId,
+    method,
+    cardId,
+  }: {
+    pickupRequestId: string;
+    method: PaymentMethod;
+    cardId?: string;
+  }) {
     try {
       const extra = cardId ? `/${cardId}` : '';
 
@@ -90,15 +95,21 @@ class PaymentService {
   }
 
   /*
-   * send payment method with saved card
+   * send payment method with new card
    * @param pickupRequestId string
-   * @param cardId string
+   * @param reference string
+   * @param save boolean
    */
-  async makeCardPayment(pickupRequestId: string, cardId: string) {
+  async makePaymentWithNewCard(
+    pickupRequestId: string,
+    reference: string,
+    save: boolean,
+  ) {
     try {
       const result = await httpHandler({
         method: 'patch',
-        url: `/customer/pickup-requests/${pickupRequestId}/pay/card/${cardId}`,
+        url: `/customer/pickup-requests/${pickupRequestId}/pay/card`,
+        data: {reference, saveCard: save},
       });
       const data: IGeneralResponse = result.data;
       if (data.success) {
