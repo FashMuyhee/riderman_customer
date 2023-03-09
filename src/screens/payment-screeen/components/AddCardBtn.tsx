@@ -1,21 +1,86 @@
+import {ActivityModal, RenderSnackbar} from '@components';
 import PaystackModal from '@screens/wallet/sheets/paystack-modal';
 import paymentService from '@services/Payment';
 import {useAddCardMutation} from '@services/rtk-queries/payments';
 import {Pressable, Text} from 'native-base';
 import React, {useCallback, useRef, useState} from 'react';
+import {Alert} from 'react-native';
 // @ts-ignore
 import {paystackProps} from 'react-native-paystack-webview';
 
-const AddCardBtn = () => {
+type AddCardBtnProps = Partial<{
+  chargeCard: boolean;
+  pickupId: string;
+  amount: number;
+}>;
+
+const AddCardBtn = ({
+  chargeCard = false,
+  pickupId,
+  amount,
+}: AddCardBtnProps) => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
   const [isInitializing, setIsInitializing] = useState(false);
   const [transRef, setTransRef] = useState('');
-  const [addNewCard, {isLoading}] = useAddCardMutation();
+  const [addNewCard, {isLoading, error}] = useAddCardMutation();
+  const saveCard = useRef(false);
+  const chargeAmount = chargeCard ? (amount as number) : 10;
+
+  const handlePayment = async (refNo: string) => {
+    try {
+      const res = await paymentService.makePaymentWithNewCard(
+        pickupId as string,
+        refNo,
+        saveCard.current,
+      );
+      if (res?.success) {
+        RenderSnackbar({text: 'Payment Successful', duration: 'LONG'});
+      } else {
+        RenderSnackbar({
+          text: `Couldn't Complete Payment,Please Try Another Method`,
+          duration: 'LONG',
+        });
+      }
+    } catch (error) {
+      RenderSnackbar({
+        text: `Couldn't Complete Payment,Please Try Another Method`,
+        duration: 'LONG',
+      });
+    }
+  };
 
   const initPayment = useCallback(async () => {
-    setIsInitializing(true);
+    if (chargeCard) {
+      Alert.alert(
+        'Save Card',
+        'Do you wish to save this card for future reference',
+        [
+          {
+            text: 'No',
+            onPress: () => {
+              saveCard.current = false;
+              paystackInitialization();
+            },
+          },
+          {
+            onPress: () => {
+              saveCard.current = true;
+              paystackInitialization();
+            },
+            text: 'Yes',
+          },
+        ],
+      );
+
+      return;
+    }
+    paystackInitialization();
+  }, []);
+
+  const paystackInitialization = async () => {
     try {
-      const res = await paymentService.initializeCard();
+      setIsInitializing(true);
+      const res = await paymentService.initializeCard(chargeAmount.toString());
       if (res?.success) {
         setTransRef(res.data?.reference as string);
         paystackWebViewRef.current.startTransaction();
@@ -26,9 +91,9 @@ const AddCardBtn = () => {
     } catch (error) {
       setIsInitializing(false);
     }
-  }, []);
-
-  const onAddNewCard = async (reference: string) => {
+  };
+  
+  const handleAddNewCard = async (reference: string) => {
     try {
       const res = await addNewCard({reference}).unwrap();
       if (res.success) {
@@ -37,6 +102,14 @@ const AddCardBtn = () => {
     } catch (error) {
       // @ts-ignore
       console.log(error.message);
+    }
+  };
+
+  const onPaystackDone = (reference: string) => {
+    if (chargeCard) {
+      handlePayment(reference);
+    } else {
+      handleAddNewCard(reference);
     }
   };
 
@@ -53,7 +126,7 @@ const AddCardBtn = () => {
           +
         </Text>
         <Text underline fontWeight="600" fontSize="11px" color="main">
-          {isLoading || isInitializing ? 'Loading...' : ' Add New Card'}
+          {chargeCard ? 'Pay With New Card' : 'Add New Card'}
         </Text>
       </Pressable>
       <PaystackModal
@@ -61,10 +134,11 @@ const AddCardBtn = () => {
         transRef={transRef}
         onCancel={() => {
           setTransRef('');
-          console.log('cancelled');
         }}
-        onDone={d => onAddNewCard(d.transactionRef.reference)}
+        amount={chargeAmount}
+        onDone={d => onPaystackDone(d.transactionRef.reference)}
       />
+      <ActivityModal isLoading={isLoading || isInitializing} />
     </>
   );
 };

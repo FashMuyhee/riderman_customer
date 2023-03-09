@@ -28,25 +28,24 @@ type Props = {
   onDone: (d: PaytstackSuccess) => void;
   onCancel: () => void;
   transRef: string;
+  amount: number;
 };
 
 const PaystackModal = React.forwardRef<paystackProps.PayStackRef, Props>(
-  ({onCancel, onDone, transRef}, ref) => {
+  ({onCancel, onDone, transRef, amount}, ref) => {
     const {colors} = useTheme();
     const {user} = useAuth();
-
     return (
       <Paystack
         paystackKey={__DEV__ ? PAYSTACK_TEST : PAYSTACK_LIVE}
         billingEmail={user?.email}
         activityIndicatorColor={colors.main}
         billingName={`${user?.firstName} ${user?.lastName}`}
-        amount={10}
+        amount={amount}
         onCancel={onCancel}
         onSuccess={onDone}
         ref={ref}
         refNumber={transRef}
-        
       />
     );
   },
