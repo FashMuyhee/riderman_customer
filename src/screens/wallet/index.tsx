@@ -1,10 +1,48 @@
 import {View, Text, HStack} from 'native-base';
-import React from 'react';
-import {Button, DashedDivider, SaveCardItem, ScreenWrapper} from '@components';
+import React, {useEffect} from 'react';
+import {
+  Button,
+  DashedDivider,
+  RenderSnackbar,
+  SaveCardItem,
+  ScreenWrapper,
+} from '@components';
 import {Wallet} from '@screens/payment-screeen/components/PaymentMethodSection';
 import AddCardBtn from '@screens/payment-screeen/components/AddCardBtn';
+import {
+  useDeleteCardMutation,
+  useGetCardsQuery,
+} from '@services/rtk-queries/payments';
+import {CardType} from '@components/CreditCardLogo';
+import {Alert} from 'react-native';
 
 const MyWallet = () => {
+  const {data, isLoading, refetch} = useGetCardsQuery();
+  const [deleteCard] = useDeleteCardMutation();
+
+  const handleDeleteCard = (id: string) => {
+    Alert.alert('Delete Card', 'Are you sure you want to delete this card?', [
+      {text: 'No, Cancel'},
+      {
+        onPress: async () => {
+          try {
+            const res = await deleteCard(id).unwrap();
+            if (res.success) {
+              RenderSnackbar({text: 'Delete Card'});
+            }
+          } catch (error) {
+            RenderSnackbar({text: `Couldn't Delete Card`});
+          }
+        },
+        text: 'Yes, Delete',
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
   return (
     <ScreenWrapper pad barStyle="light-content">
       <Wallet />
@@ -21,22 +59,18 @@ const MyWallet = () => {
         Payment Cards
       </Text>
       <View mt="5%">
-        <SaveCardItem
-          onDelete={console.log}
-          expiry="09/32"
-          number="5531886652142950"
-          withDelete
-          cardId="11"
-          cardType="mastercard"
-        />
-        <SaveCardItem
-          onDelete={console.log}
-          expiry="09/32"
-          number="4242424242424242"
-          withDelete
-          cardId="11"
-          cardType="visa"
-        />
+        {!!data?.data &&
+          data.data.map((x, y) => (
+            <SaveCardItem
+              key={`card_${x.paymentCardId}`}
+              onDelete={id => handleDeleteCard(id as string)}
+              expiry={`${x.expiryMonth}/${x.expiryYear}`}
+              number={x.maskedCard}
+              withDelete
+              cardId={x.paymentCardId.toString()}
+              cardType={x.cardType.trim() as CardType}
+            />
+          ))}
       </View>
       <AddCardBtn />
     </ScreenWrapper>
