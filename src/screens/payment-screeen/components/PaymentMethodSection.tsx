@@ -8,6 +8,7 @@ import cash from '@images/illustrations/cash-on-delivery.png';
 import InfoGradient from '@components/icons/info-gradient';
 import {useGetCardsQuery} from '@services/rtk-queries/payments';
 import {CardType} from '@components/CreditCardLogo';
+import {useGetWalletBalanceQuery} from '@services/rtk-queries/wallet';
 
 type Props = {
   method: PaymentMethod;
@@ -16,6 +17,8 @@ type Props = {
 };
 
 export const Wallet = () => {
+  const {data} = useGetWalletBalanceQuery();
+  const balance = data?.data;
   return (
     <View w="full" h="100px">
       <ImageBackground
@@ -27,7 +30,7 @@ export const Wallet = () => {
             Wallet Balance
           </Text>
           <MoneyText
-            moneyValue={50000}
+            moneyValue={balance?.accountBalance}
             fontWeight="600"
             fontSize="20px"
             color="white"
@@ -74,9 +77,10 @@ const PaymentMethodSection = ({
           data.data.map((x, y) => {
             return (
               // @ts-ignore
-              <Pressable onPress={() => onChangeCard(x.paymentCardId)}>
+              <Pressable
+                key={`card_${x.paymentCardId}`}
+                onPress={() => onChangeCard(x.paymentCardId)}>
                 <SaveCardItem
-                  key={`card_${x.paymentCardId}`}
                   expiry={`${x.expiryMonth}/${x.expiryYear}`}
                   number={x.maskedCard}
                   cardId={x.paymentCardId.toString()}
