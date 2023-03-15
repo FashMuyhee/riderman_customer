@@ -79,6 +79,7 @@ const PaymentMethodSection = ({
               // @ts-ignore
               <Pressable
                 key={`card_${x.paymentCardId}`}
+                // @ts-ignore
                 onPress={() => onChangeCard(x.paymentCardId)}>
                 <SaveCardItem
                   expiry={`${x.expiryMonth}/${x.expiryYear}`}
