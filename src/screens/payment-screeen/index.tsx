@@ -58,7 +58,7 @@ const PaymentScreen = ({
     pickupRequestId,
   } = pickupInfo;
   const {data} = useGetCardsQuery();
-  const cards = !!data?.data ? data?.data : [{paymentCardId: 0}];
+  const cards = !!data ? data : [{paymentCardId: 0}];
   const [isCancelling, setIsCancelling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
@@ -162,7 +162,7 @@ const PaymentScreen = ({
             {paymentChannel == 'card' && (
               <AddCardBtn
                 amount={totalAmount}
-                chargeCard
+                payFor="delivery"
                 pickupId={pickupRequestId.toString()}
               />
             )}

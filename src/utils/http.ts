@@ -1,6 +1,6 @@
-import { BaseQueryFn } from '@reduxjs/toolkit/dist/query';
+import {BaseQueryFn} from '@reduxjs/toolkit/dist/query';
 import tokenManagerService from '@services/TokenManager';
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import axiosRetry from 'axios-retry';
 
 export const BASE_URL = 'https://riderman-dev.herokuapp.com';
@@ -59,25 +59,25 @@ httpHandler.interceptors.request.use(
 );
 
 export const axiosBaseQuery =
-(
-  { baseUrl }: { baseUrl: string } = { baseUrl: '' },
-): BaseQueryFn<
-  {
-    url: string;
-    method: AxiosRequestConfig['method'];
-    data?: AxiosRequestConfig['data'];
-  },
-  unknown,
-  unknown
-> =>
-  async ({ url, method, data }) => {
+  (
+    {baseUrl}: {baseUrl: string} = {baseUrl: ''},
+  ): BaseQueryFn<
+    {
+      url: string;
+      method: AxiosRequestConfig['method'];
+      data?: AxiosRequestConfig['data'];
+    },
+    unknown,
+    unknown
+  > =>
+  async ({url, method, data}) => {
     try {
-      const result = await httpHandler({ url: baseUrl + url, method, data });
-      return { data: result.data };
+      const result = await httpHandler({url: baseUrl + url, method, data});
+      return {data: result.data};
     } catch (axiosError) {
       let err = axiosError as AxiosError;
       return {
-        error: { status: err.response?.status, data: err.response?.data },
+        error: {status: err.response?.status, data: err.response?.data},
       };
     }
   };

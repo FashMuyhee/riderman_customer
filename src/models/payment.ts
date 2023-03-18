@@ -1,7 +1,7 @@
 import {CardType} from '@components/CreditCardLogo';
 import {StatusCode} from './auth';
 
-type SaveCard = {
+export type SaveCard = {
   paymentCardId: number;
   lastDigits: string;
   expiryMonth: string;

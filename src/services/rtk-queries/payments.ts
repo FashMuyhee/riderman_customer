@@ -1,4 +1,8 @@
-import {IAddCardResponse, IAllSavedCardResponse} from '@models/payment';
+import {
+  IAddCardResponse,
+  IAllSavedCardResponse,
+  SaveCard,
+} from '@models/payment';
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@utils/http';
 
@@ -20,24 +24,34 @@ export const paymentApi = createApi({
           ? [{type: 'PaymentRequest', id: result.data.paymentCardId}]
           : [{type: 'PaymentRequest', id: 'SAVE_CARDS'}],
     }),
-    getCards: builder.query<IAllSavedCardResponse, void>({
+    getCards: builder.query<SaveCard[], void>({
       query() {
         return {
           url: ``,
           method: 'GET',
         };
       },
-      providesTags: (result, _, req) => [
-        // @ts-ignore
-        ...result.data.map(({paymentCardId}) => ({
-          type: 'PaymentRequest' as const,
-          id: paymentCardId,
-        })),
-        {
-          type: 'PaymentRequest',
-          id: 'SAVE_CARDS',
-        },
-      ],
+      transformResponse: (returnValue: IAllSavedCardResponse) => {
+        return !!returnValue?.data ? returnValue?.data : [];
+      },
+      providesTags: (result, _, req) =>
+        result
+          ? [
+              ...result.map(({paymentCardId}) => ({
+                type: 'PaymentRequest' as const,
+                id: paymentCardId,
+              })),
+              {
+                type: 'PaymentRequest',
+                id: 'SAVE_CARDS',
+              },
+            ]
+          : [
+              {
+                type: 'PaymentRequest',
+                id: 'SAVE_CARDS',
+              },
+            ],
     }),
     deleteCard: builder.mutation<IAllSavedCardResponse, string>({
       query(cardId) {

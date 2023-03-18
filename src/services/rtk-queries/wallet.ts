@@ -8,7 +8,7 @@ export const walletApi = createApi({
   tagTypes: ['WalletRequest'],
   endpoints: builder => ({
     getWalletBalance: builder.query<IWalletResponse, void>({
-      query(body) {
+      query() {
         return {
           url: ``,
           method: 'get',
@@ -16,7 +16,37 @@ export const walletApi = createApi({
       },
       providesTags: [{type: 'WalletRequest', id: 'Balance'}],
     }),
+    fundWithSaveCard: builder.mutation<
+      IWalletResponse,
+      {amount: number; cardId: number}
+    >({
+      query(body) {
+        return {
+          url: `/fund/card/${body.cardId}`,
+          method: 'post',
+          data: {amount: body.amount},
+        };
+      },
+      invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
+    }),
+    fundWithNewCard: builder.mutation<
+      IWalletResponse,
+      {reference: string; saveCard: boolean}
+    >({
+      query(body) {
+        return {
+          url: `/fund/card`,
+          method: 'post',
+          data: body,
+        };
+      },
+      invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
+    }),
   }),
 });
 
-export const {useGetWalletBalanceQuery} = walletApi;
+export const {
+  useGetWalletBalanceQuery,
+  useFundWithSaveCardMutation,
+  useFundWithNewCardMutation,
+} = walletApi;

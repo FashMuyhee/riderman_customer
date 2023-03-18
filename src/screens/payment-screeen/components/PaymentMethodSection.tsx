@@ -1,5 +1,5 @@
 import {View, Text, Center, HStack, VStack} from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {PaymentMethod} from '@models/delivery';
 import {Image, ImageBackground, Pressable} from 'react-native';
 import walletBg from '@images/wallet-bg.png';
@@ -17,8 +17,12 @@ type Props = {
 };
 
 export const Wallet = () => {
-  const {data} = useGetWalletBalanceQuery();
+  const {data, refetch} = useGetWalletBalanceQuery();
   const balance = data?.data;
+
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <View w="full" h="100px">
       <ImageBackground
@@ -73,8 +77,8 @@ const PaymentMethodSection = ({
     const {data} = useGetCardsQuery();
     return (
       <VStack space="2" w="full">
-        {!!data?.data &&
-          data.data.map((x, y) => {
+        {!!data &&
+          data.map((x, y) => {
             return (
               // @ts-ignore
               <Pressable

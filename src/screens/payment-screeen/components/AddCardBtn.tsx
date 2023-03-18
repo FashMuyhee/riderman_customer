@@ -1,30 +1,28 @@
 import {ActivityModal, RenderSnackbar} from '@components';
+import {moneyFormat} from '@components/MoneyText';
 import PaystackModal from '@screens/wallet/sheets/paystack-modal';
 import paymentService from '@services/Payment';
 import {useAddCardMutation} from '@services/rtk-queries/payments';
+import {useFundWithNewCardMutation} from '@services/rtk-queries/wallet';
 import {Pressable, Text} from 'native-base';
 import React, {useCallback, useRef, useState} from 'react';
 import {Alert} from 'react-native';
 // @ts-ignore
 import {paystackProps} from 'react-native-paystack-webview';
 
-type AddCardBtnProps = Partial<{
-  chargeCard: boolean;
-  pickupId: string;
+type AddCardBtnProps = {
+  payFor: 'wallet' | 'delivery';
+  pickupId?: string;
   amount: number;
-}>;
+};
 
-const AddCardBtn = ({
-  chargeCard = false,
-  pickupId,
-  amount,
-}: AddCardBtnProps) => {
+const AddCardBtn = ({payFor, pickupId, amount}: AddCardBtnProps) => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
   const [isInitializing, setIsInitializing] = useState(false);
   const [transRef, setTransRef] = useState('');
   const [addNewCard, {isLoading, error}] = useAddCardMutation();
   const saveCard = useRef(false);
-  const chargeAmount = chargeCard ? (amount as number) : 10;
+  const [fundWallet, {isLoading: isFunding}] = useFundWithNewCardMutation();
 
   const handlePayment = async (refNo: string) => {
     try {
@@ -49,8 +47,18 @@ const AddCardBtn = ({
     }
   };
 
-  const initPayment = useCallback(async () => {
-    if (chargeCard) {
+  const initPayment = async () => {
+    if (payFor == 'wallet') {
+      if (amount == 0 || isNaN(amount)) {
+        RenderSnackbar({
+          text: 'Please enter amount you want to fund your wallet with',
+        });
+        return;
+      }
+      if (amount < 500) {
+        RenderSnackbar({text: 'Please enter amount greater than 500'});
+        return;
+      }
       Alert.alert(
         'Save Card',
         'Do you wish to save this card for future reference',
@@ -71,16 +79,13 @@ const AddCardBtn = ({
           },
         ],
       );
-
-      return;
     }
-    paystackInitialization();
-  }, []);
+  };
 
   const paystackInitialization = async () => {
     try {
       setIsInitializing(true);
-      const res = await paymentService.initializeCard(chargeAmount.toString());
+      const res = await paymentService.initializeCard(amount?.toString());
       if (res?.success) {
         setTransRef(res.data?.reference as string);
         paystackWebViewRef.current.startTransaction();
@@ -92,7 +97,7 @@ const AddCardBtn = ({
       setIsInitializing(false);
     }
   };
-  
+
   const handleAddNewCard = async (reference: string) => {
     try {
       const res = await addNewCard({reference}).unwrap();
@@ -105,11 +110,40 @@ const AddCardBtn = ({
     }
   };
 
+  const handleFundWallet = async (reference: string) => {
+    try {
+      const res = await fundWallet({
+        reference,
+        saveCard: saveCard.current,
+      }).unwrap();
+      if (res.success) {
+        if (res.success) {
+          Alert.alert(
+            'Wallet Funded',
+            `You have successfully funded your wallet with ${moneyFormat(
+              amount,
+            )} 🎉🎉 🎉`,
+          );
+        } else {
+          RenderSnackbar({
+            text: `Sorry we couldn't fund you wallet, Please Try Again`,
+          });
+        }
+      }
+    } catch (error) {
+      // @ts-ignore
+      console.log(error.message);
+    }
+  };
+
   const onPaystackDone = (reference: string) => {
-    if (chargeCard) {
+    if (payFor == 'delivery') {
       handlePayment(reference);
-    } else {
-      handleAddNewCard(reference);
+      return;
+    }
+    if (payFor == 'wallet') {
+      handleFundWallet(reference);
+      return;
     }
   };
 
@@ -117,16 +151,16 @@ const AddCardBtn = ({
     <>
       <Pressable
         onPress={initPayment}
-        justifyContent="space-between"
         flexDirection="row"
         h="20px"
-        w="95px"
+        minW="90px"
+        maxW="150px"
         alignItems="center">
-        <Text fontWeight="600" fontSize="11px" color="main">
+        <Text fontWeight="600" mr="10px" fontSize="13px" color="main">
           +
         </Text>
-        <Text underline fontWeight="600" fontSize="11px" color="main">
-          {chargeCard ? 'Pay With New Card' : 'Add New Card'}
+        <Text fontWeight="600" fontSize="13px" color="main">
+          {payFor == 'delivery' ? 'Pay With New Card' : 'Fund With New Card'}
         </Text>
       </Pressable>
       <PaystackModal
@@ -135,10 +169,10 @@ const AddCardBtn = ({
         onCancel={() => {
           setTransRef('');
         }}
-        amount={chargeAmount}
+        amount={amount}
         onDone={d => onPaystackDone(d.transactionRef.reference)}
       />
-      <ActivityModal isLoading={isLoading || isInitializing} />
+      <ActivityModal isLoading={isFunding || isInitializing} />
     </>
   );
 };
