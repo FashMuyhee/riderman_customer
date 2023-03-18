@@ -9,6 +9,7 @@ import InfoGradient from '@components/icons/info-gradient';
 import {useGetCardsQuery} from '@services/rtk-queries/payments';
 import {CardType} from '@components/CreditCardLogo';
 import {useGetWalletBalanceQuery} from '@services/rtk-queries/wallet';
+import { WalletData } from '@models/wallet';
 
 type Props = {
   method: PaymentMethod;
@@ -18,7 +19,7 @@ type Props = {
 
 export const Wallet = () => {
   const {data, refetch} = useGetWalletBalanceQuery();
-  const balance = data?.data;
+  const balance = data?.data as WalletData;
 
   useEffect(() => {
     refetch();
@@ -34,7 +35,7 @@ export const Wallet = () => {
             Wallet Balance
           </Text>
           <MoneyText
-            moneyValue={balance?.accountBalance}
+            moneyValue={parseFloat(balance?.accountBalance) / 100}
             fontWeight="600"
             fontSize="20px"
             color="white"
