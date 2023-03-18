@@ -1,5 +1,5 @@
 import {View, Text, HStack, useDisclose} from 'native-base';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Button,
   DashedDivider,
@@ -8,7 +8,6 @@ import {
   ScreenWrapper,
 } from '@components';
 import {Wallet} from '@screens/payment-screeen/components/PaymentMethodSection';
-import AddCardBtn from '@screens/payment-screeen/components/AddCardBtn';
 import {
   useDeleteCardMutation,
   useGetCardsQuery,
@@ -16,11 +15,14 @@ import {
 import {CardType} from '@components/CreditCardLogo';
 import {Alert} from 'react-native';
 import FundWalletSheet from './sheets/fund-wallet';
+import AddAccountSheet from './sheets/add-account';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const MyWallet = () => {
   const {data, isLoading, refetch} = useGetCardsQuery();
   const [deleteCard] = useDeleteCardMutation();
   const {isOpen, onToggle} = useDisclose();
+  const addAccountRef = useRef<BottomSheet>(null);
 
   const handleDeleteCard = (id: string) => {
     Alert.alert('Delete Card', 'Are you sure you want to delete this card?', [
@@ -60,7 +62,13 @@ const MyWallet = () => {
           bg="bg"
           color="black"
         />
-        <Button title="Withdraw" w="48%" bg="black" color="white" />
+        <Button
+          title="Withdraw"
+          onPress={() => addAccountRef.current?.snapToIndex(0)}
+          w="48%"
+          bg="black"
+          color="white"
+        />
       </HStack>
       <DashedDivider />
       <Text mt="3%" fontWeight="600" fontSize="12px" color="#263238">
@@ -86,6 +94,10 @@ const MyWallet = () => {
         )}
       </View>
       <FundWalletSheet isVisible={isOpen} onClose={onToggle} />
+      <AddAccountSheet
+        ref={addAccountRef}
+        onClose={() => addAccountRef.current?.close()}
+      />
     </ScreenWrapper>
   );
 };
