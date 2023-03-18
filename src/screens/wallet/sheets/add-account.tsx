@@ -21,7 +21,7 @@ import Snackbar from 'react-native-snackbar';
 
 const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
   ({onClose}, ref) => {
-    const snapPoints = useMemo(() => ['70%'], []);
+    const snapPoints = useMemo(() => ['60%'], []);
     const [addBank] = useAddBankAccountMutation();
     const [commercialBanksStrng, setCommercialBanks] =
       useMMKVString('commercialBanks');

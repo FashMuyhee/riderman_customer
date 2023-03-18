@@ -17,12 +17,14 @@ import {Alert} from 'react-native';
 import FundWalletSheet from './sheets/fund-wallet';
 import AddAccountSheet from './sheets/add-account';
 import BottomSheet from '@gorhom/bottom-sheet';
+import WithdrawSheet from './sheets/withdraw';
 
 const MyWallet = () => {
   const {data, isLoading, refetch} = useGetCardsQuery();
   const [deleteCard] = useDeleteCardMutation();
   const {isOpen, onToggle} = useDisclose();
   const addAccountRef = useRef<BottomSheet>(null);
+  const withdrawRef = useRef<BottomSheet>(null);
 
   const handleDeleteCard = (id: string) => {
     Alert.alert('Delete Card', 'Are you sure you want to delete this card?', [
@@ -64,7 +66,7 @@ const MyWallet = () => {
         />
         <Button
           title="Withdraw"
-          onPress={() => addAccountRef.current?.snapToIndex(0)}
+          onPress={() => withdrawRef.current?.snapToIndex(0)}
           w="48%"
           bg="black"
           color="white"
@@ -97,6 +99,11 @@ const MyWallet = () => {
       <AddAccountSheet
         ref={addAccountRef}
         onClose={() => addAccountRef.current?.close()}
+      />
+      <WithdrawSheet
+        ref={withdrawRef}
+        onClose={() => withdrawRef.current?.close()}
+        addNewAccount={() => addAccountRef.current?.snapToIndex(0)}
       />
     </ScreenWrapper>
   );
