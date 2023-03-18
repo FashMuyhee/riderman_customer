@@ -1,6 +1,6 @@
 import {StatusCode} from './auth';
 
-type WalletData = {
+export type WalletData = {
   accountName: string;
   accountNumber: string;
   bank: {

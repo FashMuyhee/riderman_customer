@@ -1,4 +1,5 @@
 import {configureStore, ConfigureStoreOptions} from '@reduxjs/toolkit';
+import {bankApi} from '@services/rtk-queries/banks';
 import {deliveryApi} from '@services/rtk-queries/deliveries';
 import {paymentApi} from '@services/rtk-queries/payments';
 import {walletApi} from '@services/rtk-queries/wallet';
@@ -12,12 +13,14 @@ export const createStore = (
       [deliveryApi.reducerPath]: deliveryApi.reducer,
       [paymentApi.reducerPath]: paymentApi.reducer,
       [walletApi.reducerPath]: walletApi.reducer,
+      [bankApi.reducerPath]: bankApi.reducer,
     },
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware().concat(
         deliveryApi.middleware,
         paymentApi.middleware,
         walletApi.middleware,
+        bankApi.middleware,
       ),
     ...options,
   });
