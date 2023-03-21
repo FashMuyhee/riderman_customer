@@ -16,6 +16,10 @@ export type WalletData = {
   updatedAt: string;
 };
 
+export type TipRiderForm = {
+  riderId: string;
+  amount: number;
+};
 export interface IWalletResponse {
   message: string;
   success: boolean;

@@ -2,6 +2,7 @@ import {StatusCode} from './auth';
 
 export type AddBankAccountForm = {
   accountNumber: string;
+  accountName: string;
   bankCode: string;
   currency: string;
   bankImage: string;
