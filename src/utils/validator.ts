@@ -52,6 +52,10 @@ export const addBankAccountSchema = yup.object().shape({
   currency: yup.string().required('Required'),
   bankImage: yup.string().required('Required'),
 });
+export const withdrawFundSchema = yup.object().shape({
+  bankId: yup.number().required('Required'),
+  amount: yup.string().required('Required'),
+});
 
 export const phoneNumberFormat = (phone: string) => {
   return phone.split(' ').join('').replace('+', '');
