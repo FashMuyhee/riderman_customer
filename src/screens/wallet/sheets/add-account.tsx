@@ -63,7 +63,7 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
         if (res?.data) {
           if (res?.data?.success) {
             const resolved = res?.data?.data?.accountName;
-            setAccountName(resolved);
+            setFieldValue('accountName', resolved);
             setValidated(true);
           }
         }
@@ -92,6 +92,7 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
         bankName: '',
         currency: 'NGN',
         bankImage: '',
+        accountName: '',
       },
       onSubmit: values => {
         handleAddAccount(values);
@@ -199,7 +200,7 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
               </Text>
             </HStack>
           )}
-          {accountName.length > 0 && (
+          {values?.accountName.length > 0 && (
             <HStack mb="20px" alignItems="center" space="3">
               <CheckCircleIcon size={5} color="green.500" />
               <Text
@@ -208,7 +209,7 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
                 textAlign="center"
                 color="darkBlue.600"
                 textTransform="uppercase">
-                {accountName}
+                {values?.accountName}
               </Text>
             </HStack>
           )}
