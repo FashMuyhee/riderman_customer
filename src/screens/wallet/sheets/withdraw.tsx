@@ -12,10 +12,13 @@ import {
 } from '@components';
 import {useGetBankAccountsQuery} from '@services/rtk-queries/banks';
 import {useFormik} from 'formik';
-import {addBankAccountSchema} from '@utils/validator';
-import {AddBankAccountForm} from '@models/bank';
+import {withdrawFundSchema} from '@utils/validator';
 import {isEmptyString} from '@utils/helper';
 import NairaMoneyIcon from '@components/icons/naira-money';
+import {useWithdrawToBankMutation} from '@services/rtk-queries/wallet';
+import {Alert} from 'react-native';
+import {moneyFormat} from '@components/MoneyText';
+import Snackbar from 'react-native-snackbar';
 
 const WithdrawSheet = React.forwardRef<
   BottomSheet,
@@ -23,10 +26,7 @@ const WithdrawSheet = React.forwardRef<
 >(({onClose, addNewAccount}, ref) => {
   const snapPoints = useMemo(() => ['60%'], []);
   const {data: banks, isLoading: fetchingBanks} = useGetBankAccountsQuery();
-
-  const [validating, setValidating] = useState(false);
-  const [validated, setValidated] = useState(false);
-  const [accountName, setAccountName] = useState('');
+  const [withdraw] = useWithdrawToBankMutation();
 
   const {
     values,
@@ -39,20 +39,57 @@ const WithdrawSheet = React.forwardRef<
   } = useFormik({
     initialValues: {
       amount: '',
-      bankCode: '',
-      bankName: '',
-      currency: 'NGN',
-      bankImage: '',
+      bankId: '',
     },
     onSubmit: values => {
       handleWithdraw(values);
     },
-    validationSchema: addBankAccountSchema,
+    validationSchema: withdrawFundSchema,
   });
 
   const onChangeBank = (bankCode: string) => {};
+  type Body = {amount: string; bankId: string};
 
-  const handleWithdraw = async (value: AddBankAccountForm) => {};
+  const handleWithdraw = async (value: Body) => {
+    try {
+      setSubmitting(true);
+      const res = await withdraw({
+        amount: parseFloat(values.amount),
+        bankId: values.bankId,
+      }).unwrap();
+      setSubmitting(false);
+      if (res.success) {
+        Alert.alert(
+          'Withdraw Success',
+          `${moneyFormat(
+            values.amount,
+          )} has been successfully transfer to your bank account, it might take few minutes before reflecting`,
+        );
+      } else {
+        RenderSnackbar({
+          text: `Sorry we couldn't transfer to your bank, Please Try Again`,
+        });
+      }
+    } catch (error) {
+      setSubmitting(false);
+      RenderSnackbar({
+        text: `Sorry we couldn't transfer to your bank, Please Try Again`,
+      });
+    }
+  };
+
+  const handleOpenAccountSheet = () => {
+    if ((banks?.length as number) > 2) {
+      RenderSnackbar({
+        text: 'You can only add two bank accounts',
+        duration: 'INFINITE',
+        action: {text: 'Close', onPress: () => Snackbar.dismiss()},
+      });
+    } else {
+      onClose();
+      addNewAccount();
+    }
+  };
 
   return (
     <BottomSheetWrapperSnappy
@@ -86,28 +123,11 @@ const WithdrawSheet = React.forwardRef<
       <View mt="7%" px="20px">
         <Button
           title="Add New Bank Account"
-          onPress={() => {
-            onClose();
-            addNewAccount();
-          }}
+          onPress={handleOpenAccountSheet}
           w="full"
           bg="black"
           color="white"
           mb="20px"
-        />
-        <SelectInput
-          label="Select Bank"
-          placeholder="Select your bank"
-          options={banks}
-          transform
-          displayKey="accountName"
-          valueKey="bankAccountId"
-          multiDisplayKey
-          displayKeySecondary="maskedAccountNumber"
-          value={values.bankCode}
-          onChange={onChangeBank}
-          inputHint={errors.bankCode}
-          isLoading={(banks?.length as number) > 0 ? false : fetchingBanks}
         />
         <TextInput
           leftIcon={<NairaMoneyIcon />}
@@ -118,6 +138,21 @@ const WithdrawSheet = React.forwardRef<
           hasError={!isEmptyString(errors.amount)}
           hintMessage={errors.amount}
           onChange={handleChange('amount')}
+        />
+
+        <SelectInput
+          label="Select Bank"
+          placeholder="Select your bank"
+          options={banks}
+          transform
+          displayKey="accountName"
+          valueKey="bankAccountId"
+          multiDisplayKey
+          displayKeySecondary="maskedAccountNumber"
+          value={values.bankId}
+          onChange={onChangeBank}
+          inputHint={errors.bankId}
+          isLoading={(banks?.length as number) > 0 ? false : fetchingBanks}
         />
 
         <Button
