@@ -1,10 +1,10 @@
-import {IWalletResponse} from '@models/wallet';
+import {IWalletResponse, TipRiderForm} from '@models/wallet';
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@utils/http';
 
 export const walletApi = createApi({
   reducerPath: 'walletApi',
-  baseQuery: axiosBaseQuery({baseUrl: '/wallet'}),
+  baseQuery: axiosBaseQuery({baseUrl: '/'}),
   tagTypes: ['WalletRequest'],
   endpoints: builder => ({
     getWalletBalance: builder.query<IWalletResponse, void>({
@@ -22,7 +22,7 @@ export const walletApi = createApi({
     >({
       query(body) {
         return {
-          url: `/fund/card/${body.cardId}`,
+          url: `wallet/fund/card/${body.cardId}`,
           method: 'post',
           data: {amount: body.amount},
         };
@@ -35,7 +35,30 @@ export const walletApi = createApi({
     >({
       query(body) {
         return {
-          url: `/fund/card`,
+          url: `wallet/fund/card`,
+          method: 'post',
+          data: body,
+        };
+      },
+      invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
+    }),
+    withdrawToBank: builder.mutation<
+      IWalletResponse,
+      {bankId: string; amount: number}
+    >({
+      query(body) {
+        return {
+          url: `wallet/withdraw/${body.bankId}`,
+          method: 'post',
+          data: {amount: body.amount * 100},
+        };
+      },
+      invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
+    }),
+    sendTipToRider: builder.mutation<IWalletResponse, TipRiderForm>({
+      query(body) {
+        return {
+          url: `customer/tip/wallet`,
           method: 'post',
           data: body,
         };
@@ -49,4 +72,6 @@ export const {
   useGetWalletBalanceQuery,
   useFundWithSaveCardMutation,
   useFundWithNewCardMutation,
+  useWithdrawToBankMutation,
+  useSendTipToRiderMutation,
 } = walletApi;

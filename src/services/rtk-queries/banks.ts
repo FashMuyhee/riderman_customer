@@ -36,6 +36,9 @@ export const bankApi = createApi({
         };
       },
       transformResponse: (returnValue: IBankAccountsResponse) => {
+        // const transformed = returnValue.data.map(i => {
+        //   return {...i,account:`${}`};
+        // });
         return !!returnValue?.data ? returnValue?.data : [];
       },
       providesTags: (result, _, req) =>
