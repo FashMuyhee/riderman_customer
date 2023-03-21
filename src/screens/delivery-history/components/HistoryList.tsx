@@ -17,10 +17,16 @@ const HistoryList = ({status}: Props) => {
   const deliveryDetailSheet = React.useRef<BottomSheet>(null);
   const tipSheet = React.useRef<BottomSheet>(null);
   const [page, setPage] = useState(1);
-  const {data, isLoading, isFetching} = useGetDeliveriesByStatusQuery({page, status});
+  const {data, isLoading, isFetching} = useGetDeliveriesByStatusQuery({
+    page,
+    status,
+  });
   const [selectedItem, setSelectedItem] = useState<IDeliveryItem | null>(null);
 
-  const deliveries = formatDeliveriesByDate(data?.data as IDeliveryItem[], status);
+  const deliveries = formatDeliveriesByDate(
+    data?.data as IDeliveryItem[],
+    status,
+  );
 
   return (
     <ScreenWrapper pad>
@@ -58,13 +64,18 @@ const HistoryList = ({status}: Props) => {
       <DeliveryDetailSheet
         handleTipRider={() => {
           deliveryDetailSheet.current?.close();
+          tipSheet.current?.snapToIndex(0);
         }}
         deliveryStatus={status}
         ref={deliveryDetailSheet}
         onClose={() => deliveryDetailSheet.current?.close()}
         item={selectedItem as IDeliveryItem}
       />
-      <TipRiderSheet ref={tipSheet} onClose={() => tipSheet.current?.close()} />
+      <TipRiderSheet
+        riderId={selectedItem?.pickupRequest.riderId.toString() as string}
+        ref={tipSheet}
+        onClose={() => tipSheet.current?.close()}
+      />
     </ScreenWrapper>
   );
 };
