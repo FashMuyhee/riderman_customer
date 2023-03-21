@@ -14,7 +14,7 @@ export type CommercialBanksData = {
   code: string;
   type: string;
   active: boolean;
-  currency: 'NGN';
+  currency: string;
   image: string;
 };
 
@@ -23,7 +23,7 @@ export type BankAccountData = {
   maskedAccountNumber: string;
   accountName: string;
   bankCode: string;
-  currency: 'NGN';
+  currency: string;
   bankImage: string;
   validated: boolean;
   createdAt: string;
@@ -47,5 +47,5 @@ export interface ICommercialBankResponse {
   message: string;
   success: boolean;
   statusCode: StatusCode;
-  data: BankAccountData[];
+  data: CommercialBanksData[];
 }

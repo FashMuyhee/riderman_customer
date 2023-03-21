@@ -20,6 +20,8 @@ export type TipRiderForm = {
   riderId: string;
   amount: number;
 };
+export type WithdrawToBankForm = {amount: string; bankId: number};
+
 export interface IWalletResponse {
   message: string;
   success: boolean;

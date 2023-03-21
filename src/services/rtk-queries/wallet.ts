@@ -1,4 +1,8 @@
-import {IWalletResponse, TipRiderForm} from '@models/wallet';
+import {
+  IWalletResponse,
+  TipRiderForm,
+  WithdrawToBankForm,
+} from '@models/wallet';
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@utils/http';
 
@@ -42,15 +46,12 @@ export const walletApi = createApi({
       },
       invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
     }),
-    withdrawToBank: builder.mutation<
-      IWalletResponse,
-      {bankId: string; amount: number}
-    >({
+    withdrawToBank: builder.mutation<IWalletResponse, WithdrawToBankForm>({
       query(body) {
         return {
           url: `wallet/withdraw/${body.bankId}`,
           method: 'post',
-          data: {amount: body.amount * 100},
+          data: {amount: parseFloat(body.amount) * 100},
         };
       },
       invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],

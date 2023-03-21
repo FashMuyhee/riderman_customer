@@ -1,15 +1,9 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {HStack, Text, View} from 'native-base';
 import {BottomSheetWrapperSnappy} from '@components/BottomSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {hp} from '@utils/responsive';
-import {
-  DashedDivider,
-  Button,
-  SelectInput,
-  TextInput,
-  RenderSnackbar,
-} from '@components';
+import {DashedDivider, Button, TextInput, RenderSnackbar} from '@components';
 import {useGetBankAccountsQuery} from '@services/rtk-queries/banks';
 import {useFormik} from 'formik';
 import {withdrawFundSchema} from '@utils/validator';
@@ -19,12 +13,14 @@ import {useWithdrawToBankMutation} from '@services/rtk-queries/wallet';
 import {Alert} from 'react-native';
 import {moneyFormat} from '@components/MoneyText';
 import Snackbar from 'react-native-snackbar';
+import BankItem from '../components/BankItem';
+import {WithdrawToBankForm} from '@models/wallet';
 
 const WithdrawSheet = React.forwardRef<
   BottomSheet,
   {addNewAccount: () => void; onClose: () => void}
 >(({onClose, addNewAccount}, ref) => {
-  const snapPoints = useMemo(() => ['60%'], []);
+  const snapPoints = useMemo(() => ['60%', '70%'], []);
   const {data: banks, isLoading: fetchingBanks} = useGetBankAccountsQuery();
   const [withdraw] = useWithdrawToBankMutation();
 
@@ -39,7 +35,7 @@ const WithdrawSheet = React.forwardRef<
   } = useFormik({
     initialValues: {
       amount: '',
-      bankId: '',
+      bankId: 1,
     },
     onSubmit: values => {
       handleWithdraw(values);
@@ -47,14 +43,11 @@ const WithdrawSheet = React.forwardRef<
     validationSchema: withdrawFundSchema,
   });
 
-  const onChangeBank = (bankCode: string) => {};
-  type Body = {amount: string; bankId: string};
-
-  const handleWithdraw = async (value: Body) => {
+  const handleWithdraw = async (value: WithdrawToBankForm) => {
     try {
       setSubmitting(true);
       const res = await withdraw({
-        amount: parseFloat(values.amount),
+        amount: values.amount,
         bankId: values.bankId,
       }).unwrap();
       setSubmitting(false);
@@ -140,20 +133,21 @@ const WithdrawSheet = React.forwardRef<
           onChange={handleChange('amount')}
         />
 
-        <SelectInput
-          label="Select Bank"
-          placeholder="Select your bank"
-          options={banks}
-          transform
-          displayKey="accountName"
-          valueKey="bankAccountId"
-          multiDisplayKey
-          displayKeySecondary="maskedAccountNumber"
-          value={values.bankId}
-          onChange={onChangeBank}
-          inputHint={errors.bankId}
-          isLoading={(banks?.length as number) > 0 ? false : fetchingBanks}
-        />
+        {(banks?.length as number) > 0 ? (
+          banks?.map((bank, z) => (
+            <BankItem
+              key={`bank_${z}`}
+              {...bank}
+              onDelete={id => console.log(id)}
+              onPress={id => setFieldValue('bankId', id)}
+              selected={values.bankId == bank.bankAccountId}
+            />
+          ))
+        ) : (
+          <Text bold textAlign="center" fontSize="lg" my="20px">
+            No Saved Banks
+          </Text>
+        )}
 
         <Button
           title="Proceed to Withdraw"
