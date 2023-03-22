@@ -57,6 +57,16 @@ export const withdrawFundSchema = yup.object().shape({
   amount: yup.string().required('Required'),
 });
 
+export const profileUpdateSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter valid email')
+    .required('Email Address is Required'),
+  firstName: yup.string().required('First Name is Required'),
+  lastName: yup.string().required('Last Name is Required'),
+  phone: yup.string().required('Phone Number Required'),
+});
+
 export const phoneNumberFormat = (phone: string) => {
   return phone.split(' ').join('').replace('+', '');
 };

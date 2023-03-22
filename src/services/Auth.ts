@@ -1,5 +1,13 @@
 import httpHandler, {configureAxiosHeaders} from '../utils/http';
-import {ILoginForm, IRegisterForm, ILoginRegisterResponse, IRsetPasswordForm, IVerifyTokenForm, IGeneralResponse} from '@models/auth';
+import {
+  ILoginForm,
+  IRegisterForm,
+  ILoginRegisterResponse,
+  IRsetPasswordForm,
+  IVerifyTokenForm,
+  IGeneralResponse,
+  IUpdateForm,
+} from '@models/auth';
 import tokenManagerService from './TokenManager';
 
 class AuthService {
@@ -55,8 +63,15 @@ class AuthService {
       });
       const data: ILoginRegisterResponse = result.data;
       if (data.success) {
-        tokenManagerService.storeUserCredentials({email: body.email, password: body.password, uid: data?.data?.id as number});
-        tokenManagerService.storeUserSession({ token: data?.token as string, expireTime: 0 })
+        tokenManagerService.storeUserCredentials({
+          email: body.email,
+          password: body.password,
+          uid: data?.data?.id as number,
+        });
+        tokenManagerService.storeUserSession({
+          token: data?.token as string,
+          expireTime: 0,
+        });
 
         // @ts-ignore set token
         configureAxiosHeaders(data?.token);
@@ -115,7 +130,6 @@ class AuthService {
         return data;
       }
     } catch (error) {
-      console.log("🚀 ~ file: Auth.ts:116 ~ AuthService ~ verifyAccount ~ error", error)
       //@ts-ignore
       const message: IGeneralResponse = {
         //@ts-ignore
@@ -198,6 +212,32 @@ class AuthService {
         message: error?.response.data.message,
         statusCode: 400,
         success: false,
+      };
+      return message;
+    }
+  }
+
+  /**
+   * update user profile
+   * @param  {IUpdateForm} body
+   */
+  async updateProfile(body: IUpdateForm) {
+    try {
+      const result = await httpHandler({
+        method: 'put',
+        url: '/profile/update',
+        data: body,
+      });
+      const data: ILoginRegisterResponse = result.data;
+      if (data.statusCode === 200) {
+        return data;
+      }
+    } catch (error) {
+      const message: ILoginRegisterResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+        statusCode: 400,
       };
       return message;
     }

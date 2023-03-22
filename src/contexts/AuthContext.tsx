@@ -10,6 +10,7 @@ export interface IAuthContext {
   authenticate: (user: IUser, token: string) => void;
   logout: () => void;
   setToken: (token: string) => void;
+  updateUser: (user: IUser) => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -19,9 +20,14 @@ export const AuthContext = createContext<IAuthContext>({
   logout: () => {},
   setToken: token => {},
   isAuth: false,
+  updateUser: user => {},
 });
 
-export const AuthContextProvider = ({children}: {children: React.ReactNode}) => {
+export const AuthContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [user, setUser] = useMMKVObject<IUser | null>('_user');
   const [isAuth, setIsAuth] = useMMKVBoolean('_isAuth');
   const [token, setToken] = useMMKVString('_token');
@@ -52,6 +58,7 @@ export const AuthContextProvider = ({children}: {children: React.ReactNode}) => 
         authenticate: handleLogin,
         logout: handleLogout,
         setToken: handleResetToken,
+        updateUser: setUser,
       }}>
       {children}
     </AuthContext.Provider>
