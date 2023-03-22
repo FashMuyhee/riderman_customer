@@ -7,7 +7,6 @@ import {
   SaveCardItem,
   ScreenWrapper,
 } from '@components';
-import {Wallet} from '@screens/payment-screeen/components/PaymentMethodSection';
 import {
   useDeleteCardMutation,
   useGetCardsQuery,
@@ -18,6 +17,7 @@ import FundWalletSheet from './sheets/fund-wallet';
 import AddAccountSheet from './sheets/add-account';
 import BottomSheet from '@gorhom/bottom-sheet';
 import WithdrawSheet from './sheets/withdraw';
+import WalletBalance from './components/WalletBalance';
 
 const MyWallet = () => {
   const {data, isLoading, refetch} = useGetCardsQuery();
@@ -51,7 +51,7 @@ const MyWallet = () => {
 
   return (
     <ScreenWrapper pad barStyle="light-content">
-      <Wallet />
+      <WalletBalance />
       <HStack
         mb="10px"
         mt="10%"
