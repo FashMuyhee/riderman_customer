@@ -1,7 +1,7 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawerContent';
-import { useTheme, View} from 'native-base';
+import {useTheme, View} from 'native-base';
 import GuardStack from '../stack/guard';
 import TimeIcon from '@components/icons/time';
 import MyWallet from '@screens/wallet';
@@ -10,6 +10,8 @@ import {FONT} from '@utils/constant';
 import {useNavigation} from '@react-navigation/native';
 import DeliveryHistoryTab from '@screens/delivery-history';
 import Profile from '@screens/profile';
+import Transactions from '@screens/wallet/transactions';
+import DrawerTransactionIcon from '@components/icons/drawer-order';
 
 const Drawer = createDrawerNavigator();
 
@@ -84,11 +86,22 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
+        name="transactions"
+        component={Transactions}
+        options={{
+          drawerLabel: 'Transactions',
+          drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
+          headerShown: true,
+        }}
+      />
+      <Drawer.Screen
         name="profile"
         component={Profile}
         options={{
           drawerLabel: 'Earnings',
-          drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
+          drawerIcon: ({focused}) => (
+            <DrawerTransactionIcon isFocused={focused} />
+          ),
           headerShown: true,
           drawerItemStyle: {display: 'none'},
         }}
