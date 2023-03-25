@@ -53,6 +53,8 @@ const FundWalletSheet = ({isVisible, onClose}: Props) => {
             amount,
           )} 🎉🎉 🎉`,
         );
+        onClose();
+        setAmount('');
       } else {
         RenderSnackbar({
           text: `Sorry we couldn't fund you wallet, Please Try Again`,

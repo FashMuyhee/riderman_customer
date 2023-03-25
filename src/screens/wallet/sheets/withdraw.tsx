@@ -31,7 +31,7 @@ const WithdrawSheet = React.forwardRef<
     isSubmitting,
     setSubmitting,
     setFieldValue,
-    handleChange,
+    handleChange,resetForm
   } = useFormik({
     initialValues: {
       amount: '',
@@ -58,6 +58,8 @@ const WithdrawSheet = React.forwardRef<
             values.amount,
           )} has been successfully transfer to your bank account, it might take few minutes before reflecting`,
         );
+        onClose()
+        resetForm()
       } else {
         RenderSnackbar({
           text: `Sorry we couldn't transfer to your bank, Please Try Again`,

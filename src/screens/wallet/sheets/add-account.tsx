@@ -84,7 +84,7 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
       errors,
       isSubmitting,
       setSubmitting,
-      setFieldValue,
+      setFieldValue,resetForm
     } = useFormik({
       initialValues: {
         accountNumber: '',
@@ -126,6 +126,8 @@ const AddAccountSheet = React.forwardRef<BottomSheet, {onClose: () => void}>(
         if (res.success) {
           setSubmitting(false);
           RenderSnackbar({text: res.message});
+          onClose()
+          resetForm()
         }
       } catch (error) {
         setSubmitting(false);
