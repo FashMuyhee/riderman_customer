@@ -1,5 +1,5 @@
 import {FlatList, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DateListTitle, ScreenWrapper} from '@components';
 import DeliveryDetailSheet from './DeliveryDetailSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -19,7 +19,7 @@ const HistoryList = ({status}: Props) => {
   const tipSheet = React.useRef<BottomSheet>(null);
   const rateSheet = React.useRef<BottomSheet>(null);
   const [page, setPage] = useState(1);
-  const {data, isLoading, isFetching} = useGetDeliveriesByStatusQuery({
+  const {data, isLoading, isFetching, refetch,} = useGetDeliveriesByStatusQuery({
     page,
     status,
   });
@@ -29,6 +29,10 @@ const HistoryList = ({status}: Props) => {
     data?.data as IDeliveryItem[],
     status,
   );
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <ScreenWrapper pad>
