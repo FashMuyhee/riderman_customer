@@ -21,7 +21,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
       defaultStatus="closed"
-      initialRouteName="wallet"
+      initialRouteName="guard_stack"
       screenOptions={{
         headerShown: false,
         drawerStyle: {
