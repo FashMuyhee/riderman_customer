@@ -54,7 +54,10 @@ export const addBankAccountSchema = yup.object().shape({
 });
 export const withdrawFundSchema = yup.object().shape({
   bankId: yup.number().required('Required'),
-  amount: yup.string().required('Required'),
+  amount: yup
+    .number()
+    .required('Required')
+    .min(5000, 'You can only withdraw minimum of 5000'),
 });
 
 export const profileUpdateSchema = yup.object().shape({

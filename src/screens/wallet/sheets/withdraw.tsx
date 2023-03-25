@@ -9,7 +9,10 @@ import {useFormik} from 'formik';
 import {withdrawFundSchema} from '@utils/validator';
 import {isEmptyString} from '@utils/helper';
 import NairaMoneyIcon from '@components/icons/naira-money';
-import {useWithdrawToBankMutation} from '@services/rtk-queries/wallet';
+import {
+  useGetWalletBalanceQuery,
+  useWithdrawToBankMutation,
+} from '@services/rtk-queries/wallet';
 import {Alert} from 'react-native';
 import {moneyFormat} from '@components/MoneyText';
 import Snackbar from 'react-native-snackbar';
@@ -23,6 +26,11 @@ const WithdrawSheet = React.forwardRef<
   const snapPoints = useMemo(() => ['60%', '70%'], []);
   const {data: banks, isLoading: fetchingBanks} = useGetBankAccountsQuery();
   const [withdraw] = useWithdrawToBankMutation();
+  const {data} = useGetWalletBalanceQuery();
+  const balance = data?.data;
+
+  const isInsufficient =
+    parseInt(balance?.accountBalance as string) / 100 < 5000;
 
   const {
     values,
@@ -31,7 +39,8 @@ const WithdrawSheet = React.forwardRef<
     isSubmitting,
     setSubmitting,
     setFieldValue,
-    handleChange,resetForm
+    handleChange,
+    resetForm,
   } = useFormik({
     initialValues: {
       amount: '',
@@ -58,8 +67,8 @@ const WithdrawSheet = React.forwardRef<
             values.amount,
           )} has been successfully transfer to your bank account, it might take few minutes before reflecting`,
         );
-        onClose()
-        resetForm()
+        onClose();
+        resetForm();
       } else {
         RenderSnackbar({
           text: `Sorry we couldn't transfer to your bank, Please Try Again`,
@@ -124,6 +133,18 @@ const WithdrawSheet = React.forwardRef<
           color="white"
           mb="20px"
         />
+        {isInsufficient && (
+          <Text
+            bold
+            fontSize="lg"
+            mb="10px"
+            textAlign="center"
+            color="darkBlue.600"
+            textTransform="uppercase">
+            insufficient balance
+          </Text>
+        )}
+
         <TextInput
           leftIcon={<NairaMoneyIcon />}
           leftIconDivider
@@ -133,6 +154,7 @@ const WithdrawSheet = React.forwardRef<
           hasError={!isEmptyString(errors.amount)}
           hintMessage={errors.amount}
           onChange={handleChange('amount')}
+          disabled={isInsufficient}
         />
 
         {(banks?.length as number) > 0 ? (
@@ -155,6 +177,7 @@ const WithdrawSheet = React.forwardRef<
           title="Proceed to Withdraw"
           isLoading={isSubmitting}
           onPress={handleSubmit}
+          isDisabled={isInsufficient}
         />
       </View>
     </BottomSheetWrapperSnappy>
