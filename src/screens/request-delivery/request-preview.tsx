@@ -1,7 +1,16 @@
 import {MoneyText, ScreenWrapper, Button, RenderSnackbar} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, Text, Image, Center, ScrollView, Box, HStack, useDisclose} from 'native-base';
+import {
+  View,
+  Text,
+  Image,
+  Center,
+  ScrollView,
+  Box,
+  HStack,
+  useDisclose,
+} from 'native-base';
 import React, {useEffect, useMemo, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
@@ -25,6 +34,7 @@ import pusherEventService from '@services/Pusher';
 import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 import useCountDown from 'react-countdown-hook';
 import PaymentScreen from '@screens/payment-screeen';
+import {Alert} from 'react-native';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -37,7 +47,13 @@ type PackageInfoProps = {
   instruction: string;
   index: number;
 };
-export const PackageDetail = ({contactName, contactPhone, packageType, index, instruction}: PackageInfoProps) => {
+export const PackageDetail = ({
+  contactName,
+  contactPhone,
+  packageType,
+  index,
+  instruction,
+}: PackageInfoProps) => {
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
@@ -66,11 +82,18 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index, in
 const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
-  const [progressStatus, setProgressStatus] = useState<PickupRequestProgressStatus>('pending');
+  const [progressStatus, setProgressStatus] =
+    useState<PickupRequestProgressStatus>('pending');
   const pickupInfo = storage.getString('_pickupInfo');
-  const {rider, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(
-    pickupInfo as string,
-  ) as PickupRequestInfo;
+  const {
+    rider,
+    delivery_packages,
+    paymentChannel,
+    totalAmount,
+    delivery_locations,
+    pickupLocation,
+    pickupRequestId,
+  } = JSON.parse(pickupInfo as string) as PickupRequestInfo;
   const [duration, setDuration] = useState('');
   const pusher = pusherEventService.pusher;
   const [isCancelling, setIsCancelling] = useState(false);
@@ -89,7 +112,10 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   };
 
   const getTimeAway = async () => {
-    const {duration} = await deliveryService.calcDistanceMatrix({x: rider.location, y: pickupLocation});
+    const {duration} = await deliveryService.calcDistanceMatrix({
+      x: rider.location,
+      y: pickupLocation,
+    });
     setDuration(duration.text);
     setTimeout(() => {
       toggleProgress();
@@ -99,14 +125,18 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const handleCancelPickup = async () => {
     try {
       setIsCancelling(true);
-      const res = await deliveryService.cancelPickupRequest(pickupRequestId.toString());
+      const res = await deliveryService.cancelPickupRequest(
+        pickupRequestId.toString(),
+      );
       if (res?.success) {
         toggleCancel();
         handleSelectNewRider();
         setIsCancelling(false);
       }
     } catch (error) {
-      RenderSnackbar({text: `We couldn't process your request, Please try again`});
+      RenderSnackbar({
+        text: `We couldn't process your request, Please try again`,
+      });
       setIsCancelling(false);
     }
   };
@@ -143,7 +173,17 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         }
         //  PaymentConfirmed
         if (eventName === 'PaymentConfirmed') {
-          navigation.navigate('package_status');
+          Alert.alert(
+            'Payment Confirmed',
+            'Your Package has been set to processing, you can track your package progress in the delivery history screen',
+            [
+              {
+                text: 'Go Home',
+                onPress: () => navigation.navigate('home'),
+              },
+            ],
+          );
+          // navigation.navigate('package_status');
         }
       },
     });
@@ -161,7 +201,9 @@ const RequestPreview = ({navigation}: RequestPreview) => {
     onEventChange();
     start();
     return () => {
-      pusher.unsubscribe({channelName: `private-pickupRequests.${pickupRequestId}`});
+      pusher.unsubscribe({
+        channelName: `private-pickupRequests.${pickupRequestId}`,
+      });
       pusher.disconnect();
     };
   }, []);
@@ -177,9 +219,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         </Center>
         <Box mt="4%" minH={hp(65)}>
           {/* company info */}
-          <HStack borderTopRadius="2xl" bg="accent" h="80px" alignItems="center" justifyContent="space-between" px="10px">
+          <HStack
+            borderTopRadius="2xl"
+            bg="accent"
+            h="80px"
+            alignItems="center"
+            justifyContent="space-between"
+            px="10px">
             {/* TODO: add compnay logo */}
-            <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
+            <Image
+              source={logo}
+              alt="company logo"
+              rounded="full"
+              bg="gray.400"
+              size="50px"
+            />
             <View w="60%">
               <Text fontSize={hp(1.3)} fontWeight="600">
                 {rider?.company?.name}
@@ -205,8 +259,17 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             plateNo={rider?.bikeDetails.licenseNumber}
             rating={rider?.rating}
           />
-          <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
-          <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
+          <RequestLocations
+            pickUp={pickupLocation.address}
+            {...{deliveryLocations}}
+          />
+          <View
+            borderWidth={1}
+            mx="10px"
+            mt="20px"
+            borderColor="gray.200"
+            borderStyle="dashed"
+          />
           {delivery_packages?.map((item, key) => (
             <PackageDetail
               key={key}
@@ -217,9 +280,21 @@ const RequestPreview = ({navigation}: RequestPreview) => {
               instruction={item.deliveryInstructions}
             />
           ))}
-          <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
+          <View
+            borderWidth={1}
+            mx="10px"
+            mt="10px"
+            borderColor="gray.200"
+            borderStyle="dashed"
+          />
         </Box>
-        <HStack alignItems="center" position="absolute" bottom="0" justifyContent="space-between" mt="5%" px="10px">
+        <HStack
+          alignItems="center"
+          position="absolute"
+          bottom="0"
+          justifyContent="space-between"
+          mt="5%"
+          px="10px">
           <Button
             title="Call Rider"
             w="full"
@@ -242,7 +317,12 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         onCallRider={() => openDialer(rider?.user.phone)}
         {...{pickupLocation}}
       />
-      <CancelRequestSheet {...{isCancelling}} visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
+      <CancelRequestSheet
+        {...{isCancelling}}
+        visible={visibleCancel}
+        onCancel={handleCancelPickup}
+        onClose={handleOnCloseCancelModal}
+      />
       <PaymentScreen
         isVisible={showPaymentScreen}
         onClose={() => setShowPaymentScreen(false)}
