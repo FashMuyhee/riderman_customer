@@ -1,6 +1,8 @@
 import {
+  ITransactionResponse,
   IWalletResponse,
   TipRiderForm,
+  TransactionItem,
   WithdrawToBankForm,
 } from '@models/wallet';
 import {createApi} from '@reduxjs/toolkit/query/react';
@@ -66,6 +68,30 @@ export const walletApi = createApi({
       },
       invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
     }),
+    getTransactionHistory: builder.query<TransactionItem[], number>({
+      query(page) {
+        return {
+          url: `customer/transactions?page=${page}`,
+          method: 'get',
+        };
+      },
+      transformResponse: (returnValue: ITransactionResponse) => {
+        // const transformed = returnValue.data.map(i => {
+        //   return {...i,account:`${}`};
+        // });
+        return !!returnValue?.data ? returnValue?.data : [];
+      },
+      // @ts-ignore
+      providesTags: (result: TransactionItem[]) =>
+        result
+          ? [
+              ...result.map(({transactionId}) => ({
+                type: 'TransactionRequest',
+                id: transactionId,
+              })),
+            ]
+          : [{type: 'TransactionRequest', id: 'transactions'}],
+    }),
   }),
 });
 
@@ -75,4 +101,5 @@ export const {
   useFundWithNewCardMutation,
   useWithdrawToBankMutation,
   useSendTipToRiderMutation,
+  useGetTransactionHistoryQuery,
 } = walletApi;

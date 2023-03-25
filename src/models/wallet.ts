@@ -1,4 +1,5 @@
 import {StatusCode} from './auth';
+import {PaymentMethod} from './delivery';
 
 export type WalletData = {
   accountName: string;
@@ -22,9 +23,32 @@ export type TipRiderForm = {
 };
 export type WithdrawToBankForm = {amount: string; bankId: number};
 
+export type TransactionItem = {
+  transactionId: number;
+  userId: number;
+  reference: string;
+  type: 'debit' | 'credit';
+  amount: number;
+  purpose: string;
+  paymentChannel: PaymentMethod;
+  reason: string;
+  createdAt: Date;
+  updatedAt: Date;
+  meta: {
+    recipient: string;
+    note: string;
+  };
+};
+
 export interface IWalletResponse {
   message: string;
   success: boolean;
   statusCode: StatusCode;
   data: WalletData;
+}
+export interface ITransactionResponse {
+  message: string;
+  success: boolean;
+  statusCode: StatusCode;
+  data: TransactionItem[];
 }
