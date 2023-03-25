@@ -84,6 +84,7 @@ const ProfileImage = () => {
       const res = await authService.updateImage(imageBase64);
       if (res?.statusCode === 200) {
         RenderSnackbar({text: res.message, duration: 'LONG'});
+        // @ts-ignore
         updateUser({...user, image: res?.data?.image});
         setImage(null);
       } else {

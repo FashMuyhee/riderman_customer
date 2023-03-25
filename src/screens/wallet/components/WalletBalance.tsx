@@ -38,7 +38,7 @@ const WalletBalance = () => {
           Wallet Balance
         </Heading>
         <Heading color="white" mt="10px">
-          {moneyFormat(walletInfo?.accountBalance, true)}
+          {moneyFormat(parseFloat(walletInfo?.accountBalance) / 100, true)}
         </Heading>
       </Center>
       <Text textTransform="uppercase" textAlign="center" mt="10px">

@@ -14,7 +14,7 @@ export const walletApi = createApi({
     getWalletBalance: builder.query<IWalletResponse, void>({
       query() {
         return {
-          url: ``,
+          url: `wallet`,
           method: 'get',
         };
       },
