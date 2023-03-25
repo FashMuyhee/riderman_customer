@@ -9,23 +9,23 @@ import {
 import avatar from '@images/avatar.png';
 import EditIcon from '@components/icons/edit';
 import {AuthContext} from '@contexts/AuthContext';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {GuardStackParamList} from '@navigations/param-list';
+import {useNavigation} from '@react-navigation/native';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   const {user, logout} = React.useContext(AuthContext);
-  const navigation = useNavigation<NavigationProp<GuardStackParamList>>();
-
+  const navigation = useNavigation();
+  const IMAGE_SELECTED = !!user?.image;
   return (
     <View style={{flex: 1, marginTop: '5%'}}>
       <DrawerContentScrollView {...props} style={{paddingHorizontal: 30}}>
         <Pressable
           mt="4"
           mb="20px"
+          // @ts-ignore
           onPress={() => navigation.navigate('profile')}>
           <HStack alignItems="center" space="3">
             <Image
-              source={avatar}
+              source={IMAGE_SELECTED ? {uri: user?.image} : avatar}
               rounded="full"
               style={{
                 width: 60,

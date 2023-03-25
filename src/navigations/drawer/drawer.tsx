@@ -1,7 +1,7 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawerContent';
-import {ChevronLeftIcon, useTheme, View, Pressable} from 'native-base';
+import { useTheme, View} from 'native-base';
 import GuardStack from '../stack/guard';
 import TimeIcon from '@components/icons/time';
 import MyWallet from '@screens/wallet';
@@ -9,8 +9,7 @@ import DrawerWalletIcon from '@components/icons/drawer-wallet';
 import {FONT} from '@utils/constant';
 import {useNavigation} from '@react-navigation/native';
 import DeliveryHistoryTab from '@screens/delivery-history';
-import {Platform} from 'react-native';
-import ArrowBackIcon from '@components/icons/arrow-back';
+import Profile from '@screens/profile';
 
 const Drawer = createDrawerNavigator();
 
@@ -22,7 +21,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
       defaultStatus="closed"
-      initialRouteName="guard_stack"
+      initialRouteName="wallet"
       screenOptions={{
         headerShown: false,
         drawerStyle: {
@@ -44,6 +43,7 @@ const DrawerNavigator = () => {
           fontSize: 14,
           marginLeft: -10,
         },
+        headerTintColor: 'white',
         headerStyle: {
           backgroundColor: colors.main,
         },
@@ -53,14 +53,6 @@ const DrawerNavigator = () => {
           textTransform: 'capitalize',
           fontSize: 16,
         },
-        headerLeft: () => (
-          <Pressable onPress={goBack} ml="10%">
-            {Platform.select({
-              ios: <ChevronLeftIcon color="white" size={4} />,
-              android: <ArrowBackIcon />,
-            })}
-          </Pressable>
-        ),
       }}>
       <Drawer.Screen
         name="guard_stack"
@@ -79,7 +71,7 @@ const DrawerNavigator = () => {
           drawerLabel: 'Delivery History',
           drawerIcon: ({focused}) => <TimeIcon isFocused={focused} />,
           headerShown: true,
-          headerTitle:'Delivery History'
+          headerTitle: 'Delivery History',
         }}
       />
       <Drawer.Screen
@@ -89,6 +81,16 @@ const DrawerNavigator = () => {
           drawerLabel: 'Wallet',
           drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
           headerShown: true,
+        }}
+      />
+      <Drawer.Screen
+        name="profile"
+        component={Profile}
+        options={{
+          drawerLabel: 'Earnings',
+          drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
+          headerShown: true,
+          drawerItemStyle: {display: 'none'},
         }}
       />
     </Drawer.Navigator>

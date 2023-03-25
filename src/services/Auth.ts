@@ -242,6 +242,35 @@ class AuthService {
       return message;
     }
   }
+
+  /**
+   * update profile image
+   * @param  {string} image
+   */
+  async updateImage(image: string) {
+    try {
+      const result = await httpHandler({
+        method: 'patch',
+        url: '/profile/image/upload',
+        data: {image},
+      });
+      const data: ILoginRegisterResponse = result.data;
+      if (data.success) {
+        return data;
+      }
+    } catch (error) {
+      const message: ILoginRegisterResponse = {
+        //@ts-ignore
+        message: error?.response.data.message,
+        success: false,
+        //@ts-ignore
+        statusCode: error?.response?.data?.statusCode,
+        //@ts-ignore
+        errors: error?.response.data?.errors as any,
+      };
+      return message;
+    }
+  }
 }
 
 const authService = new AuthService();

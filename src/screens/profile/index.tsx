@@ -15,12 +15,9 @@ import {IUpdateForm, IUser} from '@models/auth';
 import authService from '@services/Auth';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
+import ProfileImage from './components/ProfileImage';
 
-type Props = {
-  navigation: StackNavigationProp<GuardStackParamList, 'profile'>;
-};
-
-const Profile = (props: Props) => {
+const Profile = () => {
   const {user, updateUser} = useContext(AuthContext);
   const {
     values,
@@ -54,7 +51,6 @@ const Profile = (props: Props) => {
       if (res?.statusCode === 200) {
         RenderSnackbar({text: res.message, duration: 'LONG'});
         updateUser(res.data as IUser);
-        props.navigation.goBack();
       } else if (res?.statusCode === 400) {
         RenderSnackbar({text: 'Invalid Input', duration: 'LONG'});
       } else {
@@ -79,6 +75,7 @@ const Profile = (props: Props) => {
   return (
     <ScreenWrapper translucentBar={false} bgColor="bg" barStyle="light-content">
       <ScrollView px="20px">
+        <ProfileImage />
         <TextInput
           label="First Name"
           mt="10px"
