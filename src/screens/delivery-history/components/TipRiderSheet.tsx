@@ -56,7 +56,7 @@ const TipRiderSheet = React.forwardRef<
 >(({onClose, riderId}, ref) => {
   const snapPoints = useMemo(() => ['50%'], []);
   const [amount, setAmount] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [sendTip] = useSendTipToRiderMutation();
 
   const handleSubmit = async () => {
@@ -71,7 +71,10 @@ const TipRiderSheet = React.forwardRef<
         amount: parseFloat(amount) * 100,
         riderId,
       }).unwrap();
+      setIsLoading(false);
       if (res.success) {
+        setAmount('');
+        onClose();
         Alert.alert(
           'Tip Sent',
           `${moneyFormat(amount)} has been sent to rider wallet`,
@@ -82,6 +85,7 @@ const TipRiderSheet = React.forwardRef<
         });
       }
     } catch (error) {
+      setIsLoading(false);
       RenderSnackbar({
         text: `Sorry, Please Try Again`,
       });
@@ -123,6 +127,7 @@ const TipRiderSheet = React.forwardRef<
           placeholder="Enter amount"
           value={amount}
           onChange={setAmount}
+          keyboardType="number-pad"
         />
         <Text bold mt="10px">
           Select Payment Method

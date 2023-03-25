@@ -8,6 +8,7 @@ import TipRiderSheet from './TipRiderSheet';
 import {useGetDeliveriesByStatusQuery} from '@services/rtk-queries/deliveries';
 import DeliveryItem, {DeliverySkeleton} from './DeliveryItem';
 import {formatDeliveriesByDate} from '@utils/helper';
+import RateSheet from './RateSheet';
 
 type Props = {
   status: DeliveryStatus;
@@ -16,6 +17,7 @@ type Props = {
 const HistoryList = ({status}: Props) => {
   const deliveryDetailSheet = React.useRef<BottomSheet>(null);
   const tipSheet = React.useRef<BottomSheet>(null);
+  const rateSheet = React.useRef<BottomSheet>(null);
   const [page, setPage] = useState(1);
   const {data, isLoading, isFetching} = useGetDeliveriesByStatusQuery({
     page,
@@ -66,15 +68,24 @@ const HistoryList = ({status}: Props) => {
           deliveryDetailSheet.current?.close();
           tipSheet.current?.snapToIndex(0);
         }}
+        handleRateRider={() => {
+          deliveryDetailSheet.current?.close();
+          rateSheet.current?.snapToIndex(0);
+        }}
         deliveryStatus={status}
         ref={deliveryDetailSheet}
         onClose={() => deliveryDetailSheet.current?.close()}
         item={selectedItem as IDeliveryItem}
       />
       <TipRiderSheet
-        riderId={selectedItem?.pickupRequest.riderId.toString() as string}
+        riderId={'1'}
         ref={tipSheet}
         onClose={() => tipSheet.current?.close()}
+      />
+      <RateSheet
+        riderId={'1'}
+        ref={rateSheet}
+        onClose={() => rateSheet.current?.close()}
       />
     </ScreenWrapper>
   );

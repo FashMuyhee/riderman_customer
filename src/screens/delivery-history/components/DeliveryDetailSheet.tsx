@@ -22,10 +22,11 @@ type Props = {
   onClose: () => void;
   deliveryStatus: DeliveryStatus;
   handleTipRider: () => void;
+  handleRateRider: () => void;
 };
 
 const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
-  ({onClose, deliveryStatus, handleTipRider, item}, ref) => {
+  ({onClose, deliveryStatus, handleTipRider, item, handleRateRider}, ref) => {
     const snapPoints = useMemo(() => ['65%', '80%'], []);
     const {rider, pickupRequest, deliveryId} = item || {};
     const [confirmDelivery, {isLoading}] = useConfirmDeliveryMutation();
@@ -79,16 +80,29 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
       }
 
       return (
-        <Button
-          onPress={handleTipRider}
-          title="Tip Rider"
-          leftIcon={
-            <RNImage
-              source={nairaCoin}
-              style={{width: 30, height: 30, resizeMode: 'contain'}}
-            />
-          }
-        />
+        <HStack
+          alignItems="center"
+          justifyContent="space-between"
+          mt="5%"
+          px="10px">
+          <Button
+            onPress={handleTipRider}
+            title="Tip Rider"
+            w="48%"
+            leftIcon={
+              <RNImage
+                source={nairaCoin}
+                style={{width: 30, height: 30, resizeMode: 'contain'}}
+              />
+            }
+          />
+          <Button
+            bg="black"
+            onPress={handleRateRider}
+            title="Rate Delivery"
+            w="48%"
+          />
+        </HStack>
       );
     };
 
