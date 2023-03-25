@@ -127,9 +127,8 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
             alignItems="center"
             justifyContent="space-between"
             px="10px">
-            {/* TODO company logo */}
             <Image
-              source={companyLogo}
+              source={{uri: rider?.user?.image as string}}
               alt={`${rider?.companyName}_logo`}
               rounded="full"
               bg="gray.400"

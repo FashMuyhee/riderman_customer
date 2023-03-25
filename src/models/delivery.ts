@@ -1,8 +1,18 @@
 import {IUser, StatusCode} from './auth';
 
 export type PaymentMethod = 'cash' | 'card' | 'wallet';
-export type DeliveryStatus = 'processing' | 'confirmed' | 'completed' | 'active';
-export type PickupRequestProgressStatus = 'pending' | 'accepted' | 'rejected' | 'cancelled' | 'picked' | 'too-long';
+export type DeliveryStatus =
+  | 'processing'
+  | 'confirmed'
+  | 'completed'
+  | 'active';
+export type PickupRequestProgressStatus =
+  | 'pending'
+  | 'accepted'
+  | 'rejected'
+  | 'cancelled'
+  | 'picked'
+  | 'too-long';
 
 type BikeDetails = {
   licenseNumber: string;
@@ -114,6 +124,7 @@ export type ConfirmPickupFormBody = {
 export interface IDeliveryItem {
   deliveryId: number;
   rider: {
+    riderId: number;
     user: IUser;
     companyId: number;
     companyName: string;
