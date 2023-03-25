@@ -90,7 +90,9 @@ const DrawerNavigator = () => {
         component={Transactions}
         options={{
           drawerLabel: 'Transactions',
-          drawerIcon: ({focused}) => <DrawerWalletIcon isFocused={focused} />,
+          drawerIcon: ({focused}) => (
+            <DrawerTransactionIcon isFocused={focused} />
+          ),
           headerShown: true,
         }}
       />
