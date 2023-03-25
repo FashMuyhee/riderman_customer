@@ -15,7 +15,21 @@ export const moneyFormat = (value: number | string, showNaira: boolean = false) 
   const money = isNaN(moneyValue) ? 0 : moneyValue;
   const formatted = money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-  return showNaira ? `\u20A6 ${formatted}` : formatted;
+  return showNaira ? `\u20A6${formatted}` : formatted;
+};
+
+export const amountToNaira = (value: number | string) => {
+  const moneyValue = typeof value === 'number' ? value : parseFloat(value);
+  const money = isNaN(moneyValue) ? 0 : moneyValue;
+
+  return money / 100;
+};
+
+export const amountToKobo = (value: number | string) => {
+  const moneyValue = typeof value === 'number' ? value : parseFloat(value);
+  const money = isNaN(moneyValue) ? 0 : moneyValue;
+
+  return money * 100;
 };
 
 const MoneyText = ({moneyValue, showCurrency = true, percentage, currency = 'ngn', ...restProps}: MoneyTextProps) => {
@@ -31,9 +45,9 @@ const MoneyText = ({moneyValue, showCurrency = true, percentage, currency = 'ngn
     }
   };
   return (
-    <HStack alignItems="center" space="1">
+    <HStack alignItems="center">
       {showCurrency && <Text {...restProps}>{getCurrency()}</Text>}
-      <Text {...restProps}>
+      <Text ml="1px" {...restProps}>
         {/* @ts-ignore */}
         {percentage ? `${value}` : moneyFormat(value)}
       </Text>
