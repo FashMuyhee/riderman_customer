@@ -76,9 +76,6 @@ export const walletApi = createApi({
         };
       },
       transformResponse: (returnValue: ITransactionResponse) => {
-        // const transformed = returnValue.data.map(i => {
-        //   return {...i,account:`${}`};
-        // });
         return !!returnValue?.data ? returnValue?.data : [];
       },
       // @ts-ignore
