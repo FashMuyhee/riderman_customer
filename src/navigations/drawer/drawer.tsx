@@ -12,6 +12,8 @@ import DeliveryHistoryTab from '@screens/delivery-history';
 import Profile from '@screens/profile';
 import Transactions from '@screens/wallet/transactions';
 import DrawerTransactionIcon from '@components/icons/drawer-order';
+import ProfileIcon from '@components/icons/profile';
+import HomeIcon from '@components/icons/home';
 
 const Drawer = createDrawerNavigator();
 
@@ -60,10 +62,9 @@ const DrawerNavigator = () => {
         name="guard_stack"
         component={GuardStack}
         options={{
-          drawerLabel: 'Delivery History',
-          drawerIcon: ({focused}) => <TimeIcon isFocused={focused} />,
+          drawerLabel: 'Home',
+          drawerIcon: ({focused}) => <HomeIcon active={focused} />,
           headerShown: false,
-          drawerItemStyle: {display: 'none'},
         }}
       />
       <Drawer.Screen
@@ -100,12 +101,9 @@ const DrawerNavigator = () => {
         name="profile"
         component={Profile}
         options={{
-          drawerLabel: 'Earnings',
-          drawerIcon: ({focused}) => (
-            <DrawerTransactionIcon isFocused={focused} />
-          ),
+          drawerLabel: 'Profile',
+          drawerIcon: ({focused}) => <ProfileIcon active={focused} />,
           headerShown: true,
-          drawerItemStyle: {display: 'none'},
         }}
       />
     </Drawer.Navigator>
