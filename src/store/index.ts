@@ -1,6 +1,7 @@
 import {configureStore, ConfigureStoreOptions} from '@reduxjs/toolkit';
 import {bankApi} from '@services/rtk-queries/banks';
 import {deliveryApi} from '@services/rtk-queries/deliveries';
+import {notificationApi} from '@services/rtk-queries/notification';
 import {paymentApi} from '@services/rtk-queries/payments';
 import {walletApi} from '@services/rtk-queries/wallet';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
@@ -14,6 +15,7 @@ export const createStore = (
       [paymentApi.reducerPath]: paymentApi.reducer,
       [walletApi.reducerPath]: walletApi.reducer,
       [bankApi.reducerPath]: bankApi.reducer,
+      [notificationApi.reducerPath]: notificationApi.reducer,
     },
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware().concat(
@@ -21,6 +23,7 @@ export const createStore = (
         paymentApi.middleware,
         walletApi.middleware,
         bankApi.middleware,
+        notificationApi.middleware,
       ),
     ...options,
   });
