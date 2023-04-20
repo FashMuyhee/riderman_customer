@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "arch --x86_64 react-native run-ios",
     "start": "react-native start",
     "start_port": "react-native start --port=6001",
     "test": "jest",
