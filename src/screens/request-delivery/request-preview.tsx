@@ -1,12 +1,21 @@
 import {MoneyText, ScreenWrapper, Button, RenderSnackbar} from '@components';
 import {GuardStackParamList} from '@navigations/param-list';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, Text, Image, Center, ScrollView, Box, HStack, useDisclose} from 'native-base';
+import {
+  View,
+  Text,
+  Image,
+  Center,
+  ScrollView,
+  Box,
+  HStack,
+  useDisclose,
+} from 'native-base';
 import React, {useEffect, useMemo, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
-import rider from '@images/rider.png';
+import riderImage from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from './components/SelectPaymentMethod';
 import RiderInfo from './components/RiderInfo';
@@ -15,12 +24,17 @@ import {PackageNote, PackageType} from './components/SummaryItem';
 import UserIcon from '@components/icons/user';
 import PhoneIcon from '@components/icons/phone';
 import CallIcon from '@components/icons/call';
-import RequestProgressSheet, {RequestProgressStatus} from './components/RequestProgressSheet';
+import RequestProgressSheet from './components/RequestProgressSheet';
 import CancelRequestSheet from './components/CancelRequestSheet';
 import {storage} from '@services/TokenManager';
-import {PickupRequestInfo} from '@models/delivery';
-import {Linking} from 'react-native';
+import {PickupRequestInfo, PickupRequestProgressStatus} from '@models/delivery';
 import deliveryService from '@services/Delivery';
+import openDialer from '@utils/open-dialer';
+import pusherEventService from '@services/Pusher';
+import {PusherEvent} from '@pusher/pusher-websocket-react-native';
+import useCountDown from 'react-countdown-hook';
+import PaymentScreen from '@screens/payment-screeen';
+import {Alert} from 'react-native';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -30,9 +44,16 @@ type PackageInfoProps = {
   contactName: string;
   contactPhone: string;
   packageType: string[];
+  instruction: string;
   index: number;
 };
-export const PackageDetail = ({contactName, contactPhone, packageType, index}: PackageInfoProps) => {
+export const PackageDetail = ({
+  contactName,
+  contactPhone,
+  packageType,
+  index,
+  instruction,
+}: PackageInfoProps) => {
   return (
     <View px="15px" mt="4%">
       <HStack alignItems="center" space="2">
@@ -53,7 +74,7 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index}: P
           <Text fontSize="12px">{contactPhone}</Text>
         </HStack>
       </HStack>
-      <PackageNote rounded note="No break am " />
+      <PackageNote rounded note={instruction} />
     </View>
   );
 };
@@ -61,10 +82,23 @@ export const PackageDetail = ({contactName, contactPhone, packageType, index}: P
 const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
-  const [progressStatus, setProgressStatus] = useState<RequestProgressStatus>('progress');
+  const [progressStatus, setProgressStatus] =
+    useState<PickupRequestProgressStatus>('pending');
   const pickupInfo = storage.getString('_pickupInfo');
-  const {riderId, delivery_packages, paymentChannel, totalAmount, delivery_locations, pickupLocation, pickupRequestId} = JSON.parse(pickupInfo as string) as PickupRequestInfo;
+  const {
+    rider,
+    delivery_packages,
+    paymentChannel,
+    totalAmount,
+    delivery_locations,
+    pickupLocation,
+    pickupRequestId,
+  } = JSON.parse(pickupInfo as string) as PickupRequestInfo;
   const [duration, setDuration] = useState('');
+  const pusher = pusherEventService.pusher;
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [showPaymentScreen, setShowPaymentScreen] = useState(false);
+  const [timeLeft, {start, reset}] = useCountDown(600000, 1000);
 
   const deliveryLocations = useMemo(() => {
     return delivery_locations.map(location => {
@@ -78,32 +112,100 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   };
 
   const getTimeAway = async () => {
-    const {duration} = await deliveryService.calcDistanceMatrix({x: riderId.location, y: pickupLocation});
+    const {duration} = await deliveryService.calcDistanceMatrix({
+      x: rider.location,
+      y: pickupLocation,
+    });
     setDuration(duration.text);
     setTimeout(() => {
       toggleProgress();
-    }, 10000);
+    }, 500);
   };
 
   const handleCancelPickup = async () => {
     try {
-      const res = await deliveryService.cancelPickupRequest(pickupRequestId.toString());
+      setIsCancelling(true);
+      const res = await deliveryService.cancelPickupRequest(
+        pickupRequestId.toString(),
+      );
       if (res?.success) {
         toggleCancel();
-        RenderSnackbar({text: 'Select another rider'});
-        navigation.goBack();
+        handleSelectNewRider();
+        setIsCancelling(false);
       }
     } catch (error) {
-      RenderSnackbar({text: `We couldn't process your request, Please try again`});
+      RenderSnackbar({
+        text: `We couldn't process your request, Please try again`,
+      });
+      setIsCancelling(false);
     }
   };
 
+  const handleSelectNewRider = () => {
+    RenderSnackbar({text: 'Select another rider'});
+    navigation.navigate('select_rider');
+  };
+
+  const onKeepWaiting = () => {
+    setProgressStatus('pending');
+    start();
+  };
+
   // PUSHER EVENT
-  const onEventChange = () => {};
+  const onEventChange = async () => {
+    await pusher.connect();
+
+    await pusher.subscribe({
+      channelName: `private-pickupRequests.${pickupRequestId}`,
+      onEvent: ({eventName, data}: PusherEvent) => {
+        // rejected
+        if (eventName === 'PickupRequestRejected') {
+          setProgressStatus('rejected');
+        }
+        // arrived
+        if (eventName === 'RiderArrived') {
+          RenderSnackbar({text: `Rider has arrived`, duration: 'LONG'});
+          setShowPaymentScreen(true);
+        }
+        // accepted
+        if (eventName === 'PickupRequestAccepted') {
+          setProgressStatus('accepted');
+        }
+        //  PaymentConfirmed
+        if (eventName === 'PaymentConfirmed') {
+          Alert.alert(
+            'Payment Confirmed',
+            'Your Package has been set to processing, you can track your package progress in the delivery history screen',
+            [
+              {
+                text: 'Go Home',
+                onPress: () => navigation.navigate('home'),
+              },
+            ],
+          );
+          // navigation.navigate('package_status');
+        }
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (timeLeft / 1000 === 1) {
+      setProgressStatus('too-long');
+      reset();
+    }
+  }, [timeLeft]);
 
   useEffect(() => {
     getTimeAway();
     onEventChange();
+    start();
+    return () => {
+      pusher.unsubscribe({
+        channelName: `private-pickupRequests.${pickupRequestId}`,
+      });
+      pusher.disconnect();
+    };
   }, []);
 
   return (
@@ -116,13 +218,25 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           </Text>
         </Center>
         <Box mt="4%" minH={hp(65)}>
-          {/* comoany info */}
-          <HStack borderTopRadius="2xl" bg="accent" h="80px" alignItems="center" justifyContent="space-between" px="10px">
+          {/* company info */}
+          <HStack
+            borderTopRadius="2xl"
+            bg="accent"
+            h="80px"
+            alignItems="center"
+            justifyContent="space-between"
+            px="10px">
             {/* TODO: add compnay logo */}
-            <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
+            <Image
+              source={logo}
+              alt="company logo"
+              rounded="full"
+              bg="gray.400"
+              size="50px"
+            />
             <View w="60%">
               <Text fontSize={hp(1.3)} fontWeight="600">
-                {riderId.company.name}
+                {rider?.company?.name}
               </Text>
               <HStack mt="10px" alignItems="center" space="2">
                 <TimeSolid />
@@ -139,38 +253,85 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           </HStack>
           {/* rider info */}
           {/* TODO: rider image */}
-          <RiderInfo image={rider} fullname={`${riderId.user?.firstName} ${riderId.user?.lastName}`} plateNo={riderId.bikeDetails.licenseNumber} rating={riderId.rating} />
-          <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
-          <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
-          {delivery_packages.map((item, key) => (
-            <PackageDetail key={key} contactName={item.recipient.name} contactPhone={item.recipient.phone} packageType={item.packageCategories} index={key + 1} />
+          <RiderInfo
+            image={riderImage}
+            fullname={`${rider?.user?.firstName} ${rider?.user?.lastName}`}
+            plateNo={rider?.bikeDetails.licenseNumber}
+            rating={rider?.rating}
+          />
+          <RequestLocations
+            pickUp={pickupLocation.address}
+            {...{deliveryLocations}}
+          />
+          <View
+            borderWidth={1}
+            mx="10px"
+            mt="20px"
+            borderColor="gray.200"
+            borderStyle="dashed"
+          />
+          {delivery_packages?.map((item, key) => (
+            <PackageDetail
+              key={key}
+              contactName={item.recipient.name}
+              contactPhone={item.recipient.phone}
+              packageType={item.packageCategories}
+              index={key + 1}
+              instruction={item.deliveryInstructions}
+            />
           ))}
-          <View borderWidth={1} mx="10px" mt="10px" borderColor="gray.200" borderStyle="dashed" />
+          <View
+            borderWidth={1}
+            mx="10px"
+            mt="10px"
+            borderColor="gray.200"
+            borderStyle="dashed"
+          />
         </Box>
-        <HStack alignItems="center" position="absolute" bottom="0" justifyContent="space-between" mt="5%" px="10px">
+        <HStack
+          alignItems="center"
+          position="absolute"
+          bottom="0"
+          justifyContent="space-between"
+          mt="5%"
+          px="10px">
           <Button
             title="Call Rider"
             w="full"
             leftIcon={<CallIcon />}
             onPress={() => {
-              Linking.openURL(`tel:+${riderId.user.phone}`);
+              openDialer(rider?.user.phone);
             }}
           />
         </HStack>
       </ScrollView>
-      {/* TODo pusher event for waiting and rec */}
+      {/* MODALS AND SHEET */}
       <RequestProgressSheet
-        onKeepWaiting={() => setProgressStatus('progress')}
+        {...{onKeepWaiting}}
         progressStatus={progressStatus}
         visible={visibleProgress}
         onClose={toggleProgress}
         onCancel={toggleCancel}
         deliveryLocations={delivery_locations}
-        onSelectNewRider={handleCancelPickup}
-        onCallRider={() => Linking.openURL(`tel:+${riderId.user.phone}`)}
+        onSelectNewRider={handleSelectNewRider}
+        onCallRider={() => openDialer(rider?.user.phone)}
         {...{pickupLocation}}
       />
-      <CancelRequestSheet visible={visibleCancel} onCancel={handleCancelPickup} onClose={handleOnCloseCancelModal} />
+      <CancelRequestSheet
+        {...{isCancelling}}
+        visible={visibleCancel}
+        onCancel={handleCancelPickup}
+        onClose={handleOnCloseCancelModal}
+      />
+      <PaymentScreen
+        isVisible={showPaymentScreen}
+        onClose={() => setShowPaymentScreen(false)}
+        onCancelRequest={() => {
+          setShowPaymentScreen(true);
+          navigation.navigate('select_rider');
+        }}
+        pickupInfo={JSON.parse(pickupInfo as string) as PickupRequestInfo}
+      />
     </ScreenWrapper>
   );
 };

@@ -21,8 +21,8 @@ const Login: React.FC<Props> = ({navigation}) => {
   // dannyff@fallinhay.com
   const {values, handleChange, handleSubmit, errors, isValid, isSubmitting, setSubmitting} = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'chukuma.adekunle@test.com',
+      password: 'SpaceAge123',
     },
     onSubmit: values => {
       handleLogin(values);

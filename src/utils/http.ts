@@ -1,5 +1,6 @@
+import {BaseQueryFn} from '@reduxjs/toolkit/dist/query';
 import tokenManagerService from '@services/TokenManager';
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import axiosRetry from 'axios-retry';
 
 export const BASE_URL = 'https://riderman-staging-1437fe2f7312.herokuapp.com';
@@ -12,7 +13,7 @@ export const BASE_URL = 'https://riderman-staging-1437fe2f7312.herokuapp.com';
  * @param  {} }
  */
 const httpHandler: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: `${BASE_URL}/api/v1`,
   headers: {
     'content-type': 'application/json',
   },
@@ -57,22 +58,28 @@ httpHandler.interceptors.request.use(
   },
 );
 
-// httpHandler.interceptors.response.use(
-//   response => {
-//     return response;
-//   },
-//   async function (error) {
-//     let originalRequest = error.config;
-
-//     // const serverMsg = error.response.data.message;
-//     // console.log('🚀 ~ file: http.ts ~ line 74 ~ serverMsg', serverMsg);
-
-//     // delayed token recognition from backend
-//     // if (serverMsg.includes('Cannot handle token prior to')) {
-//     //   return httpHandler(originalRequest);
-//     // }
-//     return Promise.reject(error);
-//   },
-// );
+export const axiosBaseQuery =
+  (
+    {baseUrl}: {baseUrl: string} = {baseUrl: ''},
+  ): BaseQueryFn<
+    {
+      url: string;
+      method: AxiosRequestConfig['method'];
+      data?: AxiosRequestConfig['data'];
+    },
+    unknown,
+    unknown
+  > =>
+  async ({url, method, data}) => {
+    try {
+      const result = await httpHandler({url: baseUrl + url, method, data});
+      return {data: result.data};
+    } catch (axiosError) {
+      let err = axiosError as AxiosError;
+      return {
+        error: {status: err.response?.status, data: err.response?.data},
+      };
+    }
+  };
 
 export default httpHandler;

@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import { useTheme, View} from 'native-base';
+import {useTheme, View} from 'native-base';
 import {hp} from '@utils/responsive';
 import MapView, {Marker} from 'react-native-maps';
 import {StyleSheet} from 'react-native';
@@ -8,9 +8,10 @@ import mapStyle from '@utils/map-style';
 import {G_MAP_KEY} from '@env';
 import MapViewDirections from 'react-native-maps-directions';
 
+// TODO coridnate stuff
 export type IMapSectionProps = {
   height?: number;
-  coordinates: {
+  coordinates?: {
     latitude: number;
     longitude: number;
   }[];

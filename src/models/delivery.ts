@@ -1,7 +1,19 @@
 import {IUser, StatusCode} from './auth';
 
-export type PaymentMethod = 'Cash' | 'Card' | 'Wallet';
-export type DeliveryStatus = 'Processing' | 'Confirmed' | 'Completed' | 'Active';
+export type PaymentMethod = 'cash' | 'card' | 'wallet';
+export type DeliveryStatus =
+  | 'processing'
+  | 'confirmed'
+  | 'completed'
+  | 'active';
+export type PickupRequestProgressStatus =
+  | 'pending'
+  | 'accepted'
+  | 'rejected'
+  | 'cancelled'
+  | 'picked'
+  | 'too-long';
+
 type BikeDetails = {
   licenseNumber: string;
   bikeBrand: string;
@@ -82,16 +94,17 @@ export type RiderCloseBy = {
 
 export type PickupRequestInfo = {
   pickupRequestId: number;
-  riderId: RiderCloseBy;
+  rider: RiderCloseBy;
   pickupLocation: LocationValue;
   delivery_locations: LocationValue[];
   delivery_packages: DeliveryPackage[];
   paymentChannel: PaymentMethod;
   totalDistance: string;
   totalAmount: number;
-  status: DeliveryStatus;
+  status: PickupRequestProgressStatus;
   createdAt: Date;
   updatedAt: Date;
+  paid: boolean;
 };
 
 export type PickupFormBody = {
@@ -107,6 +120,58 @@ export type ConfirmPickupFormBody = {
   riderId: string;
   pickupRequestId: string;
 };
+
+export interface IDeliveryItem {
+  deliveryId: number;
+  rider: {
+    riderId: number;
+    user: IUser;
+    companyId: number;
+    companyName: string;
+    bikeDetails: BikeDetails;
+    status: string;
+    state: string;
+    rating: string;
+  };
+  pickupRequest: {
+    customerId: number;
+    riderId: number;
+    pickupLocation: LocationValue;
+    deliveryLocations: Array<LocationValue>;
+    deliveryPackages: Array<DeliveryPackage>;
+    paymentChannel: PaymentMethod;
+    totalDistance: string;
+    totalAmount: string;
+    pickupRequestStatus: PickupRequestProgressStatus;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  deliveryStatus: PickupRequestProgressStatus;
+  processingAt: Date;
+  activeAt: Date;
+  completedAt: Date;
+  confirmedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IDeliveriesResponse {
+  success: boolean;
+  message: string;
+  data: Array<IDeliveryItem>;
+  statusCode: StatusCode;
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+  };
+}
+export interface IDeliveryResponse {
+  success: boolean;
+  message: string;
+  data: IDeliveryItem;
+  statusCode: StatusCode;
+}
 export interface RiderResponse {
   message: string;
   success: boolean;

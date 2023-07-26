@@ -3,7 +3,6 @@ import DeliveryHistoryTab from '@screens/delivery-history';
 import Home from '@screens/home/home';
 import Notifications from '@screens/notifications';
 import PackageStatusScreen from '@screens/package-status';
-import PaymentScreen from '@screens/payment-screeen';
 import RateDeliveryScreen from '@screens/rate-delivery';
 import {RequestDelivery} from '@screens/request-delivery/request-delivery';
 import RequestPreview from '@screens/request-delivery/request-preview';
@@ -73,13 +72,6 @@ const GuardStack = () => {
           headerShown: false,
         }}
         name="request_preview"
-      />
-      <StackNav.Screen
-        component={PaymentScreen}
-        options={{
-          headerShown: false,
-        }}
-        name="payment_screen"
       />
       <StackNav.Screen
         component={PackageStatusScreen}

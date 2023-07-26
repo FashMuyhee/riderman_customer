@@ -6,6 +6,7 @@ import SelectRiderModal from './components/SelectRiderSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
 import CompanyInfoSheet from './components/CompanyInfoSheet';
 import MapSection from './components/MapSection';
+import {hp} from '@utils/responsive';
 
 type ISelectRiderProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'select_rider'>;
@@ -22,9 +23,9 @@ const SelectRider: React.FC<ISelectRiderProps> = ({navigation}) => {
   };
 
   return (
-    <ScreenWrapper barStyle='dark-content'>
+    <ScreenWrapper barStyle="dark-content">
       <TransparentNavbar />
-      <MapSection />
+      <MapSection height={hp(43)} />
       <SelectRiderModal ref={selectRiderRef} handleCompanyInfo={handleOPencCompanySheet} />
       <CompanyInfoSheet
         ref={companyRef}

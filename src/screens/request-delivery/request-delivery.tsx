@@ -11,13 +11,21 @@ export type IRequestDeliveryProps = {
 };
 
 const initialValues: IDeliveryRequestBody = {
-  pickupLocation: {lat: '0', long: '0', address: ''},
-  deliveryLocation: {lat: '0', long: '0', address: ''},
-  instruction: '',
-  packageTypes: [],
-  weight: '',
+  pickupLocation: {
+    address: 'Tobbles Schools, Agege, Nigeria',
+    lat: '6.727503299999999',
+    long: '3.304060099999999',
+  },
+  deliveryLocation: {
+    address: '1 Ibrahim Kolapo St, 112105, Agege, Ogun State, Nigeria',
+    lat: '6.7306514',
+    long: '3.3027568',
+  },
+  instruction: 'Fragile',
+  packageTypes: ['Wears'],
+  weight: '1',
   packageNo: '',
-  rName: '',
+  rName: 'Ade Olu',
   rPhone: '',
   rEmail: '',
 };

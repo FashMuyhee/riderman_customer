@@ -1,19 +1,22 @@
-import {DateListTitle, ScreenWrapper} from '@components';
-import {View, Text, HStack, Circle} from 'native-base';
-import React from 'react';
+import {FlatList, ScreenWrapper} from '@components';
+import {Notification} from '@models/notification';
+import {useGetNotificationsQuery} from '@services/rtk-queries/notification';
+import dayjs from 'dayjs';
+import {View, Text, HStack, Circle, VStack} from 'native-base';
+import React, {useState} from 'react';
 
 type Props = {};
 
 type NotificationProps = {
-  company: string;
-  rider: string;
   message: string;
-  timeDate: string;
+  title: string;
+  timeDate: Date;
+  read: boolean;
 };
 
-const NotificationItem = ({company, rider, message, timeDate}: NotificationProps) => {
+const NotificationItem = ({title, message, timeDate, read}: NotificationProps) => {
   return (
-    <HStack
+    <VStack
       bg="white"
       minH="80px"
       mb="10px"
@@ -23,26 +26,41 @@ const NotificationItem = ({company, rider, message, timeDate}: NotificationProps
       borderBottomColor="grey.500"
       borderRightColor="grey.500"
       borderLeftWidth={10}
-      px="20px"
+      px="10px"
       py="10px"
       borderLeftColor="lightAccent">
-      <View w="3/4">
-        <Text fontSize="xs">{`${rider} from ${company} ${message}`}</Text>
-      </View>
-      <View alignItems="flex-end" w="100px" justifyContent="space-between">
-        <Circle bg="red.700" size={3} />
-        <Text fontSize="xs" color="muted.400">
-          5:30PM
+      <View>
+        <Text bold fontSize="sm">
+          {title}
         </Text>
+        <Text fontSize="xs">{message}</Text>
       </View>
-    </HStack>
+      <HStack mt="10px" space="2">
+        <Text fontSize="xs" color="muted.400">
+          {dayjs(timeDate).format('ddd Do MMM YY')}
+        </Text>
+        <Text fontSize="xs" color="muted.400">
+          {dayjs(timeDate).format('hh:MM A')}
+        </Text>
+      </HStack>
+      {read && <Circle bg="red.500" borderRadius="20px" size="10px" position="absolute" right={2} top={2} />}
+    </VStack>
   );
 };
 const Notifications = (props: Props) => {
+  const [page, setPage] = useState(1);
+  const {isLoading, data} = useGetNotificationsQuery(page);
+
   return (
     <ScreenWrapper pad>
-      <DateListTitle date="2022-05-19" />
-      <NotificationItem rider="Shola Onibalusi" company="King Solomon Deliveries" message="has completed delivery" timeDate="" />
+      <FlatList
+        data={data}
+        onEndReached={() => {
+          setPage(prev => +1);
+        }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}: {item: Notification}) => <NotificationItem read message={item.body} title={item.title} timeDate={item.createdAt} />}
+      />
     </ScreenWrapper>
   );
 };

@@ -16,9 +16,9 @@ export interface SelectRiderProps {
 }
 
 const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handleCompanyInfo}, ref) => {
-  const snapPoints = useMemo(() => ['60%', '80%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
   const {navigate} = useNavigation<NavigationProp<GuardStackParamList>>();
-  const [paymentChannel, setPaymentChannel] = useState<PaymentMethod>('Cash');
+  const [paymentChannel, setPaymentChannel] = useState<PaymentMethod>('cash');
   const [riders, setRiders] = useState<RiderCloseBy[]>([]);
   const pickpInfo = storage.getString('_pickupInfo');
   const parsedPickupInfo = JSON.parse(pickpInfo as string) as PickupRequestInfo;
@@ -37,18 +37,25 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
   };
 
   const handleConfirmRequest = async () => {
-    try {
-      setIsLoading(true);
-      const res = await deliveryService.confirmPickupRequest({...rider, paymentChannel, pickupRequestId: parsedPickupInfo.pickupRequestId.toString()});
-      if (res?.success) {
-        RenderSnackbar({text: 'Request Sent'});
+    if (rider.riderId != '0' && rider.totalAmount != '0') {
+      try {
+        setIsLoading(true);
+        const res = await deliveryService.confirmPickupRequest({
+          ...rider,
+          paymentChannel,
+          pickupRequestId: parsedPickupInfo.pickupRequestId.toString(),
+        });
+        if (res?.success) {
+          setIsLoading(false);
+          storage.set('_pickupInfo', JSON.stringify(res.data));
+          navigate('request_preview');
+        }
+      } catch (error) {
         setIsLoading(false);
-        storage.set('_pickupInfo', JSON.stringify(res.data));
-        navigate('request_preview');
+        RenderSnackbar({text: `We couldn't process your request, Please try again`});
       }
-    } catch (error) {
-      setIsLoading(false);
-      RenderSnackbar({text: `We couldn't process your request, Please try again`});
+    } else {
+      RenderSnackbar({text: 'Select a Rider Please'});
     }
   };
 
@@ -76,13 +83,15 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
         }}
         borderWidth={selected ? 1 : 0}
         borderBottomWidth={1}
+        rounded={selected ? 'xs' : 'none'}
         flexDir="row"
         alignItems="center"
+        px={selected ? '5px' : 0}
         justifyContent="space-between"
-        borderBottomColor="grey.500"
+        borderBottomColor={selected ? 'none' : 'grey.500'}
         borderColor="main"
         h={hp(8)}>
-        {/* @ts-ignore */}
+        {/* @ts-ignore TODO delivery count */}
         <RidermanAvatar image={{uri: riderInfo.image}} deliveryCount={300} />
         <View w="60%" h="full">
           <HStack mt="2%" alignItems="center" justifyContent="flex-start" space="2">
@@ -91,7 +100,15 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
             </Text>
             <Rating number={item.rating} />
           </HStack>
-          <Pressable onPress={() => handleCompanyInfo('adeniyi')} bg="lightAccent" rounded="sm" mt="5px" w="80%" px="5px" h="25px" justifyContent="center">
+          <Pressable
+            onPress={() => handleCompanyInfo('adeniyi')}
+            bg="lightAccent"
+            rounded="sm"
+            mt="5px"
+            w="80%"
+            px="5px"
+            h="25px"
+            justifyContent="center">
             <Text textAlign="center" fontSize={hp(1.5)} isTruncated color="main">
               {item.company.name}
             </Text>
@@ -107,9 +124,12 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
     );
   };
 
-  const renderItem = useCallback(({item, index}: {item: RiderCloseBy; index: number}) => {
-    return <RiderItem {...{item}} selected={item.riderId === rider.riderId} />;
-  }, []);
+  const renderItem = useCallback(
+    ({item, index}: {item: RiderCloseBy; index: number}) => {
+      return <RiderItem {...{item}} selected={item.riderId === rider.riderId} />;
+    },
+    [rider],
+  );
 
   return (
     <BottomSheetWrapperSnappy dragClose={false} index={0} ref={ref} snapPoints={snapPoints}>
@@ -123,13 +143,28 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(({handl
       </View>
       <View borderWidth={0.5} borderColor="grey.500" mx="5%" mt="2px" mb="10px" />
       <View w="full" h="65%">
-        <BottomSheetFlatList contentContainerStyle={{paddingHorizontal: 10}} data={riders} renderItem={renderItem} keyExtractor={(i, j) => j.toString()} />
+        <BottomSheetFlatList
+          contentContainerStyle={{paddingHorizontal: 10}}
+          data={riders}
+          renderItem={renderItem}
+          keyExtractor={(i, j) => j.toString()}
+        />
       </View>
-      <View bg="kindaWhite" h={hp(20)} w="full" px="10px">
+      <View bg="kindaWhite" w="full" px="10px">
         <SelectPaymentMethod method={paymentChannel} onChange={setPaymentChannel} />
-        <Pressable onPress={handleConfirmRequest} px="10px" flexDir="row" alignItems="center" justifyContent="space-between" mt="2%" bg="main" h="50px" rounded="lg">
+        <Pressable
+          onPress={handleConfirmRequest}
+          px="10px"
+          flexDir="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mt="2%"
+          bg="main"
+          disabled={isLoading}
+          h="50px"
+          rounded="lg">
           <Text color="white" fontWeight="600" fontSize={hp(1.5)}>
-            Confirm
+            {isLoading ? 'Loading ....' : 'Confirm'}
           </Text>
           <HStack alignItems="center" space="2">
             <MoneyText color="white" fontSize={hp(1.5)} moneyValue={rider.totalAmount} />

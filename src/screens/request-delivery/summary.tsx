@@ -18,7 +18,10 @@ export type IDeliverySummaryProps = {
   route: RouteProp<GuardStackParamList, 'delivery_summary'>;
 };
 
-const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) => {
+const DeliverySummary: React.FC<IDeliverySummaryProps> = ({
+  navigation,
+  route,
+}) => {
   const {item: requestData} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [totalDistance, setTotalDistance] = useState(0);
@@ -26,7 +29,10 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
   const calcTotalDistance = async () => {
     const total = await requestData.reduce(async (p, c) => {
       const prevValue = await p;
-      const {distance} = await deliveryService.calcDistanceMatrix({x: c.pickupLocation, y: c.deliveryLocation});
+      const {distance} = await deliveryService.calcDistanceMatrix({
+        x: c.pickupLocation,
+        y: c.deliveryLocation,
+      });
       const distanceInKm = distance.value / 1000 + prevValue;
       return distanceInKm;
     }, Promise.resolve(0));
@@ -40,7 +46,10 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
     });
     const deliveryPackages: DeliveryPackage[] = await Promise.all(
       requestData.map(async item => {
-        const {distance} = await deliveryService.calcDistanceMatrix({x: item.pickupLocation, y: item.deliveryLocation});
+        const {distance} = await deliveryService.calcDistanceMatrix({
+          x: item.pickupLocation,
+          y: item.deliveryLocation,
+        });
         return {
           deliveryInstructions: item.instruction,
           numberOfPackages: item.packageNo,
@@ -66,7 +75,6 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       if (res?.success) {
         storage.set('_pickupInfo', JSON.stringify(res.data));
         navigation.navigate('select_rider');
-        RenderSnackbar({text: 'Request Created'});
       }
     } catch (error) {
       setIsLoading(false);
@@ -83,19 +91,61 @@ const DeliverySummary: React.FC<IDeliverySummaryProps> = ({navigation, route}) =
       <Text textAlign="center" mt="20px" color="grey.200" fontSize="13px">
         {dayjs().format('ddd, Do MMM, YYYY')}
       </Text>
-      <FlatList px="20px" h="full" w="full" data={requestData} renderItem={({item, index}) => <SummaryItem request={item} isLast={index + 1 === requestData.length} />} />
+      <FlatList
+        px="20px"
+        h="full"
+        w="full"
+        data={requestData}
+        renderItem={({item, index}) => (
+          <SummaryItem
+            request={item}
+            isLast={index + 1 === requestData.length}
+          />
+        )}
+      />
 
-      <View borderWidth={0.5} borderColor="gray.200" position="absolute" bottom="0px" bg="white" borderTopRadius="30px" w="full" px="20px" py="15px" h={hp(20)}>
-        <HStack h="30px" mt="5px" alignItems="center" justifyContent="space-between">
+      <View
+        borderWidth={0.5}
+        borderColor="gray.200"
+        position="absolute"
+        bottom="0px"
+        bg="white"
+        borderTopRadius="30px"
+        w="full"
+        px="20px"
+        py="15px"
+        h={hp(20)}>
+        <HStack
+          h="30px"
+          mt="5px"
+          alignItems="center"
+          justifyContent="space-between">
           <Text fontSize="11px">Total Distance</Text>
           <Text fontSize="14px" fontWeight="semibold">
             {Math.round(totalDistance)}km
           </Text>
         </HStack>
-        <View mt="20px" borderColor="grey.500" borderStyle="dashed" borderWidth={1} borderRadius="1px" />
+        <View
+          mt="20px"
+          borderColor="grey.500"
+          borderStyle="dashed"
+          borderWidth={1}
+          borderRadius="1px"
+        />
         <HStack space="3" alignItems="center" mt="20px">
-          <Button bg="black" title="Cancel" w="1/2" onPress={() => navigation.goBack()} />
-          <Button isLoading={isLoading} disabled={isLoading} title="Confirm" w="1/2" onPress={handleSubmit} />
+          <Button
+            bg="black"
+            title="Cancel"
+            w="1/2"
+            onPress={() => navigation.goBack()}
+          />
+          <Button
+            isLoading={isLoading}
+            disabled={isLoading}
+            title="Confirm"
+            w="1/2"
+            onPress={handleSubmit}
+          />
         </HStack>
       </View>
     </ScreenWrapper>

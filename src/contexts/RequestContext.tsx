@@ -14,14 +14,14 @@ interface RequestContext {
 export const RequestContext = createContext<RequestContext>({
   amount: '',
   deliveryBody: [],
-  paymentMethod: 'Cash',
+  paymentMethod: 'cash',
   setAmount: () => {},
   setDeliveryBody: () => {},
   setPaymentMethod: () => {},
 });
 
 export const RequestContextProvider = ({children}: {children: React.ReactNode}) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Cash');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [amount, setAmount] = useState('0');
   const [deliveryBody, setDeliveryBody] = useState<IDeliveryRequestBody[]>([]);
 

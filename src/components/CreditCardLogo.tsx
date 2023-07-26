@@ -1,15 +1,14 @@
 import React from 'react';
-import detectCard from '@utils/detect-card';
 import MasterCardLogo from './icons/mastercard-logo';
 import VisaCardLogo from './icons/visacard-logo';
 
-const CreditCardLogo = ({creditCardNumber}: {creditCardNumber: string}) => {
-  const cardType = detectCard(creditCardNumber);
+export type CardType = 'visa' | 'mastercard';
 
-  if (cardType?.cardType === 'MASTERCARD') {
+const CreditCardLogo = ({cardType}: {cardType: CardType}) => {
+  if (cardType === 'mastercard') {
     return <MasterCardLogo />;
   }
-  if (cardType?.cardType === 'VISA') {
+  if (cardType === 'visa') {
     return <VisaCardLogo />;
   }
 

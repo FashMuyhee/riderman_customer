@@ -3,22 +3,18 @@ import React from 'react';
 import MapSection from './MapSection';
 import {hp} from '@utils/responsive';
 import fastTime from '@images/illustrations/fast-time.png';
-import {Image, Modal, StatusBar, Platform, useWindowDimensions} from 'react-native';
+import {Image, Modal, Platform, useWindowDimensions} from 'react-native';
 import CallIcon from '@components/icons/call';
 import {Button} from '@components';
-import ToggleButton from './ToggleButton';
 import {CancelRequestSheetProps} from './CancelRequestSheet';
 import riderman from '@images/illustrations/riderman-sm.png';
 import decline from '@images/illustrations/decline.png';
 import warning from '@images/illustrations/warning.png';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {GuardStackParamList} from '@navigations/param-list';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
-import {LocationValue} from '@models/delivery';
+import {LocationValue, PickupRequestProgressStatus} from '@models/delivery';
 
-export type RequestProgressStatus = 'decline' | 'progress' | 'accepted' | 'too-long';
-interface IProps extends CancelRequestSheetProps {
-  progressStatus: RequestProgressStatus;
+interface IProps extends Omit<CancelRequestSheetProps, 'isCancelling'> {
+  progressStatus: PickupRequestProgressStatus;
   onKeepWaiting: () => void;
   onSelectNewRider: () => void;
   onCallRider: () => void;
@@ -26,8 +22,17 @@ interface IProps extends CancelRequestSheetProps {
   pickupLocation: LocationValue;
 }
 
-const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKeepWaiting, pickupLocation, deliveryLocations, onSelectNewRider, onCallRider}: IProps) => {
-  console.log('🚀 ~ file: RequestProgressSheet.tsx:28 ~ RequestProgressSheet ~ pickupLocation, deliveryLocations', pickupLocation, deliveryLocations);
+const RequestProgressSheet = ({
+  visible,
+  onCancel,
+  onClose,
+  progressStatus,
+  onKeepWaiting,
+  pickupLocation,
+  deliveryLocations,
+  onSelectNewRider,
+  onCallRider,
+}: IProps) => {
   const handleShowCancel = () => {
     onClose();
     onCancel();
@@ -36,13 +41,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
   const renderImage = () => {
     let image;
     switch (progressStatus) {
-      case 'progress':
+      case 'pending':
         image = fastTime;
         break;
       case 'accepted':
         image = riderman;
         break;
-      case 'decline':
+      case 'rejected':
         image = decline;
         break;
       case 'too-long':
@@ -55,13 +60,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
   const renderTitle = () => {
     let title;
     switch (progressStatus) {
-      case 'progress':
+      case 'pending':
         title = 'WAITING FOR RIDER TO CONFIRM ORDER...';
         break;
       case 'accepted':
         title = 'RIDER HAS ACCEPTED YOUR REQUEST! 🎉';
         break;
-      case 'decline':
+      case 'rejected':
         title = 'RIDER DECLINED REQUEST! 😞';
         break;
       case 'too-long':
@@ -74,13 +79,13 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
   const renderSubtitle = () => {
     let title;
     switch (progressStatus) {
-      case 'progress':
+      case 'pending':
         title = 'We have notified the rider about your request, please wait a bit for rider to accept request.';
         break;
       case 'accepted':
         title = 'Rider has accepted your delivery request and they’re on their way to pickup your package for delivery.';
         break;
-      case 'decline':
+      case 'rejected':
         title = 'We are so sorry, but for some reason, Adeola Adebimpe of Rush Delivery has declined your delivery request.';
         break;
       case 'too-long':
@@ -90,8 +95,8 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
     return title;
   };
 
-  const ACTION_HEIGHT = progressStatus === 'decline' ? hp(35) : hp(40);
-  const MAP_HEIGHT = progressStatus === 'decline' ? hp(65) : hp(60);
+  const ACTION_HEIGHT = progressStatus === 'rejected' ? hp(35) : hp(40);
+  const MAP_HEIGHT = progressStatus === 'rejected' ? hp(65) : hp(60);
   const DEVICE_HEIGHT = useWindowDimensions().height;
   const wrapperHeight = Platform.OS === 'ios' ? DEVICE_HEIGHT : DEVICE_HEIGHT + STATUSBAR_HEIGHT;
 
@@ -117,19 +122,14 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
             <Text w="80%" textAlign="center" mt="5px" fontSize={hp(1.3)} fontWeight="300">
               {renderSubtitle()}
             </Text>
-            {progressStatus === 'decline' && (
-              <HStack w="full" mt="7%" justifyContent="space-around">
-                <Button title="Cancel Request" w="47%" bg="black" onPress={handleShowCancel} />
-                <Button title="Select New Rider" w="47%" onPress={handleSelectNewRider} />
-              </HStack>
-            )}
+            {progressStatus === 'rejected' && <Button title="Select New Rider" w="95%" alignSelf="center" mt="5%" onPress={handleSelectNewRider} />}
             {progressStatus === 'too-long' && (
               <HStack w="95%" mt="7%" justifyContent="space-around">
                 <Button title="Select New Rider" bg="black" w="47%" onPress={handleSelectNewRider} />
                 <Button title="Keep waiting" w="47%" onPress={onKeepWaiting} />
               </HStack>
             )}
-            {(progressStatus === 'accepted' || progressStatus === 'progress') && (
+            {(progressStatus === 'accepted' || progressStatus === 'pending') && (
               <Button
                 w="90%"
                 mt="7%"
@@ -140,7 +140,7 @@ const RequestProgressSheet = ({visible, onCancel, onClose, progressStatus, onKee
                 leftIcon={<CallIcon />}
               />
             )}
-            {progressStatus != 'decline' && <ToggleButton onToggle={handleShowCancel} />}
+            {progressStatus != 'rejected' && <Button mt="5%" bg="red.600" title="Cancel request" w="90%" onPress={handleShowCancel} />}
           </Center>
         </View>
       </View>

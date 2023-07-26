@@ -1,4 +1,4 @@
-import { IDeliveryRequestBody } from "@models/delivery";
+import {IDeliveryRequestBody, PickupRequestInfo} from '@models/delivery';
 
 export type AuthStackParamList = {
   login: undefined;
@@ -6,18 +6,18 @@ export type AuthStackParamList = {
   r_password: undefined;
   verify: undefined;
   register: undefined;
-  verify_forgot: undefined
+  verify_forgot: undefined;
 };
 
 export type GuardStackParamList = {
   home: undefined;
   request_delivery: undefined;
-  delivery_summary: { item: IDeliveryRequestBody[] }
+  delivery_summary: {item: IDeliveryRequestBody[]};
   select_rider: undefined;
   request_preview: undefined;
-  payment_screen: undefined;
+  payment_screen: PickupRequestInfo;
   package_status: undefined;
   rate_delivery: undefined;
   delivery_history: undefined;
-  notifications: undefined
+  notifications: undefined;
 };
