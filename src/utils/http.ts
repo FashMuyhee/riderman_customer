@@ -2,7 +2,7 @@ import tokenManagerService from '@services/TokenManager';
 import axios, {AxiosInstance} from 'axios';
 import axiosRetry from 'axios-retry';
 
-export const BASE_URL = 'https://riderman-dev.herokuapp.com/api/v1';
+export const BASE_URL = 'https://riderman-staging-1437fe2f7312.herokuapp.com';
 
 /**
  * axios instance
