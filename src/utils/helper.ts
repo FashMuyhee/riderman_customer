@@ -23,7 +23,7 @@ export function formatDeliveriesByDate(data: IDeliveryItem[], status: DeliverySt
   const record = data;
   const filter: any = {};
 
-  if (!!record && record?.length > 1) {
+  if (!!record && record?.length > 0) {
     for (const item of record) {
       let deliveryDate;
       switch (status) {
