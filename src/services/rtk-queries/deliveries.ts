@@ -74,7 +74,10 @@ export const deliveryApi = createApi({
           method: 'PATCH',
         };
       },
-      invalidatesTags: (__, _, req) => [{type: 'DeliveryRequest', id: req}],
+      invalidatesTags: (__, _, req) => [
+        {type: 'DeliveryRequest', id: req},
+        {type: 'DeliveryRequest', id: 'CONFIRMED_DELIVERIES'},
+      ],
     }),
   }),
 });
