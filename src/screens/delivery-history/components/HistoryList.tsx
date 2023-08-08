@@ -19,7 +19,7 @@ const HistoryList = ({status}: Props) => {
   const tipSheet = React.useRef<BottomSheet>(null);
   const rateSheet = React.useRef<BottomSheet>(null);
   const [page, setPage] = useState(1);
-  const {data, isLoading, isFetching, refetch,} = useGetDeliveriesByStatusQuery({
+  const {data, isLoading, isFetching, refetch} = useGetDeliveriesByStatusQuery({
     page,
     status,
   });
@@ -32,7 +32,7 @@ const HistoryList = ({status}: Props) => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [status]);
 
   return (
     <ScreenWrapper pad>
@@ -45,6 +45,8 @@ const HistoryList = ({status}: Props) => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={Object.keys(deliveries)}
+          onRefresh={refetch}
+          refreshing={isFetching}
           renderItem={({item, index}) => (
             <View key={index}>
               <DateListTitle date={item} />
@@ -65,6 +67,7 @@ const HistoryList = ({status}: Props) => {
           onEndReached={() => {
             setPage(prev => +1);
           }}
+          //TODO: EMPTY STATE
         />
       )}
       <DeliveryDetailSheet
