@@ -7,6 +7,7 @@ import {
 } from '@models/wallet';
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@utils/http';
+import {paymentApi} from './payments';
 
 export const walletApi = createApi({
   reducerPath: 'walletApi',
@@ -45,6 +46,14 @@ export const walletApi = createApi({
           method: 'post',
           data: body,
         };
+      },
+      async onQueryStarted(_, {dispatch, queryFulfilled}) {
+        await queryFulfilled;
+        dispatch(
+          paymentApi.util.invalidateTags([
+            {type: 'PaymentRequest', id: 'SAVE_CARDS'},
+          ]),
+        );
       },
       invalidatesTags: [{type: 'WalletRequest', id: 'Balance'}],
     }),
