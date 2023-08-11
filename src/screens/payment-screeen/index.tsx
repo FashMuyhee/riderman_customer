@@ -34,14 +34,12 @@ interface IProps {
   onCancelRequest: () => void;
   onClose: () => void;
   isVisible: boolean;
-  isPaymentConfirmed: boolean;
 }
 const PaymentScreen = ({
   pickupInfo,
   isVisible,
   onCancelRequest,
   onClose,
-  isPaymentConfirmed,
 }: IProps) => {
   const {
     delivery_locations,
@@ -120,17 +118,6 @@ const PaymentScreen = ({
   const payTitle = useMemo(() => {
     return isPaid ? 'Paid' : `Pay \u20A6 ${moneyFormat(totalAmount)}`;
   }, [isPaid]);
-
-  React.useEffect(() => {
-    if (isPaymentConfirmed) {
-      Snackbar.show({
-        text: 'Your Package has been set to processing, you can track your package progress in the delivery history screen',
-        duration: Snackbar.LENGTH_INDEFINITE,
-      });
-      onClose();
-      navigate('home');
-    }
-  }, [isPaymentConfirmed]);
 
   return (
     <Modal

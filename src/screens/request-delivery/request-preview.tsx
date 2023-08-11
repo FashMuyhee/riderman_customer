@@ -34,7 +34,7 @@ import pusherEventService from '@services/Pusher';
 import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 import useCountDown from 'react-countdown-hook';
 import PaymentScreen from '@screens/payment-screeen';
-import {Alert} from 'react-native';
+import PaymentConfirmationSheet from '@screens/payment-screeen/components/PaymentConfirmationSheet';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -168,6 +168,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         if (eventName === 'RiderArrived') {
           RenderSnackbar({text: `Rider has arrived`, duration: 'LONG'});
           setShowPaymentScreen(true);
+          toggleProgress();
         }
         // accepted
         if (eventName === 'PickupRequestAccepted') {
@@ -176,6 +177,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         //  PaymentConfirmed
         if (eventName === 'PaymentConfirmed') {
           setIsPaymentConfirmed(true);
+          setShowPaymentScreen(true);
         }
       },
     });
@@ -317,13 +319,18 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       />
       <PaymentScreen
         isVisible={showPaymentScreen}
-        isPaymentConfirmed={isPaymentConfirmed}
         onClose={() => setShowPaymentScreen(false)}
         onCancelRequest={() => {
           setShowPaymentScreen(true);
           navigation.navigate('select_rider');
         }}
         pickupInfo={JSON.parse(pickupInfo as string) as PickupRequestInfo}
+      />
+      <PaymentConfirmationSheet
+        visible={isPaymentConfirmed}
+        onClose={() => setIsPaymentConfirmed(false)}
+        onGoHome={() => navigation.navigate('home')}
+        onGoToDelivery={() => navigation.navigate('delivery_history')}
       />
     </ScreenWrapper>
   );
