@@ -82,6 +82,8 @@ export const PackageDetail = ({
 const RequestPreview = ({navigation}: RequestPreview) => {
   const {isOpen: visibleProgress, onToggle: toggleProgress} = useDisclose();
   const {isOpen: visibleCancel, onToggle: toggleCancel} = useDisclose();
+  const [isPaymentConfirmed, setIsPaymentConfirmed] = React.useState(false);
+
   const [progressStatus, setProgressStatus] =
     useState<PickupRequestProgressStatus>('pending');
   const pickupInfo = storage.getString('_pickupInfo');
@@ -173,17 +175,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
         }
         //  PaymentConfirmed
         if (eventName === 'PaymentConfirmed') {
-          Alert.alert(
-            'Payment Confirmed',
-            'Your Package has been set to processing, you can track your package progress in the delivery history screen',
-            [
-              {
-                text: 'Go Home',
-                onPress: () => navigation.navigate('home'),
-              },
-            ],
-          );
-          // navigation.navigate('package_status');
+          setIsPaymentConfirmed(true);
         }
       },
     });
@@ -325,6 +317,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       />
       <PaymentScreen
         isVisible={showPaymentScreen}
+        isPaymentConfirmed={isPaymentConfirmed}
         onClose={() => setShowPaymentScreen(false)}
         onCancelRequest={() => {
           setShowPaymentScreen(true);

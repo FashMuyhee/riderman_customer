@@ -17,7 +17,7 @@ type AddCardBtnProps = {
 };
 
 const AddCardBtn = ({payFor, pickupId, amount}: AddCardBtnProps) => {
-  const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
+  const paystackWebViewRef = useRef<paystackProps.PayStackRef>(null);
   const [isInitializing, setIsInitializing] = useState(false);
   const [transRef, setTransRef] = useState('');
   const [addNewCard, {isLoading, error}] = useAddCardMutation();
@@ -59,27 +59,27 @@ const AddCardBtn = ({payFor, pickupId, amount}: AddCardBtnProps) => {
         RenderSnackbar({text: 'Please enter amount greater than 500'});
         return;
       }
-      Alert.alert(
-        'Save Card',
-        'Do you wish to save this card for future reference',
-        [
-          {
-            text: 'No',
-            onPress: () => {
-              saveCard.current = false;
-              paystackInitialization();
-            },
-          },
-          {
-            onPress: () => {
-              saveCard.current = true;
-              paystackInitialization();
-            },
-            text: 'Yes',
-          },
-        ],
-      );
     }
+    Alert.alert(
+      'Save Card',
+      'Do you wish to save this card for future reference',
+      [
+        {
+          text: 'No',
+          onPress: () => {
+            saveCard.current = false;
+            paystackInitialization();
+          },
+        },
+        {
+          onPress: () => {
+            saveCard.current = true;
+            paystackInitialization();
+          },
+          text: 'Yes',
+        },
+      ],
+    );
   };
 
   const paystackInitialization = async () => {
@@ -88,7 +88,8 @@ const AddCardBtn = ({payFor, pickupId, amount}: AddCardBtnProps) => {
       const res = await paymentService.initializeCard(amount?.toString());
       if (res?.success) {
         setTransRef(res.data?.reference as string);
-        paystackWebViewRef.current.startTransaction();
+        //@ts-ignore
+        paystackWebViewRef?.current.startTransaction();
         setIsInitializing(false);
       } else {
         setIsInitializing(false);

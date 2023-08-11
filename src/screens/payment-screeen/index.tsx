@@ -5,16 +5,7 @@ import {
   DashedDivider,
   RenderSnackbar,
 } from '@components';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  Box,
-  HStack,
-  Toast,
-  useToast,
-} from 'native-base';
+import {View, Text, Image, ScrollView, Box, HStack} from 'native-base';
 import React, {useMemo, useState} from 'react';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
@@ -25,7 +16,6 @@ import RequestLocations from '../request-delivery/components/RequestLocations';
 import {PackageDetail} from '../request-delivery/request-preview';
 import {moneyFormat} from '@components/MoneyText';
 import PaymentMethodSection from './components/PaymentMethodSection';
-import BottomSheet from '@gorhom/bottom-sheet';
 import MapSection from '@screens/request-delivery/components/MapSection';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
 import AddCardBtn from './components/AddCardBtn';
@@ -35,18 +25,23 @@ import {PickupRequestInfo} from '@models/delivery';
 import paymentService from '@services/Payment';
 import {IGeneralResponse} from '@models/auth';
 import {useGetCardsQuery} from '@services/rtk-queries/payments';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {GuardStackParamList} from '@navigations/param-list';
+import Snackbar from 'react-native-snackbar';
 
 interface IProps {
   pickupInfo: PickupRequestInfo;
   onCancelRequest: () => void;
   onClose: () => void;
   isVisible: boolean;
+  isPaymentConfirmed: boolean;
 }
 const PaymentScreen = ({
   pickupInfo,
   isVisible,
   onCancelRequest,
   onClose,
+  isPaymentConfirmed,
 }: IProps) => {
   const {
     delivery_locations,
@@ -63,6 +58,8 @@ const PaymentScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(cards[0]?.paymentCardId);
+
+  const {navigate} = useNavigation<NavigationProp<GuardStackParamList>>();
 
   const deliveryLocations = useMemo(() => {
     return delivery_locations.map(x => {
@@ -123,6 +120,17 @@ const PaymentScreen = ({
   const payTitle = useMemo(() => {
     return isPaid ? 'Paid' : `Pay \u20A6 ${moneyFormat(totalAmount)}`;
   }, [isPaid]);
+
+  React.useEffect(() => {
+    if (isPaymentConfirmed) {
+      Snackbar.show({
+        text: 'Your Package has been set to processing, you can track your package progress in the delivery history screen',
+        duration: Snackbar.LENGTH_INDEFINITE,
+      });
+      onClose();
+      navigate('home');
+    }
+  }, [isPaymentConfirmed]);
 
   return (
     <Modal
