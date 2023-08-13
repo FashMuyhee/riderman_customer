@@ -18,7 +18,7 @@ const Item: React.FunctionComponent<Props> = ({item}) => {
       <HStack
         alignItems={'center'}
         justifyContent="flex-start"
-        h="65px"
+        py="10px"
         space="2"
         w="full">
         <Avatar
