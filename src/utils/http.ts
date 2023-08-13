@@ -1,5 +1,5 @@
 import {BaseQueryFn} from '@reduxjs/toolkit/dist/query';
-import tokenManagerService from '@services/TokenManager';
+import tokenManagerService, { storage } from '@services/TokenManager';
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
 import axiosRetry from 'axios-retry';
 
@@ -57,6 +57,24 @@ httpHandler.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+
+httpHandler.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async function (error) {
+    let originalRequest = error.config;
+
+    const serverMsg = error.response.data;
+    if (serverMsg.hasOwnProperty('errors')) {
+      if (serverMsg?.errors.auth_failed) {
+        storage.clearAll();
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 
 export const axiosBaseQuery =
   (
