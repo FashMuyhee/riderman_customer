@@ -25,6 +25,7 @@ export interface IMultiSelectInputProps {
   placeholder: string;
   width?: string;
   height?: string;
+  title?: string;
 }
 
 const MultiSelectInput: React.FC<IMultiSelectInputProps> = ({
@@ -34,6 +35,7 @@ const MultiSelectInput: React.FC<IMultiSelectInputProps> = ({
   values,
   onSelect,
   data = packageType,
+  title = 'Select Items',
 }) => {
   const bottomSheetRef = createRef<RBSheet>();
 
@@ -155,7 +157,7 @@ const MultiSelectInput: React.FC<IMultiSelectInputProps> = ({
         isBackDrop={false}>
         <View mb="10px" px="20px">
           <Text textAlign="center" bold>
-            Select a Package
+            {title}
           </Text>
         </View>
         <FlatList

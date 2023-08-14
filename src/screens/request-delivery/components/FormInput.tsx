@@ -100,7 +100,7 @@ const FormInput: React.FC<IFormInputProps> = ({body, onFormChange, index, isLast
         <Text fontSize="11px" color="grey.200" mb="4">
           2. Fill Packaging Information
         </Text>
-        <MultiSelectInput placeholder="Add a Package" values={body.packageTypes} onSelect={onFormChange(index, 'packageTypes')} />
+        <MultiSelectInput placeholder="Add a Package" values={body.packageTypes} title="Select a Packages" onSelect={onFormChange(index, 'packageTypes')} />
         <HStack space="2" alignItems="center">
           <TextInput w="48%" placeholder="Weight in kg" keyboardType="numeric" value={body.weight} onChange={onFormChange(index, 'weight')} />
           <TextInput w="48%" placeholder="No. of Package" keyboardType="numeric" value={body.packageNo} onChange={onFormChange(index, 'packageNo')} />
