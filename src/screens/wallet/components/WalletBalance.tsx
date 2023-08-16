@@ -32,23 +32,14 @@ const WalletBalance = () => {
   );
 
   return (
-    <View h="200px">
-      <Center bg="main" h="100px" rounded="lg" w="full">
-        <Heading color="white" fontSize="lg">
-          Wallet Balance
-        </Heading>
-        <Heading color="white" mt="10px">
-          {moneyFormat(parseFloat(walletInfo?.accountBalance) / 100, true)}
-        </Heading>
-      </Center>
-      <Text textTransform="uppercase" textAlign="center" mt="10px">
-        Wallet Information
-      </Text>
-      <HStack mt="10px" justifyContent="space-between">
-        <RoundLabel title="Bank" value={walletInfo?.bank.name} />
-        <RoundLabel title="Account Number" value={walletInfo?.accountNumber} />
-      </HStack>
-    </View>
+    <Center bg="main" h="100px" rounded="lg" w="full">
+      <Heading color="white" fontSize="lg">
+        Wallet Balance
+      </Heading>
+      <Heading color="white" mt="10px">
+        {moneyFormat(parseFloat(walletInfo?.accountBalance) / 100, true)}
+      </Heading>
+    </Center>
   );
 };
 
