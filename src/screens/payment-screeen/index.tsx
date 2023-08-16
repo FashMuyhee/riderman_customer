@@ -42,7 +42,7 @@ const PaymentScreen = ({
   onClose,
 }: IProps) => {
   const {
-    delivery_locations,
+    deliveryLocations:destinations,
     paymentChannel,
     pickupLocation,
     rider,
@@ -60,7 +60,7 @@ const PaymentScreen = ({
   const {navigate} = useNavigation<NavigationProp<GuardStackParamList>>();
 
   const deliveryLocations = useMemo(() => {
-    return delivery_locations.map(x => {
+    return destinations.map(x => {
       return x.address;
     });
   }, []);

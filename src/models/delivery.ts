@@ -96,7 +96,7 @@ export type PickupRequestInfo = {
   pickupRequestId: number;
   rider: RiderCloseBy;
   pickupLocation: LocationValue;
-  delivery_locations: LocationValue[];
+  deliveryLocations: LocationValue[];
   delivery_packages: DeliveryPackage[];
   paymentChannel: PaymentMethod;
   totalDistance: string;
