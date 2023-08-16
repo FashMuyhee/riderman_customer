@@ -24,9 +24,9 @@ const initialValues: IDeliveryRequestBody = {
   instruction: 'Fragile',
   packageTypes: ['Wears'],
   weight: '1',
-  packageNo: '',
+  packageNo: '2',
   rName: 'Ade Olu',
-  rPhone: '',
+  rPhone: '234813682383484',
   rEmail: '',
 };
 
