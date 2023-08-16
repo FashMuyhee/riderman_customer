@@ -47,7 +47,7 @@ const PaymentScreen = ({
     pickupLocation,
     rider,
     totalAmount,
-    delivery_packages,
+    deliveryPackages,
     pickupRequestId,
   } = pickupInfo;
   const {data} = useGetCardsQuery();
@@ -206,8 +206,8 @@ const PaymentScreen = ({
               />
               <DashedDivider />
               <ScrollView h="100px" showsVerticalScrollIndicator={false}>
-                {delivery_packages &&
-                  delivery_packages.map((i, k) => {
+                {deliveryPackages &&
+                  deliveryPackages.map((i, k) => {
                     return (
                       <React.Fragment key={k}>
                         <PackageDetail

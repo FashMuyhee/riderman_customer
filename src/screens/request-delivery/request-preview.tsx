@@ -73,7 +73,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const pickupInfo = storage.getString('_pickupInfo');
   const {
     rider,
-    delivery_packages,
+    deliveryPackages,
     paymentChannel,
     totalAmount,
     deliveryLocations: destination,
@@ -225,7 +225,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           />
           <RequestLocations pickUp={pickupLocation.address} {...{deliveryLocations}} />
           <View borderWidth={1} mx="10px" mt="20px" borderColor="gray.200" borderStyle="dashed" />
-          {delivery_packages?.map((item, key) => (
+          {deliveryPackages?.map((item, key) => (
             <PackageDetail
               key={key}
               contactName={item.recipient.name}
