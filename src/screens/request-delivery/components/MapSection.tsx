@@ -8,38 +8,34 @@ import mapStyle from '@utils/map-style';
 import {G_MAP_KEY} from '@env';
 import MapViewDirections from 'react-native-maps-directions';
 
-// TODO coridnate stuff
+type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
 export type IMapSectionProps = {
   height?: number;
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  }[];
+  coordinates?: Coordinate[];
 };
 
 const MapSection: React.FC<IMapSectionProps> = ({
   height = hp(40),
-  coordinates = [
-    {
-      latitude: 6.545654504207982,
-      longitude: 3.3955299324844184,
-    },
-    {
-      latitude: 6.544355082389553,
-      longitude: 3.395295243282711,
-    },
-  ],
+  coordinates,
 }) => {
   const {colors} = useTheme();
   const mapRef = useRef<MapView>(null);
+
+  const cords = React.useMemo(() => {
+    if (coordinates) return coordinates as Coordinate[];
+    return [];
+  }, [coordinates]);
 
   return (
     <View h={height} w="full">
       <MapView
         ref={mapRef}
         initialRegion={{
-          latitude: coordinates[0]?.latitude,
-          longitude: coordinates[0]?.longitude,
+          latitude: cords[0]?.latitude,
+          longitude: cords[0]?.longitude,
           latitudeDelta: 0.0622,
           longitudeDelta: 0.0121,
         }}
@@ -50,9 +46,15 @@ const MapSection: React.FC<IMapSectionProps> = ({
         rotateEnabled={false}
         loadingEnabled
         loadingIndicatorColor={colors.main}>
-        <MapViewDirections origin={coordinates[0]} destination={coordinates[1]} apikey={G_MAP_KEY} strokeWidth={4} strokeColor={colors.main} />
-        <Marker coordinate={coordinates[0]} />
-        <Marker coordinate={coordinates[1]} />
+        <MapViewDirections
+          origin={cords[0]}
+          destination={cords[1]}
+          apikey={G_MAP_KEY}
+          strokeWidth={4}
+          strokeColor={colors.main}
+        />
+        <Marker coordinate={cords[0]} />
+        <Marker coordinate={cords[1]} />
       </MapView>
     </View>
   );
