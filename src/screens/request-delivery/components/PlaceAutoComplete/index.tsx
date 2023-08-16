@@ -12,6 +12,7 @@ import placeAPI from './placeApi';
 import {useDebounce} from '@hooks/useDebounce';
 import {LocationValue} from '@models/delivery';
 import useGetLocation from '@hooks/useGetLocation';
+import {Spinner} from 'native-base';
 
 export type PlacePredictionType = {
   description: string;
@@ -78,6 +79,8 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   const [suggestions, setSuggestions] = useState<PlacePredictionType[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [isFetchingLocAddress, setIsFetchingLocAddress] = useState(false);
+
   const {location} = useGetLocation();
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -151,10 +154,17 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
   // get current location
   const handleGetAddressFromLocation = async () => {
     try {
-      const res = await placeAPI.getCurrentLocationAddress({address: '', lat: location?.coords.latitude.toString() as string, long: location?.coords.longitude.toString() as string});
-      closeSearchModal();
+      setIsFetchingLocAddress(true);
+      const res = await placeAPI.getCurrentLocationAddress({
+        address: '',
+        lat: location?.coords.latitude.toString() as string,
+        long: location?.coords.longitude.toString() as string,
+      });
       onPlaceChange(res as LocationValue);
+      setIsFetchingLocAddress(false);
+      closeSearchModal();
     } catch (error) {
+      setIsFetchingLocAddress(false);
       console.log(error);
     }
   };
@@ -214,8 +224,10 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
                 alignItems="center"
                 w="full"
                 h="45px">
-                <LocationIcon bg={colors.main} />
-                <Text ml="10px">My Location</Text>
+                {!isFetchingLocAddress ? <LocationIcon bg={colors.main} /> : <Spinner size="small" color="primary.1" />}
+                <Text color="neutral.2" ml="5px">
+                  {isFetchingLocAddress ? 'Getting Address' : 'Use my current location'}
+                </Text>
               </Pressable>
               {isLoadingSuggestions && _renderLoader()}
               {/* history */}
@@ -223,7 +235,15 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
               {showSuggestions && _renderPlacesPrediction(suggestions, false)}
             </View>
             {Platform.OS === 'ios' && (
-              <Text color="main" textAlign="center" left="45%" right="45%" bottom="3%" fontSize="12px" position="absolute" onPress={closeSearchModal}>
+              <Text
+                color="main"
+                textAlign="center"
+                left="45%"
+                right="45%"
+                bottom="3%"
+                fontSize="12px"
+                position="absolute"
+                onPress={closeSearchModal}>
                 Close
               </Text>
             )}
