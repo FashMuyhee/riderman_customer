@@ -95,8 +95,8 @@ const RequestProgressSheet = ({
     return title;
   };
 
-  const ACTION_HEIGHT = progressStatus === 'rejected' ? hp(35) : hp(40);
-  const MAP_HEIGHT = progressStatus === 'rejected' ? hp(65) : hp(60);
+  const ACTION_HEIGHT = progressStatus === 'rejected' ? hp(35) : hp(35);
+  const MAP_HEIGHT = progressStatus === 'rejected' ? hp(65) : hp(65);
   const DEVICE_HEIGHT = useWindowDimensions().height;
   const wrapperHeight = Platform.OS === 'ios' ? DEVICE_HEIGHT : DEVICE_HEIGHT + STATUSBAR_HEIGHT;
 
@@ -109,7 +109,7 @@ const RequestProgressSheet = ({
     <Modal visible={visible} statusBarTranslucent transparent>
       <View h={wrapperHeight} bg="white">
         <MapSection
-          height={MAP_HEIGHT}
+          height={Platform.OS === 'ios' ? MAP_HEIGHT : MAP_HEIGHT + STATUSBAR_HEIGHT}
           coordinates={[
             {latitude: parseFloat(pickupLocation.lat), longitude: parseFloat(pickupLocation.long)},
             {latitude: parseFloat(deliveryLocations[0].lat), longitude: parseFloat(deliveryLocations[0].long)},
@@ -122,7 +122,9 @@ const RequestProgressSheet = ({
             <Text w="80%" textAlign="center" mt="5px" fontSize={hp(1.3)} fontWeight="300">
               {renderSubtitle()}
             </Text>
-            {progressStatus === 'rejected' && <Button title="Select New Rider" w="95%" alignSelf="center" mt="5%" onPress={handleSelectNewRider} />}
+            {progressStatus === 'rejected' && (
+              <Button title="Select New Rider" w="95%" alignSelf="center" mt="5%" onPress={handleSelectNewRider} />
+            )}
             {progressStatus === 'too-long' && (
               <HStack w="95%" mt="7%" justifyContent="space-around">
                 <Button title="Select New Rider" bg="black" w="47%" onPress={handleSelectNewRider} />
