@@ -225,7 +225,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
                 w="full"
                 h="45px">
                 {!isFetchingLocAddress ? <LocationIcon bg={colors.main} /> : <Spinner size="small" color="primary.1" />}
-                <Text color="neutral.2" ml="5px">
+                <Text ml="5px">
                   {isFetchingLocAddress ? 'Getting Address' : 'Use my current location'}
                 </Text>
               </Pressable>
