@@ -90,7 +90,7 @@ const HistoryList = ({status}: Props) => {
         onClose={() => tipSheet.current?.close()}
       />
       <RateSheet
-        riderId={selectedItem?.rider.riderId.toString() as string}
+        deliveryId={selectedItem?.deliveryId.toString() as string}
         ref={rateSheet}
         onClose={() => rateSheet.current?.close()}
       />
