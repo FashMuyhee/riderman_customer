@@ -273,7 +273,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
       <PaymentConfirmationSheet
         visible={isPaymentConfirmed}
         onClose={() => setIsPaymentConfirmed(false)}
-        onGoHome={() => navigation.navigate('home')}
+        onGoHome={() => navigation.replace('home')}
         onGoToDelivery={() => navigation.navigate('delivery_history')}
       />
     </ScreenWrapper>

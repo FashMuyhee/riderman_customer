@@ -196,7 +196,7 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(
           mt="2px"
           mb="10px"
         />
-        <View w="full" h="65%">
+        <View w="full" h="60%">
           <BottomSheetFlatList
             contentContainerStyle={{paddingHorizontal: 10}}
             data={riders}
