@@ -118,7 +118,7 @@ const SelectRiderModal = React.forwardRef<BottomSheet, SelectRiderProps>(
           borderColor="main"
           h={hp(8)}>
           {/* @ts-ignore TODO delivery count */}
-          <RidermanAvatar image={{uri: riderInfo.image}} deliveryCount={300} />
+          <RidermanAvatar image={riderInfo.image} deliveryCount={300} />
           <View w="60%" h="full">
             <HStack
               mt="2%"

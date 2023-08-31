@@ -6,7 +6,6 @@ import React, {useEffect, useMemo, useState} from 'react';
 import riderman from '@images/illustrations/riderman.png';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
-import riderImage from '@images/rider.png';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from './components/SelectPaymentMethod';
 import RiderInfo from './components/RiderInfo';
@@ -197,7 +196,7 @@ const RequestPreview = ({navigation}: RequestPreview) => {
           {/* company info */}
           <HStack borderTopRadius="2xl" bg="accent" h="80px" alignItems="center" justifyContent="space-between" px="10px">
             {/* TODO: add compnay logo */}
-            <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
+            <Image source={logo} alt="company_logo" rounded="full" bg="gray.400" size="50px" />
             <View w="60%">
               <Text fontSize={hp(1.3)} fontWeight="600">
                 {rider?.company?.name}
@@ -216,9 +215,8 @@ const RequestPreview = ({navigation}: RequestPreview) => {
             </View>
           </HStack>
           {/* rider info */}
-          {/* TODO: rider image */}
           <RiderInfo
-            image={riderImage}
+            image={rider?.user?.image as string}
             fullname={`${rider?.user?.firstName} ${rider?.user?.lastName}`}
             plateNo={rider?.bikeDetails.licenseNumber}
             rating={rider?.rating}

@@ -2,10 +2,9 @@ import {RidermanAvatar, Rating} from '@components';
 import {hp} from '@utils/responsive';
 import {View, Text, HStack} from 'native-base';
 import React from 'react';
-import {ImageSourcePropType} from 'react-native';
 
 type IProps = {
-  image: ImageSourcePropType;
+  image: string;
   plateNo: string;
   fullname: string;
   rating: string;

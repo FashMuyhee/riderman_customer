@@ -9,6 +9,7 @@ import MapSection from './components/MapSection';
 import {hp} from '@utils/responsive';
 import {storage} from '@services/TokenManager';
 import {PickupRequestInfo} from '@models/delivery';
+import {STATUSBAR_HEIGHT} from '@utils/constant';
 
 type ISelectRiderProps = {
   navigation: StackNavigationProp<GuardStackParamList, 'select_rider'>;
@@ -29,10 +30,10 @@ const SelectRider: React.FC<ISelectRiderProps> = ({navigation}) => {
   };
 
   return (
-    <ScreenWrapper barStyle="dark-content">
+    <ScreenWrapper translucentBar barStyle="dark-content">
       <TransparentNavbar />
       <MapSection
-        height={hp(43)}
+        height={hp(100) + STATUSBAR_HEIGHT}
         coordinates={[
           {latitude: parseFloat(pickupLocation.lat), longitude: parseFloat(pickupLocation.long)},
           {latitude: parseFloat(deliveryLocation.lat), longitude: parseFloat(deliveryLocation.long)},

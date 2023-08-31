@@ -11,7 +11,6 @@ import {PaymentMethodIcon} from './request-delivery/components/SelectPaymentMeth
 import RiderInfo from './request-delivery/components/RiderInfo';
 import RequestLocations from './request-delivery/components/RequestLocations';
 import {PackageDetail} from './request-delivery/request-preview';
-import {moneyFormat} from '@components/MoneyText';
 import {RequestContext} from '@contexts/RequestContext';
 import MapSection from '@screens/request-delivery/components/MapSection';
 import {STATUSBAR_HEIGHT} from '@utils/constant';
@@ -79,7 +78,7 @@ const PackageStatusScreen = ({navigation}: IProps) => {
             <DashedDivider />
             <ScrollView h="100px" showsVerticalScrollIndicator={false}>
               {packageBrief.map((item, key) => (
-                <PackageDetail key={key} {...item} index={key + 1} />
+                <PackageDetail instruction="" key={key} {...item} index={key + 1} />
               ))}
             </ScrollView>
             <DashedDivider />

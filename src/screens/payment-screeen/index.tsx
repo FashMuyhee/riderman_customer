@@ -3,7 +3,6 @@ import {View, Text, Image, ScrollView, Box, HStack} from 'native-base';
 import React, {useMemo, useState} from 'react';
 import {hp} from '@utils/responsive';
 import logo from '@images/company-logo.png';
-import riderImage from '@images/rider.png';
 import {PaymentMethodIcon} from '../request-delivery/components/SelectPaymentMethod';
 import RiderInfo from '../request-delivery/components/RiderInfo';
 import RequestLocations from '../request-delivery/components/RequestLocations';
@@ -126,8 +125,9 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
             {paymentChannel == 'card' && <AddCardBtn amount={totalAmount} payFor="delivery" pickupId={pickupRequestId.toString()} />}
             <Box>
               {/* comoany info */}
-              <DashedDivider /> {/* TODO: COMPANY INFO LOGO AND RIDER IMAGE */}
+              <DashedDivider />
               <HStack h="50px" mt="10px" justifyContent="space-between" px="10px">
+                {/* TODO: COMPANY INFO LOGO AND RIDER IMAGE */}
                 <Image source={logo} alt="company logo" rounded="full" bg="gray.400" size="50px" />
                 <View w="60%">
                   <Text fontSize={hp(1.3)} fontWeight="600">
@@ -143,9 +143,8 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
                 </View>
               </HStack>
               <DashedDivider />
-              {/* rider info */} {/* TODO: RIDER IMAGE */}
               <RiderInfo
-                image={riderImage}
+                image={rider.user?.image as string}
                 fullname={`${rider.user.firstName} ${rider.user.lastName}`}
                 plateNo={rider.bikeDetails.licenseNumber}
                 rating={rider.rating}

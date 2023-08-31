@@ -3,7 +3,6 @@ import {HStack, Text, View, Image} from 'native-base';
 import {BottomSheetWrapperSnappy} from '@components/BottomSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {hp} from '@utils/responsive';
-import companyLogo from '@images/company-logo.png';
 import nairaCoin from '@images/icons/naira-coin.png';
 import {Button, DashedDivider, MoneyText, RenderSnackbar} from '@components';
 import TimeSolid from '@components/icons/time-solid';
@@ -56,52 +55,22 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
 
       if (deliveryStatus === 'completed') {
         return (
-          <HStack
-            alignItems="center"
-            justifyContent="space-between"
-            mt="5%"
-            px="10px">
-            <Button
-              title="Call Rider"
-              onPress={callRider}
-              w="48%"
-              leftIcon={<CallIcon />}
-              isDisabled={isLoading}
-            />
-            <Button
-              bg="black"
-              isLoading={isLoading}
-              onPress={handleConfirm}
-              title="Received"
-              w="48%"
-            />
+          <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
+            <Button title="Call Rider" onPress={callRider} w="48%" leftIcon={<CallIcon />} isDisabled={isLoading} />
+            <Button bg="black" isLoading={isLoading} onPress={handleConfirm} title="Received" w="48%" />
           </HStack>
         );
       }
 
       return (
-        <HStack
-          alignItems="center"
-          justifyContent="space-between"
-          mt="5%"
-          px="10px">
+        <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
           <Button
             onPress={handleTipRider}
             title="Tip Rider"
             w="48%"
-            leftIcon={
-              <RNImage
-                source={nairaCoin}
-                style={{width: 30, height: 30, resizeMode: 'contain'}}
-              />
-            }
+            leftIcon={<RNImage source={nairaCoin} style={{width: 30, height: 30, resizeMode: 'contain'}} />}
           />
-          <Button
-            bg="black"
-            onPress={handleRateRider}
-            title="Rate Delivery"
-            w="48%"
-          />
+          <Button bg="black" onPress={handleRateRider} title="Rate Delivery" w="48%" />
         </HStack>
       );
     };
@@ -114,19 +83,11 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
       });
 
     return (
-      <BottomSheetWrapperSnappy
-        noIndicator
-        showBackdrop
-        index={-1}
-        ref={ref}
-        snapPoints={snapPoints}>
+      <BottomSheetWrapperSnappy noIndicator showBackdrop index={-1} ref={ref} snapPoints={snapPoints}>
         <View px="20px" w="full">
           {/* company info */}
-          <HStack
-            h="60px"
-            alignItems="center"
-            justifyContent="space-between"
-            px="10px">
+          <HStack h="60px" alignItems="center" justifyContent="space-between" px="10px">
+            {/* TODO COMPANY LOGO */}
             <Image
               source={{uri: rider?.user?.image as string}}
               alt={`${rider?.companyName}_logo`}
@@ -146,10 +107,7 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
             </View>
             <View justifyContent="center" alignItems="center" w="20%">
               <HStack alignItems="center" space="1">
-                <PaymentMethodIcon
-                  method={pickupRequest?.paymentChannel}
-                  selected={false}
-                />
+                <PaymentMethodIcon method={pickupRequest?.paymentChannel} selected={false} />
                 <Text bold textTransform="capitalize">
                   {pickupRequest?.paymentChannel}
                 </Text>
@@ -162,15 +120,12 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
             {/* rider info */}
             <RiderInfo
               plateNo={rider?.bikeDetails.licenseNumber}
-              image={{uri: rider?.user?.image as string}}
+              image={rider?.user?.image as string}
               rating={rider?.rating}
               fullname={`${rider?.user.firstName} ${rider?.user.lastName}`}
             />
             {/* delivery location */}
-            <RequestLocations
-              deliveryLocations={deliveryLocations}
-              pickUp={pickupRequest?.pickupLocation.address}
-            />
+            <RequestLocations deliveryLocations={deliveryLocations} pickUp={pickupRequest?.pickupLocation.address} />
           </View>
           <DashedDivider />
           {!!pickupRequest?.deliveryPackages &&
