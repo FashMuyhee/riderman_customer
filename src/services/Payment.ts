@@ -1,5 +1,5 @@
 import {IGeneralResponse} from '@models/auth';
-import {IInitializeCardResponse} from '@models/payment';
+import {IInitializeCardResponse, MakePaymentPayload} from '@models/payment';
 import httpHandler from '@utils/http';
 import {PaymentMethod} from '@models/delivery';
 
@@ -38,15 +38,7 @@ class PaymentService {
    * @param method PaymentMethod
    */
 
-  async makePickupPayment({
-    pickupRequestId,
-    method,
-    cardId,
-  }: {
-    pickupRequestId: string;
-    method: PaymentMethod;
-    cardId?: string;
-  }) {
+  async makePickupPayment({pickupRequestId, method, cardId}: MakePaymentPayload) {
     try {
       const extra = cardId ? `/${cardId}` : '';
 
@@ -100,11 +92,7 @@ class PaymentService {
    * @param reference string
    * @param save boolean
    */
-  async makePaymentWithNewCard(
-    pickupRequestId: string,
-    reference: string,
-    save: boolean,
-  ) {
+  async makePaymentWithNewCard(pickupRequestId: string, reference: string, save: boolean) {
     try {
       const result = await httpHandler({
         method: 'patch',

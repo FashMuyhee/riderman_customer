@@ -1,5 +1,6 @@
 import {CardType} from '@components/CreditCardLogo';
 import {StatusCode} from './auth';
+import { PaymentMethod } from './delivery';
 
 export type SaveCard = {
   paymentCardId: number;
@@ -36,4 +37,10 @@ export interface IAllSavedCardResponse {
   success: boolean;
   statusCode: StatusCode;
   data: SaveCard[];
+}
+
+export type MakePaymentPayload =  {
+  pickupRequestId: string;
+  method: PaymentMethod;
+  cardId?: string;
 }

@@ -18,6 +18,7 @@ import {PickupRequestInfo} from '@models/delivery';
 import paymentService from '@services/Payment';
 import {IGeneralResponse} from '@models/auth';
 import {useGetCardsQuery} from '@services/rtk-queries/payments';
+import {MakePaymentPayload} from '@models/payment';
 
 interface IProps {
   pickupInfo: PickupRequestInfo;
@@ -37,7 +38,7 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
     pickupRequestId,
   } = pickupInfo;
   const {data} = useGetCardsQuery();
-  const cards = !!data ? data : [{paymentCardId: 0}];
+  const cards = !!data ? data : [];
   const [isCancelling, setIsCancelling] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
@@ -79,11 +80,14 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
       if (paymentChannel === 'wallet') {
         res = await paymentService.makeWalletPayment(pickupRequestId.toString());
       } else {
-        res = await paymentService.makePickupPayment({
+        let values: MakePaymentPayload = {
           method: paymentChannel,
-          cardId: selectedCardId.toString(),
           pickupRequestId: pickupRequestId.toString(),
-        });
+        };
+        if (cards.length > 0) {
+          values['cardId'] = selectedCardId.toString();
+        }
+        res = await paymentService.makePickupPayment(values);
       }
       setIsLoading(false);
       if (res?.success) {
