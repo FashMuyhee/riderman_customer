@@ -2,6 +2,7 @@ import {IUser} from '@models/auth';
 import tokenManagerService from '@services/TokenManager';
 import React, {createContext} from 'react';
 import {useMMKVObject, useMMKVBoolean, useMMKVString} from 'react-native-mmkv';
+import {OneSignal} from 'react-native-onesignal';
 
 export interface IAuthContext {
   user?: IUser | null;
@@ -23,16 +24,13 @@ export const AuthContext = createContext<IAuthContext>({
   updateUser: user => {},
 });
 
-export const AuthContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const AuthContextProvider = ({children}: {children: React.ReactNode}) => {
   const [user, setUser] = useMMKVObject<IUser | null>('_user');
   const [isAuth, setIsAuth] = useMMKVBoolean('_isAuth');
   const [token, setToken] = useMMKVString('_token');
 
   const handleLogin = (user: IUser, token: string) => {
+    OneSignal.login(user?.id.toString());
     setUser(user);
     setToken(token);
     setIsAuth(true);
