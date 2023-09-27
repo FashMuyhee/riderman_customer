@@ -19,6 +19,10 @@ const App = () => {
     console.log('OneSignal: notification clicked:', event);
   });
 
+  React.useEffect(() => {
+    OneSignal.Notifications.requestPermission(true);
+  }, []);
+
   return (
     <Provider store={store}>
       <NativeBaseProvider theme={theme}>
