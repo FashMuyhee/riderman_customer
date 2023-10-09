@@ -28,14 +28,10 @@ const SliderImage = () => {
 
   const SlideItem = ({item}: {item: any}) => (
     <View w={wp(100)}>
-      <Image
-        h="250px"
-        resizeMode="center"
-        alt="illustration"
-        source={item?.image}
-        mt="10%"
-      />
-      <Center w="80%" mt="4" alignSelf="center">
+      <View h="60%" w="full" mt="10%">
+        <Image h="full" w="full" resizeMode="center" alt="illustration" source={item?.image} />
+      </View>
+      <Center w="80%" mt="5%" alignSelf="center">
         <Text bold mb="10px" textAlign="center" color="white">
           {item?.title}
         </Text>
