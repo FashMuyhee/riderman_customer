@@ -47,6 +47,12 @@ export const AuthContextProvider = ({children}: {children: React.ReactNode}) => 
     setToken(token);
   };
 
+  React.useEffect(() => {
+    if (user?.id) {
+      OneSignal.login(user?.id.toString());
+    }
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{
