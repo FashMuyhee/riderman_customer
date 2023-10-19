@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {PressableInput} from '@components';
 import {TextInputProps} from '@components/TextInput';
 import {hp, wp} from '@utils/responsive';
-import {View, Pressable, Text, useDisclose, Input, useTheme, Skeleton, HStack} from 'native-base';
+import {View, Pressable, Text, useDisclose, Input, useTheme, Skeleton, HStack,ScrollView} from 'native-base';
 import {Modal, Platform} from 'react-native';
 import Animated, {useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated';
 import LocationIcon from '@components/icons/location';
@@ -211,7 +211,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
                 onChangeText={setSearchQuery}
               />
             </View>
-            <View bg="bg" w="full" h="full" px="10px">
+            <ScrollView keyboardShouldPersistTaps="handled" bg="bg" w="full" h="full" px="10px">
               {/* current location pin */}
               <Pressable
                 onPress={handleGetAddressFromLocation}
@@ -233,7 +233,7 @@ const PlaceAutoComplete: React.FC<IPlaceAutoCompleteProps> = ({placeholder, boxP
               {/* history */}
               {/* search result */}
               {showSuggestions && _renderPlacesPrediction(suggestions, false)}
-            </View>
+            </ScrollView>
             {Platform.OS === 'ios' && (
               <Text
                 color="main"

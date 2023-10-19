@@ -93,7 +93,7 @@ const RequestDelivery: React.FC<IRequestDeliveryProps> = ({navigation}) => {
   };
   return (
     <ScreenWrapper>
-      <ScrollView px="15px">
+      <ScrollView keyboardShouldPersistTaps="handled" px="15px">
         {requestValues.map((item, key) => (
           <FormInput
             // placeholder="Add a Package"
