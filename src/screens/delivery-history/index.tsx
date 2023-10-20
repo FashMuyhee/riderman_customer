@@ -32,10 +32,10 @@ const DeliveryHistoryTab = (props: IProps) => {
         },
       }}
       transitionStyle="scroll">
-      <TopTabs.Screen name="Processing">{() => <HistoryList status="processing" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Active">{() => <HistoryList status="active" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Completed">{() => <HistoryList status="completed" />}</TopTabs.Screen>
-      <TopTabs.Screen name="Confirmed">{() => <HistoryList status="confirmed" />}</TopTabs.Screen>
+      <TopTabs.Screen initialParams={{status: 'processing'}} name="Processing" component={HistoryList} />
+      <TopTabs.Screen initialParams={{status: 'active'}} name="Active" component={HistoryList} />
+      <TopTabs.Screen initialParams={{status: 'completed'}} name="Completed" component={HistoryList} />
+      <TopTabs.Screen initialParams={{status: 'confirmed'}} name="Confirmed" component={HistoryList} />
     </TopTabs.Navigator>
   );
 };

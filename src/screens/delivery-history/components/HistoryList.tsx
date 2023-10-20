@@ -1,17 +1,18 @@
 import {FlatList, View} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DateListTitle, ScreenWrapper} from '@components';
-import {DeliveryStatus, IDeliveryItem} from '@models/delivery';
+import {IDeliveryItem} from '@models/delivery';
 import {useGetDeliveriesByStatusQuery} from '@services/rtk-queries/deliveries';
 import DeliveryItem, {DeliverySkeleton} from './DeliveryItem';
 import {formatDeliveriesByDate} from '@utils/helper';
 import {SheetManager} from 'react-native-actions-sheet';
+import {useRoute} from '@react-navigation/native';
 
-type Props = {
-  status: DeliveryStatus;
-};
+const HistoryList = () => {
+  const {params} = useRoute();
+  //@ts-ignore
+  const {status} = params;
 
-const HistoryList = ({status}: Props) => {
   const [page, setPage] = useState(1);
   const {data, isLoading, isFetching, refetch} = useGetDeliveriesByStatusQuery({
     page,

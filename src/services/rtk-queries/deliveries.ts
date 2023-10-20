@@ -1,8 +1,4 @@
-import {
-  DeliveryStatus,
-  IDeliveriesResponse,
-  IDeliveryResponse,
-} from '@models/delivery';
+import {DeliveryStatus, IDeliveriesResponse, IDeliveryResponse} from '@models/delivery';
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {axiosBaseQuery} from '@utils/http';
 
@@ -29,10 +25,7 @@ export const deliveryApi = createApi({
             ]
           : [{type: 'DeliveryRequest', id: 'ALL_DELIVERIES'}],
     }),
-    getDeliveriesByStatus: builder.query<
-      IDeliveriesResponse,
-      {page: number; status: DeliveryStatus}
-    >({
+    getDeliveriesByStatus: builder.query<IDeliveriesResponse, {page: number; status: DeliveryStatus}>({
       query(req) {
         return {
           url: `?status=${req.status.toLocaleLowerCase()}&page=${req.page}`,
@@ -65,7 +58,7 @@ export const deliveryApi = createApi({
           method: 'GET',
         };
       },
-      providesTags: (__, _, req) => [{type: 'DeliveryRequest', id: req}],
+      providesTags: (__, _, req) => [{type: 'DeliveryRequest', id: `${req}_DELIVERY`}],
     }),
     confirmDelivery: builder.mutation<IDeliveryResponse, string>({
       query(id) {
@@ -82,9 +75,4 @@ export const deliveryApi = createApi({
   }),
 });
 
-export const {
-  useGetDeliveriesByStatusQuery,
-  useGetDeliveriesQuery,
-  useGetSingleDeliveryQuery,
-  useConfirmDeliveryMutation,
-} = deliveryApi;
+export const {useGetDeliveriesByStatusQuery, useGetDeliveriesQuery, useGetSingleDeliveryQuery, useConfirmDeliveryMutation} = deliveryApi;
