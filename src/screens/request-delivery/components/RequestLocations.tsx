@@ -15,9 +15,9 @@ type RequestLocationsProps = {
 /**
  * Request Location Component
  */
-const RequestLocations = ({deliveryLocations, pickUp, bg, mt = '5%'}: RequestLocationsProps) => {
+const RequestLocationsBase = ({deliveryLocations, pickUp, bg, mt = '5%'}: RequestLocationsProps) => {
   return (
-    <HStack bg={bg} alignItems="flex-start" space="2" justifyContent="flex-start" mt={mt} px="10px">
+    <HStack bg={bg} alignItems="center" space="2" justifyContent="flex-start" mt={mt} px="10px">
       <VStack justifyContent="center" alignItems="center">
         <LocationRadiusIcon />
         {!!deliveryLocations &&
@@ -28,13 +28,13 @@ const RequestLocations = ({deliveryLocations, pickUp, bg, mt = '5%'}: RequestLoc
             </View>
           ))}
       </VStack>
-      <VStack>
-        <Text isTruncated fontSize={hp(1.3)}>
+      <VStack justifyContent="center" alignItems="center">
+        <Text mb="15px" isTruncated fontSize="12px">
           {pickUp}
         </Text>
         {!!deliveryLocations &&
           deliveryLocations.map((item, key) => (
-            <Text fontSize={hp(1.3)} mt="10px" key={key} isTruncated>
+            <Text mb={key != deliveryLocations.length - 1 ? '15px' : '0px'} fontSize="12px" key={key} isTruncated>
               {item}
             </Text>
           ))}
@@ -43,4 +43,5 @@ const RequestLocations = ({deliveryLocations, pickUp, bg, mt = '5%'}: RequestLoc
   );
 };
 
+const RequestLocations = React.memo(RequestLocationsBase);
 export default RequestLocations;
