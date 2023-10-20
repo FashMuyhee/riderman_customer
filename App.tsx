@@ -9,6 +9,8 @@ import {store} from '@store/index';
 //@ts-ignore
 import {ONE_SIGNAL_ID} from '@env';
 import {OneSignal, LogLevel} from 'react-native-onesignal';
+import {SheetProvider} from 'react-native-actions-sheet';
+import '@configs/sheet-register';
 
 const App = () => {
   OneSignal.initialize(ONE_SIGNAL_ID);
@@ -28,6 +30,7 @@ const App = () => {
       <NativeBaseProvider theme={theme}>
         <AuthContextProvider>
           <RequestContextProvider>
+            <SheetProvider />
             <RootNavigator />
           </RequestContextProvider>
         </AuthContextProvider>

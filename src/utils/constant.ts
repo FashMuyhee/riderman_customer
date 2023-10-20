@@ -10,3 +10,13 @@ export const FONT = {
 // @ts-ignore
 export const STATUSBAR_HEIGHT = StatusBar.currentHeight + 2
 export const RATINGS_WORDS = ['Meh', 'OK', 'Good', 'Very Good', 'Amazing']
+
+/**
+ * ACTION SHEET OPENING ANIMATION CONFIG
+ */
+export const ACTION_SHEET_ANIMATION = {
+  bounciness: 5,
+  overshootClamping: false,
+};
+
+export const ACTION_SHEET_STYLES = {borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: 'white', paddingTop: 40}
