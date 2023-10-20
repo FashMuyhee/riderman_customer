@@ -1,7 +1,5 @@
-import React, {useMemo} from 'react';
-import {HStack, Text, View, Image} from 'native-base';
-import {BottomSheetWrapperSnappy} from '@components/BottomSheetWrapper';
-import BottomSheet from '@gorhom/bottom-sheet';
+import React from 'react';
+import {HStack, Spinner, Text, View, Image} from 'native-base';
 import {hp} from '@utils/responsive';
 import nairaCoin from '@images/icons/naira-coin.png';
 import {Button, DashedDivider, MoneyText, RenderSnackbar} from '@components';
@@ -14,80 +12,84 @@ import CallIcon from '@components/icons/call';
 import {DeliveryStatus, IDeliveryItem} from '@models/delivery';
 import {Image as RNImage} from 'react-native';
 import openDialer from '@utils/open-dialer';
-import {useConfirmDeliveryMutation} from '@services/rtk-queries/deliveries';
+import {useConfirmDeliveryMutation, useGetSingleDeliveryQuery} from '@services/rtk-queries/deliveries';
+import {RouteScreenProps} from 'react-native-actions-sheet';
+import {NavigationHeader} from './components';
 
-type Props = {
-  item: IDeliveryItem;
-  onClose: () => void;
-  deliveryStatus: DeliveryStatus;
-  handleTipRider: () => void;
-  handleRateRider: () => void;
-};
+export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
+  const {data, isLoading: isFetchingDelivery} = useGetSingleDeliveryQuery(params.deliveryId);
+  const deliveryStatus = params.deliveryStatus as DeliveryStatus;
+  const item = data?.data as IDeliveryItem;
+  const {rider, pickupRequest, deliveryId} = item || {};
+  const [confirmDelivery, {isLoading}] = useConfirmDeliveryMutation();
 
-const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
-  ({onClose, deliveryStatus, handleTipRider, item, handleRateRider}, ref) => {
-    const snapPoints = useMemo(() => ['65%', '80%'], []);
-    const {rider, pickupRequest, deliveryId} = item || {};
-    const [confirmDelivery, {isLoading}] = useConfirmDeliveryMutation();
+  const callRider = () => {
+    openDialer(rider.user.phone);
+  };
 
-    const callRider = () => {
-      openDialer(rider.user.phone);
-    };
+  const onClose = () => {
+    router.goBack();
+  };
 
-    const handleConfirm = async () => {
-      try {
-        const res = await confirmDelivery(deliveryId.toString()).unwrap();
-        if (res.success) {
-          RenderSnackbar({text: res.message});
-          onClose();
-        }
-      } catch (error) {
-        RenderSnackbar({
-          text: `Sorry ,we couldn't confirm this package, Tr yagain`,
-        });
+  const handleConfirm = async () => {
+    try {
+      const res = await confirmDelivery(deliveryId.toString()).unwrap();
+      if (res.success) {
+        RenderSnackbar({text: res.message});
+        onClose();
       }
-    };
+    } catch (error) {
+      RenderSnackbar({
+        text: `Sorry ,we couldn't confirm this package, Tr yagain`,
+      });
+    }
+  };
 
-    const renderButtons = () => {
-      if (deliveryStatus === 'active' || deliveryStatus === 'processing') {
-        return <Button title="Call Rider" leftIcon={<CallIcon />} />;
-      }
+  const renderButtons = () => {
+    if (deliveryStatus === 'active' || deliveryStatus === 'processing') {
+      return <Button title="Call Rider" leftIcon={<CallIcon />} />;
+    }
 
-      if (deliveryStatus === 'completed') {
-        return (
-          <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
-            <Button title="Call Rider" onPress={callRider} w="48%" leftIcon={<CallIcon />} isDisabled={isLoading} />
-            <Button bg="black" isLoading={isLoading} onPress={handleConfirm} title="Received" w="48%" />
-          </HStack>
-        );
-      }
-
+    if (deliveryStatus === 'completed') {
       return (
         <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
-          <Button
-            onPress={handleTipRider}
-            title="Tip Rider"
-            w="48%"
-            leftIcon={<RNImage source={nairaCoin} style={{width: 30, height: 30, resizeMode: 'contain'}} />}
-          />
-          <Button bg="black" onPress={handleRateRider} title="Rate Delivery" w="48%" />
+          <Button title="Call Rider" onPress={callRider} w="48%" leftIcon={<CallIcon />} isDisabled={isLoading} />
+          <Button bg="black" isLoading={isLoading} onPress={handleConfirm} title="Received" w="48%" />
         </HStack>
       );
-    };
-
-    const locations = pickupRequest?.deliveryLocations;
-    const deliveryLocations =
-      !!locations &&
-      locations?.map(item => {
-        return item.address;
-      });
+    }
 
     return (
-      <BottomSheetWrapperSnappy noIndicator showBackdrop index={-1} ref={ref} snapPoints={snapPoints}>
-        <View px="20px" w="full">
+      <HStack alignItems="center" justifyContent="space-between" mt="5%" px="10px">
+        <Button
+          onPress={() => router.navigate('tip-rider', rider.riderId)}
+          title="Tip Rider"
+          w="48%"
+          leftIcon={<RNImage source={nairaCoin} style={{width: 30, height: 30, resizeMode: 'contain'}} />}
+        />
+        <Button bg="black" onPress={() => router.navigate('rate-delivery')} title="Rate Delivery" w="48%" />
+      </HStack>
+    );
+  };
+
+  const locations = pickupRequest?.deliveryLocations;
+  const deliveryLocations =
+    !!locations &&
+    locations?.map(item => {
+      return item.address;
+    });
+
+  return (
+    <View h="full" px="10px" w="full">
+      <NavigationHeader onClose={() => router.close()} title="Delivery History" />
+      {isFetchingDelivery ? (
+        <View alignItems="center" justifyContent="center" h="full" w="full">
+          <Spinner color="red" />
+        </View>
+      ) : (
+        <>
           {/* company info */}
           <HStack h="60px" alignItems="center" justifyContent="space-between" px="10px">
-            {/* TODO COMPANY LOGO */}
             <Image
               source={{uri: rider?.user?.image as string}}
               alt={`${rider?.companyName}_logo`}
@@ -143,10 +145,8 @@ const DeliveryDetailSheet = React.forwardRef<BottomSheet, Props>(
           <View mt="20px" px="10px">
             {renderButtons()}
           </View>
-        </View>
-      </BottomSheetWrapperSnappy>
-    );
-  },
-);
-
-export default DeliveryDetailSheet;
+        </>
+      )}
+    </View>
+  );
+};
