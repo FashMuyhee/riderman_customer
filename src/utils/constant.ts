@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native";
+import {StatusBar} from 'react-native';
 
 export const INPUT_HEIGHT = '35px';
 export const FONT = {
@@ -6,10 +6,10 @@ export const FONT = {
   REGULAR: 'WorkSans-Regular',
   SEMI_BOLD: 'WorkSans-SemiBold',
   BOLD: 'WorkSans-Bold',
-}
+};
 // @ts-ignore
-export const STATUSBAR_HEIGHT = StatusBar.currentHeight + 2
-export const RATINGS_WORDS = ['Meh', 'OK', 'Good', 'Very Good', 'Amazing']
+export const STATUSBAR_HEIGHT = StatusBar.currentHeight + 2;
+export const RATINGS_WORDS = ['Meh', 'OK', 'Good', 'Very Good', 'Amazing'];
 
 /**
  * ACTION SHEET OPENING ANIMATION CONFIG
@@ -19,4 +19,4 @@ export const ACTION_SHEET_ANIMATION = {
   overshootClamping: false,
 };
 
-export const ACTION_SHEET_STYLES = {borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: 'white', paddingTop: 40}
+export const ACTION_SHEET_STYLES = {borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: 'white', paddingTop: 10};
