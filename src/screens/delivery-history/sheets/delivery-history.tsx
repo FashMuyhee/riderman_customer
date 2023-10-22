@@ -4,7 +4,7 @@ import ActionSheet, {ActionSheetRef, Route, SheetProps} from 'react-native-actio
 import {TipRiderSheet} from './TipRider';
 import {RateDeliverySheet} from './RateDelivery';
 import {DeliveryDetailSheet} from './DeliveryDetailSheet';
-import {View} from 'native-base';
+import {RiderLocationSheet} from './RiderLocation';
 
 export const DeliveryHistorySheet = ({sheetId, payload}: SheetProps) => {
   const ref = React.useRef<ActionSheetRef>(null);
@@ -23,6 +23,10 @@ export const DeliveryHistorySheet = ({sheetId, payload}: SheetProps) => {
     {
       name: 'tip-rider',
       component: TipRiderSheet,
+    },
+    {
+      name: 'rider-location',
+      component: RiderLocationSheet,
     },
   ];
 

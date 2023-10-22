@@ -15,6 +15,7 @@ import openDialer from '@utils/open-dialer';
 import {useConfirmDeliveryMutation, useGetSingleDeliveryQuery} from '@services/rtk-queries/deliveries';
 import {RouteScreenProps} from 'react-native-actions-sheet';
 import {NavigationHeader} from './components';
+import NavigationDirectionIcon from '@components/icons/navigation-direction';
 
 export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
   const {data, isLoading: isFetchingDelivery} = useGetSingleDeliveryQuery(params.deliveryId);
@@ -144,6 +145,14 @@ export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
           <DashedDivider />
           <View mt="20px" px="10px">
             {renderButtons()}
+            <Button
+              bg="black"
+              leftIcon={<NavigationDirectionIcon />}
+              onPress={() => router.navigate('rider-location')}
+              title="Track Rider"
+              w="full"
+              mt="10px"
+            />
           </View>
         </>
       )}
