@@ -2,14 +2,13 @@ import React, {useState} from 'react';
 import {HStack, Text, View} from 'native-base';
 import {hp} from '@utils/responsive';
 import riderLogo from '@images/illustrations/riderman-sm.png';
-import {Button, DashedDivider, RenderSnackbar, TextInput} from '@components';
+import {Button, DashedDivider, RenderSnackbar, SheetNavigationHeader, TextInput} from '@components';
 import {Alert, Image as RNImage} from 'react-native';
 import NairaMoneyIcon from '@components/icons/naira-money';
 import Checkbox from '@components/icons/checkbox';
 import {moneyFormat} from '@components/MoneyText';
 import {useGetWalletBalanceQuery, useSendTipToRiderMutation} from '@services/rtk-queries/wallet';
 import {RouteScreenProps} from 'react-native-actions-sheet';
-import {NavigationHeader} from './components';
 
 const WalletItem = ({selected}: {selected: boolean}) => {
   const {data} = useGetWalletBalanceQuery();
@@ -86,7 +85,7 @@ export const TipRiderSheet = ({params, router}: RouteScreenProps) => {
 
   return (
     <View h="full">
-      <NavigationHeader title="Tip Rider" onClose={() => router.goBack()} />
+      <SheetNavigationHeader title="Tip Rider" onClose={() => router.goBack()} />
       <View mt="7%" px="20px">
         <TextInput
           leftIcon={<NairaMoneyIcon />}

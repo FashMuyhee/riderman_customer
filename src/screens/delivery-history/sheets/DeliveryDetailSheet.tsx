@@ -2,7 +2,7 @@ import React from 'react';
 import {HStack, Spinner, Text, View, Image} from 'native-base';
 import {hp} from '@utils/responsive';
 import nairaCoin from '@images/icons/naira-coin.png';
-import {Button, DashedDivider, MoneyText, RenderSnackbar} from '@components';
+import {Button, DashedDivider, MoneyText, RenderSnackbar, SheetNavigationHeader} from '@components';
 import TimeSolid from '@components/icons/time-solid';
 import {PaymentMethodIcon} from '@screens/request-delivery/components/SelectPaymentMethod';
 import RiderInfo from '@screens/request-delivery/components/RiderInfo';
@@ -14,7 +14,6 @@ import {Image as RNImage} from 'react-native';
 import openDialer from '@utils/open-dialer';
 import {useConfirmDeliveryMutation, useGetSingleDeliveryQuery} from '@services/rtk-queries/deliveries';
 import {RouteScreenProps} from 'react-native-actions-sheet';
-import {NavigationHeader} from './components';
 import NavigationDirectionIcon from '@components/icons/navigation-direction';
 
 export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
@@ -82,7 +81,7 @@ export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
 
   return (
     <View h="full" px="10px" w="full">
-      <NavigationHeader onClose={() => router.close()} title="Delivery History" />
+      <SheetNavigationHeader onClose={() => router.close()} title="Delivery History" />
       {isFetchingDelivery ? (
         <View alignItems="center" justifyContent="center" h="full" w="full">
           <Spinner color="red" />

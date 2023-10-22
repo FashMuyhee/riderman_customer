@@ -7,21 +7,21 @@ type Props = {
   title: string;
 };
 
-export const NavigationHeader = ({onClose, title}: Props) => {
+export const SheetNavigationHeader = ({onClose, title}: Props) => {
   return (
     <View mb="5px" h="60px">
-      <HStack mt="-20px" w="full" alignItems="center" justifyContent="space-between" px="20px">
-        <View w="1/3">
+      <HStack my="10px" w="full" alignItems="center" justifyContent="space-between" px="20px">
+        <View w="20%">
           <Text onPress={onClose} color="main" textAlign="left">
-            Cancel
+            Close
           </Text>
         </View>
-        <View w="1/3">
+        <View w="60%">
           <Text fontSize="14px" textAlign="center" fontWeight="semibold">
             {title}
           </Text>
         </View>
-        <View w="1/3" />
+        <View w="20%" />
       </HStack>
       <DashedDivider mt="5px" />
     </View>

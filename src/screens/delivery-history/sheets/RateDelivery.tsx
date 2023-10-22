@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {Center, Text, View} from 'native-base';
 import {hp} from '@utils/responsive';
-import {Button, RenderSnackbar, TextInput} from '@components';
+import {Button, RenderSnackbar, TextInput, SheetNavigationHeader} from '@components';
 import {RATINGS_WORDS} from '@utils/constant';
 import {AirbnbRating} from 'react-native-ratings';
 import star from '@images/icons/star.png';
 import httpHandler from '@utils/http';
 import {RouteScreenProps} from 'react-native-actions-sheet';
-import { NavigationHeader } from './components';
 
 export const RateDeliverySheet = ({params, router}: RouteScreenProps) => {
   const {deliveryId} = params;
@@ -81,7 +80,7 @@ export const RateDeliverySheet = ({params, router}: RouteScreenProps) => {
 
   return (
     <View h="full">
-      <NavigationHeader title="Rate Delivery" onClose={() => router.goBack()} />
+      <SheetNavigationHeader title="Rate Delivery" onClose={() => router.goBack()} />
       <View px="20px" pt="10px" bg="bg" w="full">
         <View mb="5%" my="10px" px="20px">
           <Text textAlign="center" bold mb="4px">

@@ -1,7 +1,4 @@
-import {
-  BottomSheetWrapper,
-  BottomSheetWrapperSnappy,
-} from './BottomSheetWrapper';
+import {BottomSheetWrapper, BottomSheetWrapperSnappy} from './BottomSheetWrapper';
 import Button from './Button';
 import CreditCardLogo from './CreditCardLogo';
 import DashedDivider from './DashedDivider';
@@ -21,6 +18,7 @@ import TransparentNavbar from './TransparentNavbar';
 import ActivityModal from './ActivityModal';
 import RenderSnackbar from './RenderSnackbar';
 import SelectInput from './SelectInput';
+export * from './SheetNavigationHeader';
 
 export {
   MoneyText,

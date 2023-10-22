@@ -6,7 +6,7 @@ import {StyleSheet} from 'react-native';
 import useGetLocation from '@hooks/useGetLocation';
 import {Center} from 'native-base';
 import {Spinner} from 'native-base';
-import {NavigationHeader} from './components';
+import {SheetNavigationHeader} from '@components';
 import {RouteScreenProps} from 'react-native-actions-sheet';
 
 export const RiderLocationSheet = ({router}: RouteScreenProps) => {
@@ -29,7 +29,7 @@ export const RiderLocationSheet = ({router}: RouteScreenProps) => {
 
   return (
     <View px="20px" h="full" w="full">
-      <NavigationHeader onClose={() => router.goBack()} title="Rider's Location" />
+      <SheetNavigationHeader onClose={() => router.goBack()} title="Rider's Location" />
 
       {loading ? (
         <Center flex="1">
@@ -60,7 +60,7 @@ export const RiderLocationSheet = ({router}: RouteScreenProps) => {
               latitude: cords?.latitude as number,
               longitude: cords?.longitude as number,
             }}>
-            <Center bg="#01b98650" size="50px"  borderRadius="50px">
+            <Center bg="#01b98650" size="50px" borderRadius="50px">
               <View bg="#01b986" size="10px" rounded="full" />
             </Center>
           </Marker>
