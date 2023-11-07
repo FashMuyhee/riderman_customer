@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import {StatusBar} from 'react-native';
 
 export const INPUT_HEIGHT = '35px';
@@ -9,7 +10,10 @@ export const FONT = {
 };
 // @ts-ignore
 export const STATUSBAR_HEIGHT = StatusBar.currentHeight + 2;
+
 export const RATINGS_WORDS = ['Meh', 'OK', 'Good', 'Very Good', 'Amazing'];
+
+export const IS_ANDROID = Platform.OS == 'android';
 
 /**
  * ACTION SHEET OPENING ANIMATION CONFIG
