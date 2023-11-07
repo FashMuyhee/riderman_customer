@@ -38,8 +38,10 @@ const HistoryList = () => {
           data={Object.keys(deliveries)}
           onRefresh={refetch}
           refreshing={isFetching}
+          initialNumToRender={15}
+          maxToRenderPerBatch={10}
           renderItem={({item, index}) => (
-            <View key={index}>
+            <View>
               <DateListTitle date={item} />
               {deliveries[item].map((ele: IDeliveryItem, index: number) => {
                 return (
@@ -57,6 +59,7 @@ const HistoryList = () => {
           onEndReached={() => {
             setPage(prev => +1);
           }}
+          onEndReachedThreshold={0.3}
           //TODO: EMPTY STATE
         />
       )}

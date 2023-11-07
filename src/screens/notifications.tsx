@@ -59,7 +59,13 @@ const Notifications = (props: Props) => {
           setPage(prev => +1);
         }}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}: {item: Notification}) => <NotificationItem read message={item.body} title={item.title} timeDate={item.createdAt} />}
+        renderItem={({item}: {item: Notification}) => (
+          <NotificationItem read message={item.body} title={item.title} timeDate={item.createdAt} />
+        )}
+        keyExtractor={d => d.notificationId.toString()}
+        initialNumToRender={15}
+        maxToRenderPerBatch={10}
+        onEndReachedThreshold={0.3}
       />
     </ScreenWrapper>
   );
