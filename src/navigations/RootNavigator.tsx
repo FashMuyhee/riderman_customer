@@ -1,8 +1,10 @@
 import {AuthContext} from '@contexts/AuthContext';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, createNavigationContainerRef} from '@react-navigation/native';
 import React, {useContext} from 'react';
 import DrawerNavigator from './drawer/drawer';
 import AuthStack from './stack/auth';
+
+export const navigationRef = createNavigationContainerRef();
 
 const RootNavigator = () => {
   const {isAuth} = useContext(AuthContext);
@@ -14,7 +16,7 @@ const RootNavigator = () => {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Navigator />
     </NavigationContainer>
   );
