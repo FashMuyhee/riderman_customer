@@ -114,7 +114,7 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
             ]}
           />
         </View>
-        <View px="10px" pt="10px" bg="bg" position="absolute" bottom="0" borderTopRadius="2xl" w="full" h={hp(50)}>
+        <View px="10px" pt="10px" bg="bg" position="absolute" bottom="0" roundedTop="2xl" w="full" h={hp(50)}>
           <ScrollView bounces={false}>
             <View my="10px" px="20px">
               <Text textAlign="center" bold mb="4px">

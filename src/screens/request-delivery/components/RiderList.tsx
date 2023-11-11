@@ -141,9 +141,9 @@ const RiderList = () => {
   );
 
   return (
-    <View h="50%" w="full" position="absolute">
+    <View h="50%" roundedTop="20px" w="full" bottom={0} bg="bg" zIndex={1} position="absolute">
       <View mb="10px" px="20px">
-        <Text textAlign="center" fontWeight="medium" textTransform="uppercase">
+        <Text textAlign="center" mt="6px" fontWeight="medium" textTransform="uppercase">
           Select a Riderman
         </Text>
         <Text fontSize={hp(1)} w="60%" textAlign="center" alignSelf="center">
@@ -151,7 +151,7 @@ const RiderList = () => {
         </Text>
       </View>
       <View borderWidth={0.5} borderColor="grey.500" mx="5%" mt="2px" mb="10px" />
-      <View w="full" h="60%" px="10px">
+      <View w="full" h="55%" px="10px">
         <FlashList
           // contentContainerStyle={{paddingHorizontal: 10}}
           data={riders}
@@ -172,7 +172,7 @@ const RiderList = () => {
           mt="2%"
           bg="main"
           disabled={isLoading}
-          h="50px"
+          h="45px"
           rounded="lg">
           <Text color="white" fontWeight="600" fontSize={hp(1.5)}>
             {isLoading ? 'Loading ....' : 'Confirm'}
