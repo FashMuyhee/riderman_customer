@@ -85,7 +85,7 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
           pickupRequestId: pickupRequestId.toString(),
         };
         if (cards.length > 0) {
-          values['cardId'] = selectedCardId.toString();
+          values['cardId'] = selectedCardId?.toString();
         }
         res = await paymentService.makePickupPayment(values);
       }
@@ -95,6 +95,7 @@ const PaymentScreen = ({pickupInfo, isVisible, onCancelRequest, onClose}: IProps
       }
     } catch (error) {
       setIsLoading(false);
+      RenderSnackbar({text: 'Try Again'});
     }
   };
 
