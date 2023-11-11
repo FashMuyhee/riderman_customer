@@ -25,6 +25,7 @@ import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 import useCountDown from 'react-countdown-hook';
 import PaymentScreen from '@screens/payment-screeen';
 import PaymentConfirmationSheet from '@screens/payment-screeen/components/PaymentConfirmationSheet';
+import {BackHandler} from 'react-native';
 
 interface RequestPreview {
   navigation: StackNavigationProp<GuardStackParamList, 'request_preview'>;
@@ -83,7 +84,9 @@ const RequestPreview = ({navigation}: RequestPreview) => {
   const pusher = pusherEventService.pusher;
   const [isCancelling, setIsCancelling] = useState(false);
   const [showPaymentScreen, setShowPaymentScreen] = useState(false);
-  const [timeLeft, {start, reset}] = useCountDown(600000, 1000);
+  const TWO_MINS_MILLS = 120000;
+  const ONE_SEC_MILLS = 1000;
+  const [timeLeft, {start, reset}] = useCountDown(TWO_MINS_MILLS, ONE_SEC_MILLS);
 
   const deliveryLocations = useMemo(() => {
     return destination.map(location => {
@@ -173,8 +176,18 @@ const RequestPreview = ({navigation}: RequestPreview) => {
 
   useEffect(() => {
     getTimeAway();
-    onEventChange();
     start();
+    const backAction = () => {
+      toggleCancel();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []);
+
+  useEffect(() => {
+    onEventChange();
     return () => {
       pusher.unsubscribe({
         channelName: `private-pickupRequests.${pickupRequestId}`,
