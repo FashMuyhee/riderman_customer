@@ -41,7 +41,7 @@ const HistoryList = () => {
           initialNumToRender={15}
           maxToRenderPerBatch={10}
           renderItem={({item, index}) => (
-            <View>
+            <>
               <DateListTitle date={item} />
               {deliveries[item].map((ele: IDeliveryItem, index: number) => {
                 return (
@@ -54,7 +54,7 @@ const HistoryList = () => {
                   />
                 );
               })}
-            </View>
+            </>
           )}
           onEndReached={() => {
             setPage(prev => +1);
