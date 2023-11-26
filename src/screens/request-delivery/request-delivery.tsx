@@ -12,14 +12,14 @@ export type IRequestDeliveryProps = {
 
 const initialValues: IDeliveryRequestBody = {
   pickupLocation: {
-    address: 'Tobbles Schools, Agege, Nigeria',
-    lat: '6.5850218',
-    long: '3.3968166',
+    address: '',
+    lat: '',
+    long: '',
   },
   deliveryLocation: {
-    address: '1 Ibrahim Kolapo St, 112105, Agege, Ogun State, Nigeria',
-    lat: '6.5746253',
-    long: '3.3850089',
+    address: '',
+    lat: '',
+    long: '',
   },
   instruction: 'Fragile',
   packageTypes: ['Wears'],
