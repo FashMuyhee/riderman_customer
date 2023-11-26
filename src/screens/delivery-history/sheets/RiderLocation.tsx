@@ -8,11 +8,16 @@ import {Center} from 'native-base';
 import {Spinner} from 'native-base';
 import {SheetNavigationHeader} from '@components';
 import {RouteScreenProps} from 'react-native-actions-sheet';
+import pusherEventService from '@services/Pusher';
+import {PusherEvent} from '@pusher/pusher-websocket-react-native';
 
-export const RiderLocationSheet = ({router}: RouteScreenProps) => {
+export const RiderLocationSheet = ({router, params}: RouteScreenProps) => {
+  const {deliveryId} = params;
   const mapRef = React.useRef<MapView>(null);
   const {location, loading, getLocation} = useGetLocation();
   const cords = location?.coords;
+
+  const pusher = pusherEventService.pusher;
 
   // React.useEffect(() => {
   //   if (cords && mapRef.current) {
@@ -27,8 +32,32 @@ export const RiderLocationSheet = ({router}: RouteScreenProps) => {
   //   }
   // }, []);
 
+  const onEventChange = async () => {
+    await pusher.connect();
+
+    await pusher.subscribe({
+      channelName: `deliveries.${deliveryId}`,
+      onEvent: ({eventName, data}: PusherEvent) => {
+        console.log('🚀 ~ file: RiderLocation.tsx:41 ~ onEventChange ~ eventName, data:', eventName, data);
+        if (eventName === 'CurrentRiderLocation') {
+          console.log(data);
+        }
+      },
+    });
+  };
+
+  React.useEffect(() => {
+    onEventChange();
+    return () => {
+      pusher.unsubscribe({
+        channelName: `deliveries.${deliveryId}`,
+      });
+      pusher.disconnect();
+    };
+  }, []);
+
   return (
-    <View px="20px" h="full" w="full">
+    <View h="full" w="full" overflow="hidden">
       <SheetNavigationHeader onClose={() => router.goBack()} title="Rider's Location" />
 
       {loading ? (
@@ -45,7 +74,7 @@ export const RiderLocationSheet = ({router}: RouteScreenProps) => {
             longitudeDelta: 0.0034,
           }}
           provider="google"
-          style={StyleSheet.absoluteFill}
+          style={{flex: 1, marginTop: '-5%'}}
           minZoomLevel={1}
           userInterfaceStyle="light"
           customMapStyle={mapStyle}

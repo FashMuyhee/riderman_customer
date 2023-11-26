@@ -27,6 +27,7 @@ export const DeliveryHistorySheet = ({sheetId, payload}: SheetProps) => {
     {
       name: 'rider-location',
       component: RiderLocationSheet,
+      params: payload,
     },
   ];
 
