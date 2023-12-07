@@ -12,10 +12,9 @@ import {
   CloseIcon,
   IconButton,
 } from 'native-base';
-import {BottomSheetWrapper, TextInput} from '@components';
-import {TextInputProps} from './TextInput';
+import {BottomSheetWrapper} from '@components';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {packageType} from '@utils/sample-data';
+import {packageTypes} from '@utils/sample-data';
 import {hp} from '@utils/responsive';
 
 export interface IMultiSelectInputProps {
@@ -34,7 +33,7 @@ const MultiSelectInput: React.FC<IMultiSelectInputProps> = ({
   placeholder,
   values,
   onSelect,
-  data = packageType,
+  data = packageTypes,
   title = 'Select Items',
 }) => {
   const bottomSheetRef = createRef<RBSheet>();

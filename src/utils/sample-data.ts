@@ -38,4 +38,16 @@ export const
     }
   ]
 
-export const packageType = ['wears', 'electronic', 'gadgets', 'perishables', 'accessories', 'documents', 'shoes']
+  export const packageTypes = [
+    'wears',
+    'electronic',
+    'gadgets',
+    'perishables',
+    'accessories',
+    'documents',
+    'Medical supplies',
+    'Consumer goods',
+    'Industrial goods',
+    'Hazardous materials',
+  ];
+  
