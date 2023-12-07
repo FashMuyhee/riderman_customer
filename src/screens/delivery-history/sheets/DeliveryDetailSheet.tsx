@@ -144,14 +144,14 @@ export const DeliveryDetailSheet = ({params, router}: RouteScreenProps) => {
           <DashedDivider />
           <View mt="20px" px="10px">
             {renderButtons()}
-            <Button
+            {/* <Button
               bg="black"
               leftIcon={<NavigationDirectionIcon />}
               onPress={() => router.navigate('rider-location')}
               title="Track Rider"
               w="full"
               mt="10px"
-            />
+            /> */}
           </View>
         </>
       )}
