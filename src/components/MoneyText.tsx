@@ -11,9 +11,9 @@ interface MoneyTextProps extends ITextProps {
 }
 
 export const moneyFormat = (value: number | string, showNaira: boolean = false) => {
-  const moneyValue = typeof value === 'number' ? value : parseFloat(value);
-  const money = isNaN(moneyValue) ? 0 : moneyValue;
-  const formatted = money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const moneyValue = typeof value === 'number' ? value.toFixed(2) : parseFloat(value).toFixed(2);
+  const money = moneyValue == undefined ? '0' : moneyValue;
+  const formatted = money.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   return showNaira ? `\u20A6${formatted}` : formatted;
 };
